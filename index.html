@@ -474,13 +474,13 @@
 
   function loadState(){
     try{
-      var raw = localStorage.getItem("op365_customer_prototype_v1");
+      var raw = localStorage.getItem("op365_customer_prototype_v2");
       if(raw) return JSON.parse(raw);
     }catch(e){}
     return null;
   }
   function saveState(){
-    try{ localStorage.setItem("op365_customer_prototype_v1", JSON.stringify(DB)); }catch(e){}
+    try{ localStorage.setItem("op365_customer_prototype_v2", JSON.stringify(DB)); }catch(e){}
   }
 
   var SEED = {
@@ -489,11 +489,11 @@
       { id:"RFQ-1042", customer:"Adaeze Foods Ltd", freightType:"FCL", origin:"CNDAL", destination:"GHTEM",
         cargoDescription:"Frozen poultry parts", cargoWeight:"18,000 kg", containerType:"40RF", quantity:"2",
         incoterm:"CIF", targetDate:"2026-10-15", notes:"Temperature controlled at -18°C. Halal certification required.",
-        status:"Sent to Commercial", source:"Web Portal", created:"2026-09-02T09:14:00" },
+        status:"Sent", source:"Web Portal", created:"2026-09-02T09:14:00" },
       { id:"RFQ-1041", customer:"Bola Textiles", freightType:"LCL", origin:"CNNSA", destination:"NGAPP",
         cargoDescription:"Cotton fabric rolls", cargoWeight:"4,200 kg", containerType:"N/A (Air)", quantity:"28 CBM",
         incoterm:"FOB", targetDate:"2026-10-01", notes:"Keep dry, avoid stacking above 3 pallets.",
-        status:"Sent to Commercial", source:"Web Portal", created:"2026-09-01T15:40:00" },
+        status:"Sent", source:"Web Portal", created:"2026-09-01T15:40:00" },
       { id:"RFQ-1039", customer:"Kaduna Metals Inc.", freightType:"FCL", origin:"CNSHA", destination:"NGAPP",
         cargoDescription:"Galvanized steel coils", cargoWeight:"24,500 kg", containerType:"40GP", quantity:"1",
         incoterm:"CFR", targetDate:"2026-09-20", notes:"",
@@ -501,19 +501,19 @@
       { id:"RFQ-1038", customer:"Ngozi AgroExports", freightType:"FCL", origin:"NGAPP", destination:"GHTEM",
         cargoDescription:"Bagged cashew nuts", cargoWeight:"", containerType:"20GP", quantity:"3",
         incoterm:"", targetDate:"", notes:"",
-        status:"Draft", source:"Web Portal", created:"2026-09-05T08:20:00" },
+        status:"Awaiting Quote", source:"Web Portal", created:"2026-09-05T08:20:00" },
       { id:"RFQ-1036", customer:"Chukwuma Auto Parts", freightType:"Air Freight", origin:"CNSHA", destination:"NGLOS",
         cargoDescription:"Automotive spare parts", cargoWeight:"850 kg", containerType:"N/A (Air)", quantity:"6 pallets",
         incoterm:"EXW", targetDate:"2026-09-14", notes:"Priority parts for stalled production line.",
-        status:"Converted", source:"Web Portal", created:"2026-08-20T10:05:00" },
+        status:"Quoted", source:"Web Portal", created:"2026-08-20T10:05:00" },
       { id:"RFQ-1031", customer:"Adaeze Foods Ltd", freightType:"FCL", origin:"CNNSA", destination:"NGAPP",
         cargoDescription:"Canned tomato paste", cargoWeight:"21,000 kg", containerType:"40GP", quantity:"2",
         incoterm:"CIF", targetDate:"2026-08-18", notes:"",
-        status:"Converted", source:"Web Portal", created:"2026-08-02T09:30:00" },
+        status:"Quoted", source:"Web Portal", created:"2026-08-02T09:30:00" },
       { id:"RFQ-1033", customer:"Adaeze Foods Ltd", freightType:"FCL", origin:"CNDAL", destination:"GHTEM",
         cargoDescription:"Bagged rice", cargoWeight:"27,000 kg", containerType:"40HC", quantity:"3",
         incoterm:"CIF", targetDate:"2026-09-25", notes:"",
-        status:"Converted", source:"Web Portal", created:"2026-08-12T13:10:00" }
+        status:"Quoted", source:"Web Portal", created:"2026-08-12T13:10:00" }
     ],
     quotes: [
       { id:"QUO-3301", rfqId:"RFQ-1039", customer:"Kaduna Metals Inc.", carrier:"Maersk Line", lane:"CNSHA → NGAPP",
@@ -599,8 +599,7 @@
 
   function rfqStatusBadge(status){
     var map = {
-      "Draft":"badge-grey", "Sent to Commercial":"badge-amber",
-      "Quoted":"badge-green", "Converted":"badge-blue", "Expired":"badge-red"
+      "Awaiting Quote":"badge-grey", "Sent":"badge-amber", "Quoted":"badge-green"
     };
     return '<span class="badge '+(map[status]||"badge-grey")+'"><span class="dot"></span>'+esc(status)+'</span>';
   }
@@ -741,7 +740,7 @@
         '</select>'+
         '<select class="filter" id="rfqStatusFilter">'+
           '<option value="all">All statuses</option>'+
-          '<option>Draft</option><option>Sent to Commercial</option><option>Quoted</option><option>Converted</option>'+
+          '<option>Awaiting Quote</option><option>Sent</option><option>Quoted</option>'+
         '</select>'+
       '</div>'+
       '<div class="table-wrap"><table>'+
@@ -838,7 +837,7 @@
               statRow("Customer", r.customer)+
             '</div>'+
           '</div>'+
-          (r.status === "Draft" ? (
+          (r.status === "Awaiting Quote" ? (
             '<div class="panel panel-pad">'+
               '<div style="font-size:13px; font-weight:600; margin-bottom:6px;">Ready to submit?</div>'+
               '<div style="font-size:12.5px; color:var(--muted); margin-bottom:12px;">Complete the remaining fields, then send this RFQ to our commercial team for pricing.</div>'+
@@ -848,7 +847,7 @@
         '</div>'+
       '</div>';
 
-    if(r.status === "Draft"){
+    if(r.status === "Awaiting Quote"){
       document.getElementById("continueEditBtn").addEventListener("click", function(e){
         e.preventDefault();
         renderRfqForm(r.id);
@@ -859,7 +858,7 @@
 
   function actionsForRfq(r){
     var html = "";
-    if(r.status === "Draft"){
+    if(r.status === "Awaiting Quote"){
       html += '<button class="btn" id="sendToCommercialBtn">Send to Commercial</button>';
     }
     html += '<button class="btn btn-ghost" data-route="#/rfq">Close</button>';
@@ -871,7 +870,7 @@
           showToast("Please complete all required fields before sending ("+rd.n+"/"+rd.total+" done).");
           return;
         }
-        r.status = "Sent to Commercial";
+        r.status = "Sent";
         saveState();
         showToast(r.id+" sent to Commercial.");
         renderRfqDetail(r.id);
@@ -967,7 +966,7 @@
           '<div class="form-actions">'+
             '<div class="progress-mini">Readiness: <b id="readinessLabel">0/10</b> required fields complete</div>'+
             '<div style="display:flex; gap:10px;">'+
-              '<button type="button" class="btn" id="saveDraftBtn">Save as draft</button>'+
+              '<button type="button" class="btn" id="saveDraftBtn">Save &amp; finish later</button>'+
               '<button type="submit" class="btn btn-primary" id="submitRfqBtn">Send to Commercial</button>'+
             '</div>'+
           '</div>'+
@@ -1002,18 +1001,18 @@
     updateReadiness();
 
     document.getElementById("saveDraftBtn").addEventListener("click", function(){
-      persist("Draft");
+      persist("Awaiting Quote");
     });
     document.getElementById("rfqForm").addEventListener("submit", function(e){
       e.preventDefault();
       var vals = collect();
       var rd = readiness(vals);
       if(rd.n < rd.total){
-        showToast("Complete all required fields to send to Commercial ("+rd.n+"/"+rd.total+" done). Saved as draft instead.");
-        persist("Draft");
+        showToast("Complete all required fields to send to Commercial ("+rd.n+"/"+rd.total+" done). Saved for later instead.");
+        persist("Awaiting Quote");
         return;
       }
-      persist("Sent to Commercial");
+      persist("Sent");
     });
 
     function persist(status){
@@ -1022,7 +1021,7 @@
         Object.assign(editing, vals);
         editing.status = status;
         saveState();
-        showToast(editing.id+" "+(status==="Draft"?"saved as draft.":"sent to Commercial."));
+        showToast(editing.id+" "+(status==="Awaiting Quote"?"saved. Finish it later from the RFQ list.":"sent to Commercial."));
         go("#/rfq/"+editing.id);
       } else {
         var id = "RFQ-"+DB.nextRfq;
@@ -1030,7 +1029,7 @@
         var record = Object.assign({id:id, status:status, source:"Web Portal", created:new Date().toISOString()}, vals);
         DB.rfqs.unshift(record);
         saveState();
-        showToast(id+" "+(status==="Draft"?"saved as draft.":"created and sent to Commercial."));
+        showToast(id+" "+(status==="Awaiting Quote"?"saved. Finish it later from the RFQ list.":"created and sent to Commercial."));
         go("#/rfq/"+id);
       }
     }
@@ -1126,7 +1125,6 @@
     if(q.status === "Sent to Customer"){
       document.getElementById("acceptQuoteBtn").addEventListener("click", function(){
         q.status = "Accepted";
-        if(rfq) rfq.status = "Converted";
         var newShip = {
           id: "SHP-"+(2200+DB.shipments.length+10), quoteId:q.id, rfqId:q.rfqId, customer:q.customer,
           mode:q.carrier+" — "+(rfq?rfq.freightType:""), lane:q.lane, carrier:q.carrier,
