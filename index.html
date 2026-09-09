@@ -435,7 +435,7 @@
         <div class="user-avatar">OK</div>
         <div>
           <div class="user-name">Okpanaci</div>
-          <div class="user-role">Adaeze Foods Ltd</div>
+          <div class="user-role" id="sidebarCompany">Adaeze Foods Ltd</div>
         </div>
       </div>
       <a class="user-link" data-route="#/profile">Profile setting</a>
@@ -474,63 +474,65 @@
 
   function loadState(){
     try{
-      var raw = localStorage.getItem("op365_customer_prototype_v2");
+      var raw = localStorage.getItem("op365_customer_prototype_v3");
       if(raw) return JSON.parse(raw);
     }catch(e){}
     return null;
   }
   function saveState(){
-    try{ localStorage.setItem("op365_customer_prototype_v2", JSON.stringify(DB)); }catch(e){}
+    try{ localStorage.setItem("op365_customer_prototype_v3", JSON.stringify(DB)); }catch(e){}
   }
+
+  var CUSTOMER = "Adaeze Foods Ltd";
 
   var SEED = {
     nextRfq: 1043,
     rfqs: [
-      { id:"RFQ-1042", customer:"Adaeze Foods Ltd", freightType:"FCL", origin:"CNDAL", destination:"GHTEM",
+      { id:"RFQ-1042", freightType:"FCL", origin:"CNDAL", destination:"GHTEM",
         cargoDescription:"Frozen poultry parts", cargoWeight:"18,000 kg", containerType:"40RF", quantity:"2",
         incoterm:"CIF", targetDate:"2026-10-15", notes:"Temperature controlled at -18°C. Halal certification required.",
-        status:"Sent", source:"Web Portal", created:"2026-09-02T09:14:00" },
-      { id:"RFQ-1041", customer:"Bola Textiles", freightType:"LCL", origin:"CNNSA", destination:"NGAPP",
+        status:"Sent", created:"2026-09-02T09:14:00" },
+      { id:"RFQ-1041", freightType:"LCL", origin:"CNNSA", destination:"NGAPP",
         cargoDescription:"Cotton fabric rolls", cargoWeight:"4,200 kg", containerType:"N/A (Air)", quantity:"28 CBM",
         incoterm:"FOB", targetDate:"2026-10-01", notes:"Keep dry, avoid stacking above 3 pallets.",
-        status:"Sent", source:"Web Portal", created:"2026-09-01T15:40:00" },
-      { id:"RFQ-1039", customer:"Kaduna Metals Inc.", freightType:"FCL", origin:"CNSHA", destination:"NGAPP",
+        status:"Sent", created:"2026-09-01T15:40:00" },
+      { id:"RFQ-1039", freightType:"FCL", origin:"CNSHA", destination:"NGAPP",
         cargoDescription:"Galvanized steel coils", cargoWeight:"24,500 kg", containerType:"40GP", quantity:"1",
         incoterm:"CFR", targetDate:"2026-09-20", notes:"",
-        status:"Quoted", source:"Web Portal", created:"2026-08-27T11:02:00" },
-      { id:"RFQ-1038", customer:"Ngozi AgroExports", freightType:"FCL", origin:"NGAPP", destination:"GHTEM",
+        status:"Quoted", created:"2026-08-27T11:02:00" },
+      { id:"RFQ-1038", freightType:"FCL", origin:"NGAPP", destination:"GHTEM",
         cargoDescription:"Bagged cashew nuts", cargoWeight:"", containerType:"20GP", quantity:"3",
         incoterm:"", targetDate:"", notes:"",
-        status:"Awaiting Quote", source:"Web Portal", created:"2026-09-05T08:20:00" },
-      { id:"RFQ-1036", customer:"Chukwuma Auto Parts", freightType:"Air Freight", origin:"CNSHA", destination:"NGLOS",
+        status:"Awaiting Quote", created:"2026-09-05T08:20:00" },
+      { id:"RFQ-1036", freightType:"Air Freight", origin:"CNSHA", destination:"NGLOS",
         cargoDescription:"Automotive spare parts", cargoWeight:"850 kg", containerType:"N/A (Air)", quantity:"6 pallets",
         incoterm:"EXW", targetDate:"2026-09-14", notes:"Priority parts for stalled production line.",
-        status:"Quoted", source:"Web Portal", created:"2026-08-20T10:05:00" },
-      { id:"RFQ-1031", customer:"Adaeze Foods Ltd", freightType:"FCL", origin:"CNNSA", destination:"NGAPP",
+        status:"Quoted", created:"2026-08-20T10:05:00" },
+      { id:"RFQ-1031", freightType:"FCL", origin:"CNNSA", destination:"NGAPP",
         cargoDescription:"Canned tomato paste", cargoWeight:"21,000 kg", containerType:"40GP", quantity:"2",
         incoterm:"CIF", targetDate:"2026-08-18", notes:"",
-        status:"Quoted", source:"Web Portal", created:"2026-08-02T09:30:00" },
-      { id:"RFQ-1033", customer:"Adaeze Foods Ltd", freightType:"FCL", origin:"CNDAL", destination:"GHTEM",
+        status:"Quoted", created:"2026-08-02T09:30:00" },
+      { id:"RFQ-1033", freightType:"FCL", origin:"CNDAL", destination:"GHTEM",
         cargoDescription:"Bagged rice", cargoWeight:"27,000 kg", containerType:"40HC", quantity:"3",
         incoterm:"CIF", targetDate:"2026-09-25", notes:"",
-        status:"Quoted", source:"Web Portal", created:"2026-08-12T13:10:00" }
+        status:"Quoted", created:"2026-08-12T13:10:00" }
     ],
     quotes: [
-      { id:"QUO-3301", rfqId:"RFQ-1039", customer:"Kaduna Metals Inc.", carrier:"Maersk Line", lane:"CNSHA → NGAPP",
+      { id:"QUO-3301", rfqId:"RFQ-1039", carrier:"Maersk Line", lane:"CNSHA → NGAPP",
         rate:"US$ 1,850 / 40GP", transitDays:26, validUntil:"2026-09-30", status:"Sent to Customer",
         created:"2026-08-29T14:00:00" },
-      { id:"QUO-3298", rfqId:"RFQ-1036", customer:"Chukwuma Auto Parts", carrier:"Ethiopian Cargo", lane:"CNSHA → NGLOS",
+      { id:"QUO-3298", rfqId:"RFQ-1036", carrier:"Ethiopian Cargo", lane:"CNSHA → NGLOS",
         rate:"US$ 4.20 / kg", transitDays:4, validUntil:"2026-09-10", status:"Accepted",
         created:"2026-08-21T09:15:00" },
-      { id:"QUO-3277", rfqId:"RFQ-1031", customer:"Adaeze Foods Ltd", carrier:"MSC", lane:"CNNSA → NGAPP",
+      { id:"QUO-3277", rfqId:"RFQ-1031", carrier:"MSC", lane:"CNNSA → NGAPP",
         rate:"US$ 2,100 / 40GP", transitDays:29, validUntil:"2026-08-15", status:"Accepted",
         created:"2026-08-03T10:40:00" },
-      { id:"QUO-3285", rfqId:"RFQ-1033", customer:"Adaeze Foods Ltd", carrier:"CMA CGM", lane:"CNDAL → GHTEM",
+      { id:"QUO-3285", rfqId:"RFQ-1033", carrier:"CMA CGM", lane:"CNDAL → GHTEM",
         rate:"US$ 1,980 / 40HC", transitDays:24, validUntil:"2026-08-30", status:"Accepted",
         created:"2026-08-13T11:20:00" }
     ],
     shipments: [
-      { id:"SHP-2210", quoteId:"QUO-3298", rfqId:"RFQ-1036", customer:"Chukwuma Auto Parts",
+      { id:"SHP-2210", quoteId:"QUO-3298", rfqId:"RFQ-1036",
         mode:"Air Freight", lane:"CNSHA → NGLOS", carrier:"Ethiopian Cargo", ref:"ET-CARGO-3922",
         etd:"2026-09-05", eta:"2026-09-09", status:"In Transit",
         milestones:[
@@ -541,7 +543,7 @@
           {label:"Arrived NGLOS", date:"", done:false},
           {label:"Delivered", date:"", done:false}
         ]},
-      { id:"SHP-2201", quoteId:"QUO-3285", rfqId:"RFQ-1033", customer:"Adaeze Foods Ltd",
+      { id:"SHP-2201", quoteId:"QUO-3285", rfqId:"RFQ-1033",
         mode:"FCL — Sea Freight", lane:"CNDAL → GHTEM", carrier:"CMA CGM", ref:"CMDU-6620148",
         etd:"2026-08-16", eta:"2026-09-13", status:"In Transit",
         milestones:[
@@ -552,7 +554,7 @@
           {label:"Arrived GHTEM", date:"", done:false},
           {label:"Delivered", date:"", done:false}
         ]},
-      { id:"SHP-2189", quoteId:"QUO-3277", rfqId:"RFQ-1031", customer:"Adaeze Foods Ltd",
+      { id:"SHP-2189", quoteId:"QUO-3277", rfqId:"RFQ-1031",
         mode:"FCL — Sea Freight", lane:"CNNSA → NGAPP", carrier:"MSC", ref:"MSCU-7741205",
         etd:"2026-08-05", eta:"2026-09-03", status:"Delivered",
         milestones:[
@@ -582,7 +584,7 @@
     return dt.toLocaleDateString("en-US", {month:"short", day:"numeric"}) + " · " + dt.toLocaleTimeString("en-US",{hour:"numeric",minute:"2-digit"});
   }
 
-  var RFQ_REQUIRED = ["customer","freightType","origin","destination","cargoDescription","cargoWeight","containerType","quantity","incoterm","targetDate"];
+  var RFQ_REQUIRED = ["freightType","origin","destination","cargoDescription","cargoWeight","containerType","quantity","incoterm","targetDate"];
   function readiness(rfq){
     var n = 0;
     RFQ_REQUIRED.forEach(function(k){ if(rfq[k] && String(rfq[k]).trim() !== "") n++; });
@@ -687,8 +689,8 @@
     var completed = DB.shipments.filter(function(s){ return s.status==="Delivered"; }).length;
 
     var recent = []
-      .concat(DB.rfqs.map(function(r){ return {t:r.created, html:'<b>'+esc(r.id)+'</b> for '+esc(r.customer)+' — '+esc(r.status), route:"#/rfq/"+r.id}; }))
-      .concat(DB.quotes.map(function(q){ return {t:q.created, html:'Quote <b>'+esc(q.id)+'</b> '+esc(q.status.toLowerCase())+' for '+esc(q.customer), route:"#/quote/"+q.id}; }))
+      .concat(DB.rfqs.map(function(r){ return {t:r.created, html:'<b>'+esc(r.id)+'</b> — '+esc(r.status), route:"#/rfq/"+r.id}; }))
+      .concat(DB.quotes.map(function(q){ return {t:q.created, html:'Quote <b>'+esc(q.id)+'</b> '+esc(q.status.toLowerCase()), route:"#/quote/"+q.id}; }))
       .sort(function(a,b){ return new Date(b.t) - new Date(a.t); })
       .slice(0,6);
 
@@ -726,18 +728,14 @@
   }
 
   /* ---------- RFQ List ---------- */
-  var rfqFilterState = { q:"", source:"all", status:"all" };
+  var rfqFilterState = { q:"", status:"all" };
 
   function renderRfqList(){
     setHeader("RFQ", "OnePort365 / RFQ", '<button class="btn btn-primary" data-route="#/rfq/new">+ New RFQ</button>');
 
     content.innerHTML =
       '<div class="toolbar">'+
-        '<div class="search"><span class="ic">&#128269;</span><input id="rfqSearch" type="text" placeholder="Search RFQ #, company, or port" value="'+esc(rfqFilterState.q)+'"></div>'+
-        '<select class="filter" id="rfqSourceFilter">'+
-          '<option value="all">All sources</option>'+
-          '<option value="Web Portal">Web Portal</option>'+
-        '</select>'+
+        '<div class="search"><span class="ic">&#128269;</span><input id="rfqSearch" type="text" placeholder="Search by RFQ number" value="'+esc(rfqFilterState.q)+'"></div>'+
         '<select class="filter" id="rfqStatusFilter">'+
           '<option value="all">All statuses</option>'+
           '<option>Awaiting Quote</option><option>Sent</option><option>Quoted</option>'+
@@ -745,17 +743,15 @@
       '</div>'+
       '<div class="table-wrap"><table>'+
         '<thead><tr>'+
-          '<th>RFQ Number</th><th>Customer</th><th>POL</th><th>POD</th><th>Status</th><th>Readiness</th><th></th>'+
+          '<th>RFQ Number</th><th>POL</th><th>POD</th><th>Status</th><th>Readiness</th><th></th>'+
         '</tr></thead>'+
         '<tbody id="rfqTbody"></tbody>'+
       '</table></div>';
 
     document.getElementById("rfqSearch").value = rfqFilterState.q;
-    document.getElementById("rfqSourceFilter").value = rfqFilterState.source;
     document.getElementById("rfqStatusFilter").value = rfqFilterState.status;
 
     document.getElementById("rfqSearch").addEventListener("input", function(e){ rfqFilterState.q = e.target.value; paintRfqRows(); });
-    document.getElementById("rfqSourceFilter").addEventListener("change", function(e){ rfqFilterState.source = e.target.value; paintRfqRows(); });
     document.getElementById("rfqStatusFilter").addEventListener("change", function(e){ rfqFilterState.status = e.target.value; paintRfqRows(); });
 
     paintRfqRows();
@@ -766,13 +762,12 @@
     var q = rfqFilterState.q.trim().toLowerCase();
     var rows = DB.rfqs.slice().sort(function(a,b){ return b.id.localeCompare(a.id, undefined, {numeric:true}); }).filter(function(r){
       if(rfqFilterState.status !== "all" && r.status !== rfqFilterState.status) return false;
-      if(rfqFilterState.source !== "all" && r.source !== rfqFilterState.source) return false;
       if(!q) return true;
-      return (r.id+" "+r.customer+" "+r.origin+" "+r.destination).toLowerCase().indexOf(q) !== -1;
+      return r.id.toLowerCase().indexOf(q) !== -1;
     });
 
     if(rows.length === 0){
-      tbody.innerHTML = '<tr class="empty-row"><td colspan="7">No RFQs match your search.</td></tr>';
+      tbody.innerHTML = '<tr class="empty-row"><td colspan="6">No RFQs match this RFQ number.</td></tr>';
       return;
     }
 
@@ -781,7 +776,6 @@
       var readyCls = rd.n === rd.total ? "readiness-full" : "readiness-partial";
       return '<tr class="table-row" tabindex="0" data-route="#/rfq/'+esc(r.id)+'">'+
         '<td class="id-link">'+esc(r.id)+'</td>'+
-        '<td>'+esc(r.customer)+'</td>'+
         '<td class="num">'+esc(r.origin)+'</td>'+
         '<td class="num">'+esc(r.destination)+'</td>'+
         '<td>'+rfqStatusBadge(r.status)+'</td>'+
@@ -802,7 +796,7 @@
 
     content.innerHTML =
       '<div class="back-link" data-route="#/rfq">&#8592; Back to RFQ list</div>'+
-      '<div class="detail-head"><div class="detail-title"><h1>'+esc(r.customer)+'</h1>'+rfqStatusBadge(r.status)+'</div></div>'+
+      '<div class="detail-head"><div class="detail-title"><h1>'+(r.cargoDescription ? esc(r.cargoDescription) : esc(r.id))+'</h1>'+rfqStatusBadge(r.status)+'</div></div>'+
       '<div class="detail-grid">'+
         '<div class="panel panel-pad">'+
           '<div class="field-grid">'+
@@ -832,9 +826,8 @@
             '<div class="section-head" style="margin:0 0 12px 0;"><h2>Summary</h2></div>'+
             '<div class="stat-list">'+
               statRow("Readiness", rd.n+" / "+rd.total)+
-              statRow("Source", r.source)+
+              statRow("Lane", (r.origin||"—")+" → "+(r.destination||"—"))+
               statRow("Created", fmtDate(r.created))+
-              statRow("Customer", r.customer)+
             '</div>'+
           '</div>'+
           (r.status === "Awaiting Quote" ? (
@@ -898,7 +891,7 @@
   function renderRfqForm(editId){
     var editing = editId ? findRfq(editId) : null;
     var draft = editing ? editing : {
-      customer:"Adaeze Foods Ltd", freightType:"", origin:"", destination:"", cargoDescription:"",
+      freightType:"", origin:"", destination:"", cargoDescription:"",
       cargoWeight:"", containerType:"", quantity:"", incoterm:"", targetDate:"", notes:""
     };
 
@@ -909,11 +902,6 @@
       '<div class="panel panel-pad" style="max-width:760px;">'+
         '<form id="rfqForm">'+
           '<div class="form-grid">'+
-
-            '<div class="form-field span2">'+
-              '<label for="f_customer">Customer</label>'+
-              '<input type="text" id="f_customer" value="'+esc(draft.customer)+'" placeholder="Company name" />'+
-            '</div>'+
 
             '<div class="form-field">'+
               '<label for="f_freightType">Freight Type</label>'+
@@ -964,7 +952,7 @@
           '</div>'+
 
           '<div class="form-actions">'+
-            '<div class="progress-mini">Readiness: <b id="readinessLabel">0/10</b> required fields complete</div>'+
+            '<div class="progress-mini">Readiness: <b id="readinessLabel">0/9</b> required fields complete</div>'+
             '<div style="display:flex; gap:10px;">'+
               '<button type="button" class="btn" id="saveDraftBtn">Save &amp; finish later</button>'+
               '<button type="submit" class="btn btn-primary" id="submitRfqBtn">Send to Commercial</button>'+
@@ -975,7 +963,6 @@
 
     function collect(){
       return {
-        customer: document.getElementById("f_customer").value.trim(),
         freightType: document.getElementById("f_freightType").value,
         incoterm: document.getElementById("f_incoterm").value,
         origin: document.getElementById("f_origin").value,
@@ -993,7 +980,7 @@
       var rd = readiness(vals);
       document.getElementById("readinessLabel").textContent = rd.n+"/"+rd.total;
     }
-    ["f_customer","f_freightType","f_incoterm","f_origin","f_destination","f_cargoDescription","f_cargoWeight","f_quantity","f_containerType","f_targetDate","f_notes"].forEach(function(id){
+    ["f_freightType","f_incoterm","f_origin","f_destination","f_cargoDescription","f_cargoWeight","f_quantity","f_containerType","f_targetDate","f_notes"].forEach(function(id){
       var el = document.getElementById(id);
       el.addEventListener("input", updateReadiness);
       el.addEventListener("change", updateReadiness);
@@ -1026,7 +1013,7 @@
       } else {
         var id = "RFQ-"+DB.nextRfq;
         DB.nextRfq += 1;
-        var record = Object.assign({id:id, status:status, source:"Web Portal", created:new Date().toISOString()}, vals);
+        var record = Object.assign({id:id, status:status, created:new Date().toISOString()}, vals);
         DB.rfqs.unshift(record);
         saveState();
         showToast(id+" "+(status==="Awaiting Quote"?"saved. Finish it later from the RFQ list.":"created and sent to Commercial."));
@@ -1056,12 +1043,11 @@
     var rows = DB.quotes.slice().sort(function(a,b){ return b.id.localeCompare(a.id, undefined, {numeric:true}); });
     content.innerHTML =
       '<div class="table-wrap"><table>'+
-        '<thead><tr><th>Quote</th><th>Customer</th><th>Lane</th><th>Carrier</th><th>Rate</th><th>Valid Until</th><th>Status</th><th></th></tr></thead>'+
+        '<thead><tr><th>Quote</th><th>Lane</th><th>Carrier</th><th>Rate</th><th>Valid Until</th><th>Status</th><th></th></tr></thead>'+
         '<tbody>'+
         (rows.length ? rows.map(function(q){
           return '<tr class="table-row" tabindex="0" data-route="#/quote/'+esc(q.id)+'">'+
             '<td class="id-link">'+esc(q.id)+'</td>'+
-            '<td>'+esc(q.customer)+'</td>'+
             '<td class="num">'+esc(q.lane)+'</td>'+
             '<td>'+esc(q.carrier)+'</td>'+
             '<td class="num">'+esc(q.rate)+'</td>'+
@@ -1069,7 +1055,7 @@
             '<td>'+quoteStatusBadge(q.status)+'</td>'+
             '<td class="chevron">&#8250;</td>'+
           '</tr>';
-        }).join("") : '<tr class="empty-row"><td colspan="8">No quotes yet.</td></tr>')+
+        }).join("") : '<tr class="empty-row"><td colspan="7">No quotes yet.</td></tr>')+
         '</tbody>'+
       '</table></div>';
   }
@@ -1088,7 +1074,7 @@
 
     content.innerHTML =
       '<div class="back-link" data-route="#/quote">&#8592; Back to Quote list</div>'+
-      '<div class="detail-head"><div class="detail-title"><h1>'+esc(q.customer)+'</h1>'+quoteStatusBadge(q.status)+'</div></div>'+
+      '<div class="detail-head"><div class="detail-title"><h1>'+esc(q.lane)+'</h1>'+quoteStatusBadge(q.status)+'</div></div>'+
       '<div class="detail-grid">'+
         '<div class="panel panel-pad">'+
           '<div class="field-grid">'+
@@ -1126,7 +1112,7 @@
       document.getElementById("acceptQuoteBtn").addEventListener("click", function(){
         q.status = "Accepted";
         var newShip = {
-          id: "SHP-"+(2200+DB.shipments.length+10), quoteId:q.id, rfqId:q.rfqId, customer:q.customer,
+          id: "SHP-"+(2200+DB.shipments.length+10), quoteId:q.id, rfqId:q.rfqId,
           mode:q.carrier+" — "+(rfq?rfq.freightType:""), lane:q.lane, carrier:q.carrier,
           ref: q.carrier.replace(/\s+/g,"").toUpperCase()+"-"+Math.floor(100000+Math.random()*899999),
           etd:"", eta:"", status:"Booked",
@@ -1159,12 +1145,11 @@
     var rows = DB.shipments.slice().sort(function(a,b){ return b.id.localeCompare(a.id, undefined, {numeric:true}); });
     content.innerHTML =
       '<div class="table-wrap"><table>'+
-        '<thead><tr><th>Shipment</th><th>Customer</th><th>Lane</th><th>Carrier</th><th>ETD</th><th>ETA</th><th>Status</th><th></th></tr></thead>'+
+        '<thead><tr><th>Shipment</th><th>Lane</th><th>Carrier</th><th>ETD</th><th>ETA</th><th>Status</th><th></th></tr></thead>'+
         '<tbody>'+
         (rows.length ? rows.map(function(s){
           return '<tr class="table-row" tabindex="0" data-route="#/shipment/'+esc(s.id)+'">'+
             '<td class="id-link">'+esc(s.id)+'</td>'+
-            '<td>'+esc(s.customer)+'</td>'+
             '<td class="num">'+esc(s.lane)+'</td>'+
             '<td>'+esc(s.carrier)+'</td>'+
             '<td class="num">'+fmtDate(s.etd)+'</td>'+
@@ -1172,7 +1157,7 @@
             '<td>'+shipmentStatusBadge(s.status)+'</td>'+
             '<td class="chevron">&#8250;</td>'+
           '</tr>';
-        }).join("") : '<tr class="empty-row"><td colspan="8">No shipments yet.</td></tr>')+
+        }).join("") : '<tr class="empty-row"><td colspan="7">No shipments yet.</td></tr>')+
         '</tbody>'+
       '</table></div>';
   }
@@ -1185,7 +1170,7 @@
 
     content.innerHTML =
       '<div class="back-link" data-route="#/shipment">&#8592; Back to Shipment list</div>'+
-      '<div class="detail-head"><div class="detail-title"><h1>'+esc(s.customer)+'</h1>'+shipmentStatusBadge(s.status)+'</div></div>'+
+      '<div class="detail-head"><div class="detail-title"><h1>'+esc(s.lane)+'</h1>'+shipmentStatusBadge(s.status)+'</div></div>'+
       '<div class="detail-grid">'+
         '<div class="panel panel-pad">'+
           '<div class="field-grid">'+
@@ -1225,7 +1210,7 @@
       '<div class="panel panel-pad" style="max-width:520px;">'+
         '<div class="field-grid">'+
           field("Name", "Okpanaci")+
-          field("Company", "Adaeze Foods Ltd")+
+          field("Company", CUSTOMER)+
           field("Email", "okpanaci@adaezefoods.example")+
           field("Role", "Logistics Coordinator")+
         '</div>'+
@@ -1235,6 +1220,7 @@
   }
 
   /* ---------- Boot ---------- */
+  document.getElementById("sidebarCompany").textContent = CUSTOMER;
   route();
 })();
 </script>
