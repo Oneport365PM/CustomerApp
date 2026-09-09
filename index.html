@@ -1,0 +1,1214 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>OnePort365 Portal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+  :root{
+    --bg:#F5F7F4;
+    --surface:#FFFFFF;
+    --surface-2:#F0F3EE;
+    --border:#DFE5DC;
+    --border-strong:#C7D0C2;
+    --ink:#152016;
+    --ink-soft:#4B5A4C;
+    --muted:#7C8A7C;
+    --sidebar:#0F1B14;
+    --sidebar-ink:#D9E4D6;
+    --sidebar-muted:#8AA089;
+    --sidebar-active:#1B2E20;
+    --accent:#8FD13A;
+    --accent-ink:#12210D;
+    --accent-strong:#6FAE21;
+    --amber-bg:#FBF0D9;
+    --amber-ink:#8A5A0B;
+    --amber-dot:#D98C1B;
+    --green-bg:#DCEFDD;
+    --green-ink:#175C31;
+    --green-dot:#1F8C46;
+    --grey-bg:#EBEEE9;
+    --grey-ink:#5B685C;
+    --grey-dot:#8B978A;
+    --blue-bg:#DDE8F5;
+    --blue-ink:#1E4A80;
+    --blue-dot:#3B7BC4;
+    --red-bg:#F8E1DE;
+    --red-ink:#9A3324;
+    --red-dot:#C9503C;
+    --shadow: 0 1px 2px rgba(15,27,20,0.06), 0 1px 1px rgba(15,27,20,0.04);
+    --radius:8px;
+    --font-ui: 'Public Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --font-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#0E1512;
+      --surface:#151F19;
+      --surface-2:#1B271F;
+      --border:#2B3A31;
+      --border-strong:#3A4C40;
+      --ink:#E7EEE5;
+      --ink-soft:#B7C4B4;
+      --muted:#7E8F7C;
+      --sidebar:#0A120D;
+      --sidebar-ink:#D9E4D6;
+      --sidebar-muted:#75886F;
+      --sidebar-active:#182620;
+      --accent:#8FD13A;
+      --accent-ink:#12210D;
+      --accent-strong:#A3E552;
+      --amber-bg:#3A2C10;
+      --amber-ink:#E8B85B;
+      --amber-dot:#D98C1B;
+      --green-bg:#123420;
+      --green-ink:#6FCB8E;
+      --green-dot:#3AAE63;
+      --grey-bg:#20291F;
+      --grey-ink:#A7B3A2;
+      --grey-dot:#7C8A7A;
+      --blue-bg:#132A3F;
+      --blue-ink:#7FB2E8;
+      --blue-dot:#4C8FD1;
+      --red-bg:#3B1D17;
+      --red-ink:#E39482;
+      --red-dot:#C9503C;
+      --shadow: 0 1px 2px rgba(0,0,0,0.4), 0 1px 1px rgba(0,0,0,0.3);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#0E1512;
+    --surface:#151F19;
+    --surface-2:#1B271F;
+    --border:#2B3A31;
+    --border-strong:#3A4C40;
+    --ink:#E7EEE5;
+    --ink-soft:#B7C4B4;
+    --muted:#7E8F7C;
+    --sidebar:#0A120D;
+    --sidebar-ink:#D9E4D6;
+    --sidebar-muted:#75886F;
+    --sidebar-active:#182620;
+    --accent:#8FD13A;
+    --accent-ink:#12210D;
+    --accent-strong:#A3E552;
+    --amber-bg:#3A2C10;
+    --amber-ink:#E8B85B;
+    --amber-dot:#D98C1B;
+    --green-bg:#123420;
+    --green-ink:#6FCB8E;
+    --green-dot:#3AAE63;
+    --grey-bg:#20291F;
+    --grey-ink:#A7B3A2;
+    --grey-dot:#7C8A7A;
+    --blue-bg:#132A3F;
+    --blue-ink:#7FB2E8;
+    --blue-dot:#4C8FD1;
+    --red-bg:#3B1D17;
+    --red-ink:#E39482;
+    --red-dot:#C9503C;
+    --shadow: 0 1px 2px rgba(0,0,0,0.4), 0 1px 1px rgba(0,0,0,0.3);
+  }
+
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:var(--font-ui);
+    font-size:14px;
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3{text-wrap:balance; margin:0;}
+  a{color:inherit;}
+  button{font-family:inherit;}
+  ::selection{background:var(--accent); color:var(--accent-ink);}
+  .num{font-family:var(--font-mono); font-variant-numeric:tabular-nums;}
+
+  /* App shell */
+  .app{display:flex; min-height:100vh;}
+
+  .sidebar{
+    width:248px; flex:none;
+    background:var(--sidebar);
+    color:var(--sidebar-ink);
+    display:flex; flex-direction:column;
+    padding:20px 16px;
+    position:sticky; top:0; height:100vh;
+  }
+  .brand{
+    display:flex; align-items:center; gap:10px;
+    padding:6px 8px 22px 8px;
+  }
+  .brand-mark{
+    width:30px; height:30px; border-radius:7px;
+    background:var(--accent); color:var(--accent-ink);
+    display:flex; align-items:center; justify-content:center;
+    font-weight:700; font-size:15px; flex:none;
+  }
+  .brand-name{font-weight:700; font-size:15px; letter-spacing:0.01em; color:#fff;}
+  .brand-sub{font-size:10.5px; color:var(--sidebar-muted); letter-spacing:0.06em; text-transform:uppercase; margin-top:1px;}
+
+  .nav-group{
+    border:1px solid #223226;
+    border-radius:10px;
+    padding:6px;
+    display:flex; flex-direction:column; gap:2px;
+    margin-bottom:14px;
+  }
+  .nav-solo{margin-bottom:14px;}
+  .nav-item{
+    display:flex; align-items:center; gap:10px;
+    padding:9px 10px;
+    border-radius:7px;
+    text-decoration:none;
+    color:var(--sidebar-ink);
+    font-size:13.5px; font-weight:500;
+    cursor:pointer;
+    border:1px solid transparent;
+    background:transparent;
+  }
+  .nav-item .ic{width:16px; text-align:center; opacity:0.85; flex:none;}
+  .nav-item:hover{background:#152018;}
+  .nav-item.active{
+    background:var(--sidebar-active);
+    border-color:#2C4032;
+    color:#fff;
+  }
+  .nav-item.active .ic{opacity:1;}
+
+  .sidebar-spacer{flex:1;}
+
+  .user-block{
+    border-top:1px solid #1F2C22;
+    padding-top:12px;
+    display:flex; flex-direction:column; gap:2px;
+  }
+  .user-row{
+    display:flex; align-items:center; gap:9px;
+    padding:6px 8px 10px 8px;
+  }
+  .user-avatar{
+    width:28px; height:28px; border-radius:50%;
+    background:#26382B; color:#C9DBC5;
+    display:flex; align-items:center; justify-content:center;
+    font-size:11.5px; font-weight:700; flex:none;
+  }
+  .user-name{font-size:13px; font-weight:600; color:#fff;}
+  .user-role{font-size:11px; color:var(--sidebar-muted);}
+  .user-link{
+    font-size:12.5px; color:var(--sidebar-muted);
+    padding:6px 8px; border-radius:6px; cursor:pointer;
+  }
+  .user-link:hover{background:#152018; color:var(--sidebar-ink);}
+
+  /* Main */
+  .main{flex:1; min-width:0; display:flex; flex-direction:column;}
+  .topbar{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:18px 32px; border-bottom:1px solid var(--border);
+    background:var(--surface);
+    position:sticky; top:0; z-index:5;
+  }
+  .crumb{font-size:12px; color:var(--muted);}
+  .page-title{font-size:19px; font-weight:700; margin-top:2px; letter-spacing:-0.01em;}
+  .topbar-right{display:flex; align-items:center; gap:10px;}
+
+  .content{padding:28px 32px 56px 32px; max-width:1180px; width:100%;}
+
+  /* Buttons */
+  .btn{
+    display:inline-flex; align-items:center; gap:6px;
+    padding:9px 14px; border-radius:7px;
+    font-size:13.5px; font-weight:600;
+    border:1px solid var(--border-strong);
+    background:var(--surface); color:var(--ink);
+    cursor:pointer; white-space:nowrap;
+  }
+  .btn:hover{background:var(--surface-2);}
+  .btn-primary{
+    background:var(--accent); border-color:var(--accent-strong); color:var(--accent-ink);
+  }
+  .btn-primary:hover{background:var(--accent-strong);}
+  .btn-ghost{border-color:transparent; background:transparent;}
+  .btn-ghost:hover{background:var(--surface-2);}
+  .btn-sm{padding:6px 10px; font-size:12.5px;}
+  .btn:focus-visible, .nav-item:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible, .table-row:focus-visible{
+    outline:2px solid var(--accent-strong); outline-offset:1px;
+  }
+
+  /* Cards / panels */
+  .panel{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    box-shadow:var(--shadow);
+  }
+  .panel-pad{padding:20px;}
+
+  .tiles{
+    display:grid; grid-template-columns:repeat(4,1fr); gap:14px;
+    margin-bottom:22px;
+  }
+  .tile{
+    background:var(--surface); border:1px solid var(--border); border-radius:var(--radius);
+    padding:16px 18px; box-shadow:var(--shadow);
+  }
+  .tile-label{font-size:11.5px; color:var(--muted); text-transform:uppercase; letter-spacing:0.05em; font-weight:600;}
+  .tile-value{font-family:var(--font-mono); font-size:26px; font-weight:600; margin-top:8px; letter-spacing:-0.01em;}
+  .tile-sub{font-size:12px; color:var(--muted); margin-top:4px;}
+  .tile-accent{border-top:3px solid var(--accent);}
+
+  .section-head{
+    display:flex; align-items:baseline; justify-content:space-between;
+    margin:26px 0 12px 0;
+  }
+  .section-head h2{font-size:14.5px; font-weight:700;}
+  .section-head .link{font-size:12.5px; color:var(--ink-soft); cursor:pointer; text-decoration:underline; text-decoration-color:var(--border-strong); text-underline-offset:3px;}
+
+  /* Toolbar */
+  .toolbar{
+    display:flex; align-items:center; gap:10px; margin-bottom:14px; flex-wrap:wrap;
+  }
+  .search{
+    flex:1; min-width:220px;
+    display:flex; align-items:center; gap:8px;
+    border:1px solid var(--border-strong); border-radius:7px;
+    padding:8px 12px; background:var(--surface);
+  }
+  .search input{border:none; outline:none; background:transparent; font-size:13.5px; color:var(--ink); width:100%; font-family:inherit;}
+  .search .ic{color:var(--muted); font-size:13px;}
+  select.filter{
+    border:1px solid var(--border-strong); border-radius:7px;
+    padding:8px 10px; background:var(--surface); color:var(--ink);
+    font-size:13px; font-family:inherit; cursor:pointer;
+  }
+
+  /* Table */
+  .table-wrap{overflow-x:auto; border:1px solid var(--border); border-radius:var(--radius); background:var(--surface); box-shadow:var(--shadow);}
+  table{width:100%; border-collapse:collapse; min-width:720px;}
+  thead th{
+    text-align:left; font-size:11px; text-transform:uppercase; letter-spacing:0.04em;
+    color:var(--muted); font-weight:600; padding:11px 16px; border-bottom:1px solid var(--border);
+    background:var(--surface-2);
+  }
+  tbody td{padding:13px 16px; border-bottom:1px solid var(--border); font-size:13.5px; vertical-align:middle;}
+  tbody tr:last-child td{border-bottom:none;}
+  .table-row{cursor:pointer;}
+  .table-row:hover{background:var(--surface-2);}
+  .id-link{font-family:var(--font-mono); font-weight:600; color:var(--green-ink); font-size:13px;}
+  .chevron{color:var(--muted); text-align:right;}
+  .empty-row td{padding:36px 16px; text-align:center; color:var(--muted);}
+
+  .badge{
+    display:inline-flex; align-items:center; gap:6px;
+    padding:4px 9px; border-radius:99px; font-size:12px; font-weight:600;
+    white-space:nowrap;
+  }
+  .badge .dot{width:6px; height:6px; border-radius:50%; flex:none;}
+  .badge-amber{background:var(--amber-bg); color:var(--amber-ink);} .badge-amber .dot{background:var(--amber-dot);}
+  .badge-green{background:var(--green-bg); color:var(--green-ink);} .badge-green .dot{background:var(--green-dot);}
+  .badge-grey{background:var(--grey-bg); color:var(--grey-ink);} .badge-grey .dot{background:var(--grey-dot);}
+  .badge-blue{background:var(--blue-bg); color:var(--blue-ink);} .badge-blue .dot{background:var(--blue-dot);}
+  .badge-red{background:var(--red-bg); color:var(--red-ink);} .badge-red .dot{background:var(--red-dot);}
+
+  .readiness{font-family:var(--font-mono); font-size:12.5px; font-weight:600; padding:3px 8px; border-radius:6px;}
+  .readiness-full{background:var(--green-bg); color:var(--green-ink);}
+  .readiness-partial{background:var(--amber-bg); color:var(--amber-ink);}
+
+  /* Detail view */
+  .detail-head{
+    display:flex; align-items:center; justify-content:space-between; margin-bottom:18px; flex-wrap:wrap; gap:10px;
+  }
+  .detail-title{display:flex; align-items:center; gap:12px;}
+  .detail-title h1{font-size:20px; font-weight:700;}
+  .back-link{
+    display:inline-flex; align-items:center; gap:6px; font-size:13px; color:var(--ink-soft);
+    cursor:pointer; margin-bottom:14px;
+  }
+  .back-link:hover{color:var(--ink);}
+
+  .detail-grid{display:grid; grid-template-columns:2fr 1fr; gap:18px; align-items:start;}
+  @media (max-width:900px){ .detail-grid{grid-template-columns:1fr;} .tiles{grid-template-columns:repeat(2,1fr);} }
+
+  .field-grid{display:grid; grid-template-columns:1fr 1fr; gap:16px 24px;}
+  .field{display:flex; flex-direction:column; gap:4px;}
+  .field-label{font-size:11px; text-transform:uppercase; letter-spacing:0.04em; color:var(--muted); font-weight:600;}
+  .field-value{font-size:14px; color:var(--ink);}
+  .field-value.mono{font-family:var(--font-mono);}
+  .field-span2{grid-column:1 / -1;}
+
+  .divider{height:1px; background:var(--border); margin:18px 0;}
+
+  .timeline{display:flex; flex-direction:column; gap:0;}
+  .tl-item{display:flex; gap:12px; padding-bottom:18px; position:relative;}
+  .tl-item:last-child{padding-bottom:0;}
+  .tl-item::before{
+    content:''; position:absolute; left:5px; top:16px; bottom:0; width:1px; background:var(--border);
+  }
+  .tl-item:last-child::before{display:none;}
+  .tl-dot{width:11px; height:11px; border-radius:50%; background:var(--surface); border:2px solid var(--border-strong); flex:none; margin-top:2px; z-index:1;}
+  .tl-dot.done{background:var(--green-dot); border-color:var(--green-dot);}
+  .tl-dot.current{background:var(--accent); border-color:var(--accent-strong);}
+  .tl-body .tl-label{font-size:13px; font-weight:600;}
+  .tl-body .tl-meta{font-size:12px; color:var(--muted); margin-top:1px;}
+
+  .stat-list{display:flex; flex-direction:column; gap:12px;}
+  .stat-row{display:flex; align-items:center; justify-content:space-between; font-size:13px;}
+  .stat-row .k{color:var(--muted);}
+  .stat-row .v{font-weight:600; font-family:var(--font-mono);}
+
+  /* Form */
+  .form-grid{display:grid; grid-template-columns:1fr 1fr; gap:16px 20px;}
+  .form-field{display:flex; flex-direction:column; gap:6px;}
+  .form-field.span2{grid-column:1 / -1;}
+  label{font-size:12.5px; font-weight:600; color:var(--ink-soft);}
+  label .opt{font-weight:400; color:var(--muted); text-transform:none; letter-spacing:0;}
+  input[type=text], input[type=number], input[type=date], select, textarea{
+    border:1px solid var(--border-strong); border-radius:7px; padding:9px 11px;
+    font-size:13.5px; font-family:inherit; color:var(--ink); background:var(--surface);
+    width:100%;
+  }
+  textarea{resize:vertical; min-height:76px;}
+  .hint{font-size:11.5px; color:var(--muted);}
+  .radio-row{display:flex; gap:8px; flex-wrap:wrap;}
+  .radio-chip{
+    border:1px solid var(--border-strong); border-radius:7px; padding:8px 12px;
+    font-size:13px; cursor:pointer; user-select:none; background:var(--surface);
+  }
+  .radio-chip input{position:absolute; opacity:0; pointer-events:none;}
+  .radio-chip.checked{background:var(--surface-2); border-color:var(--ink-soft); font-weight:600;}
+  .form-actions{
+    display:flex; align-items:center; justify-content:space-between; gap:10px;
+    margin-top:22px; padding-top:18px; border-top:1px solid var(--border);
+  }
+  .progress-mini{font-size:12.5px; color:var(--muted);}
+  .progress-mini b{color:var(--ink); font-family:var(--font-mono);}
+
+  .toast{
+    position:fixed; bottom:22px; left:50%; transform:translateX(-50%) translateY(8px);
+    background:var(--ink); color:var(--bg); padding:11px 18px; border-radius:8px;
+    font-size:13.5px; font-weight:500; box-shadow:0 6px 20px rgba(0,0,0,0.25);
+    opacity:0; pointer-events:none; transition:opacity .18s ease, transform .18s ease;
+    z-index:50; display:flex; align-items:center; gap:8px;
+  }
+  .toast.show{opacity:1; transform:translateX(-50%) translateY(0);}
+
+  .empty-state{
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    padding:56px 20px; text-align:center; color:var(--muted); gap:8px;
+  }
+  .empty-state .ic{font-size:26px; opacity:0.5;}
+
+  @media (prefers-reduced-motion: reduce){ *{transition:none !important; animation:none !important;} }
+</style>
+</head>
+<body>
+<div class="app">
+  <nav class="sidebar" aria-label="Primary">
+    <div class="brand">
+      <div class="brand-mark">1P</div>
+      <div>
+        <div class="brand-name">OnePort365</div>
+        <div class="brand-sub">Customer Portal</div>
+      </div>
+    </div>
+
+    <a class="nav-item nav-solo" data-route="#/dashboard"><span class="ic">&#9635;</span>Dashboard</a>
+
+    <div class="nav-group">
+      <a class="nav-item" data-route="#/rfq"><span class="ic">&#128196;</span>RFQ</a>
+      <a class="nav-item" data-route="#/quote"><span class="ic">&#128179;</span>Quote</a>
+    </div>
+
+    <a class="nav-item nav-solo" data-route="#/shipment"><span class="ic">&#128674;</span>Shipment</a>
+
+    <div class="sidebar-spacer"></div>
+
+    <div class="user-block">
+      <div class="user-row">
+        <div class="user-avatar">OK</div>
+        <div>
+          <div class="user-name">Okpanaci</div>
+          <div class="user-role">Adaeze Foods Ltd</div>
+        </div>
+      </div>
+      <a class="user-link" data-route="#/profile">Profile setting</a>
+      <a class="user-link" id="logoutLink">Logout</a>
+    </div>
+  </nav>
+
+  <div class="main">
+    <div class="topbar">
+      <div>
+        <div class="crumb" id="crumb">OnePort365 / Dashboard</div>
+        <h1 class="page-title" id="pageTitle">Dashboard</h1>
+      </div>
+      <div class="topbar-right" id="topbarActions"></div>
+    </div>
+    <div class="content" id="content"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ---------- Mock data store ---------- */
+  var PORTS = {
+    CNDAL:"Dalian, China", CNNSA:"Nansha, China", CNSHA:"Shanghai, China",
+    GHTEM:"Tema, Ghana", NGAPP:"Apapa (Lagos), Nigeria", NGONN:"Onne, Nigeria",
+    NGLOS:"Tin Can Island (Lagos), Nigeria", NGCAL:"Calabar, Nigeria"
+  };
+  var PORT_LIST = Object.keys(PORTS).map(function(c){ return {code:c, label:c+" — "+PORTS[c]}; });
+  var FREIGHT_TYPES = ["FCL","LCL","Air Freight","Breakbulk","RoRo"];
+  var CONTAINER_TYPES = ["20GP","40GP","40HC","20RF","40RF","N/A (Air)","N/A (Breakbulk)"];
+  var INCOTERMS = ["EXW","FCA","FOB","CFR","CIF","DAP","DDP"];
+
+  function loadState(){
+    try{
+      var raw = localStorage.getItem("op365_customer_prototype_v1");
+      if(raw) return JSON.parse(raw);
+    }catch(e){}
+    return null;
+  }
+  function saveState(){
+    try{ localStorage.setItem("op365_customer_prototype_v1", JSON.stringify(DB)); }catch(e){}
+  }
+
+  var SEED = {
+    nextRfq: 1043,
+    rfqs: [
+      { id:"RFQ-1042", customer:"Adaeze Foods Ltd", freightType:"FCL", origin:"CNDAL", destination:"GHTEM",
+        cargoDescription:"Frozen poultry parts", cargoWeight:"18,000 kg", containerType:"40RF", quantity:"2",
+        incoterm:"CIF", targetDate:"2026-10-15", notes:"Temperature controlled at -18°C. Halal certification required.",
+        status:"Sent to Commercial", source:"Web Portal", created:"2026-09-02T09:14:00" },
+      { id:"RFQ-1041", customer:"Bola Textiles", freightType:"LCL", origin:"CNNSA", destination:"NGAPP",
+        cargoDescription:"Cotton fabric rolls", cargoWeight:"4,200 kg", containerType:"N/A (Air)", quantity:"28 CBM",
+        incoterm:"FOB", targetDate:"2026-10-01", notes:"Keep dry, avoid stacking above 3 pallets.",
+        status:"Sent to Commercial", source:"Web Portal", created:"2026-09-01T15:40:00" },
+      { id:"RFQ-1039", customer:"Kaduna Metals Inc.", freightType:"FCL", origin:"CNSHA", destination:"NGAPP",
+        cargoDescription:"Galvanized steel coils", cargoWeight:"24,500 kg", containerType:"40GP", quantity:"1",
+        incoterm:"CFR", targetDate:"2026-09-20", notes:"",
+        status:"Quoted", source:"Web Portal", created:"2026-08-27T11:02:00" },
+      { id:"RFQ-1038", customer:"Ngozi AgroExports", freightType:"FCL", origin:"NGAPP", destination:"GHTEM",
+        cargoDescription:"Bagged cashew nuts", cargoWeight:"", containerType:"20GP", quantity:"3",
+        incoterm:"", targetDate:"", notes:"",
+        status:"Draft", source:"Web Portal", created:"2026-09-05T08:20:00" },
+      { id:"RFQ-1036", customer:"Chukwuma Auto Parts", freightType:"Air Freight", origin:"CNSHA", destination:"NGLOS",
+        cargoDescription:"Automotive spare parts", cargoWeight:"850 kg", containerType:"N/A (Air)", quantity:"6 pallets",
+        incoterm:"EXW", targetDate:"2026-09-14", notes:"Priority parts for stalled production line.",
+        status:"Converted", source:"Web Portal", created:"2026-08-20T10:05:00" },
+      { id:"RFQ-1031", customer:"Adaeze Foods Ltd", freightType:"FCL", origin:"CNNSA", destination:"NGAPP",
+        cargoDescription:"Canned tomato paste", cargoWeight:"21,000 kg", containerType:"40GP", quantity:"1",
+        incoterm:"CIF", targetDate:"2026-08-18", notes:"",
+        status:"Converted", source:"Web Portal", created:"2026-08-02T09:30:00" }
+    ],
+    quotes: [
+      { id:"QUO-3301", rfqId:"RFQ-1039", customer:"Kaduna Metals Inc.", carrier:"Maersk Line", lane:"CNSHA → NGAPP",
+        rate:"US$ 1,850 / 40GP", transitDays:26, validUntil:"2026-09-30", status:"Sent to Customer",
+        created:"2026-08-29T14:00:00" },
+      { id:"QUO-3298", rfqId:"RFQ-1036", customer:"Chukwuma Auto Parts", carrier:"Ethiopian Cargo", lane:"CNSHA → NGLOS",
+        rate:"US$ 4.20 / kg", transitDays:4, validUntil:"2026-09-10", status:"Accepted",
+        created:"2026-08-21T09:15:00" },
+      { id:"QUO-3277", rfqId:"RFQ-1031", customer:"Adaeze Foods Ltd", carrier:"MSC", lane:"CNNSA → NGAPP",
+        rate:"US$ 2,100 / 40GP", transitDays:29, validUntil:"2026-08-15", status:"Accepted",
+        created:"2026-08-03T10:40:00" }
+    ],
+    shipments: [
+      { id:"SHP-2210", quoteId:"QUO-3298", rfqId:"RFQ-1036", customer:"Chukwuma Auto Parts",
+        mode:"Air Freight", lane:"CNSHA → NGLOS", carrier:"Ethiopian Cargo", ref:"ET-CARGO-3922",
+        etd:"2026-09-05", eta:"2026-09-09", status:"In Transit",
+        milestones:[
+          {label:"Booking confirmed", date:"2026-08-22", done:true},
+          {label:"Cargo received at origin", date:"2026-09-04", done:true},
+          {label:"Departed CNSHA", date:"2026-09-05", done:true},
+          {label:"In transit", date:"2026-09-07", done:true, current:true},
+          {label:"Arrived NGLOS", date:"", done:false},
+          {label:"Delivered", date:"", done:false}
+        ]},
+      { id:"SHP-2189", quoteId:"QUO-3277", rfqId:"RFQ-1031", customer:"Adaeze Foods Ltd",
+        mode:"FCL — Sea Freight", lane:"CNNSA → NGAPP", carrier:"MSC", ref:"MSCU-7741205",
+        etd:"2026-08-05", eta:"2026-09-03", status:"Delivered",
+        milestones:[
+          {label:"Booking confirmed", date:"2026-08-03", done:true},
+          {label:"Cargo received at origin", date:"2026-08-04", done:true},
+          {label:"Departed CNNSA", date:"2026-08-05", done:true},
+          {label:"In transit", date:"2026-08-20", done:true},
+          {label:"Arrived NGAPP", date:"2026-09-01", done:true},
+          {label:"Delivered", date:"2026-09-03", done:true, current:true}
+        ]}
+    ]
+  };
+
+  var DB = loadState() || JSON.parse(JSON.stringify(SEED));
+
+  /* ---------- Helpers ---------- */
+  function esc(s){ return (s===undefined||s===null?"":String(s)).replace(/[&<>"]/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; }); }
+  function fmtDate(d){
+    if(!d) return "—";
+    var dt = new Date(d);
+    if(isNaN(dt.getTime())) return d;
+    return dt.toLocaleDateString("en-US", {month:"short", day:"numeric", year:"numeric"});
+  }
+  function fmtDateTime(d){
+    var dt = new Date(d);
+    if(isNaN(dt.getTime())) return d;
+    return dt.toLocaleDateString("en-US", {month:"short", day:"numeric"}) + " · " + dt.toLocaleTimeString("en-US",{hour:"numeric",minute:"2-digit"});
+  }
+
+  var RFQ_REQUIRED = ["customer","freightType","origin","destination","cargoDescription","cargoWeight","containerType","quantity","incoterm","targetDate"];
+  function readiness(rfq){
+    var n = 0;
+    RFQ_REQUIRED.forEach(function(k){ if(rfq[k] && String(rfq[k]).trim() !== "") n++; });
+    return {n:n, total:RFQ_REQUIRED.length};
+  }
+
+  function rfqStatusBadge(status){
+    var map = {
+      "Draft":"badge-grey", "Sent to Commercial":"badge-amber",
+      "Quoted":"badge-green", "Converted":"badge-blue", "Expired":"badge-red"
+    };
+    return '<span class="badge '+(map[status]||"badge-grey")+'"><span class="dot"></span>'+esc(status)+'</span>';
+  }
+  function quoteStatusBadge(status){
+    var map = { "Draft":"badge-grey", "Sent to Customer":"badge-amber", "Accepted":"badge-green", "Expired":"badge-red" };
+    return '<span class="badge '+(map[status]||"badge-grey")+'"><span class="dot"></span>'+esc(status)+'</span>';
+  }
+  function shipmentStatusBadge(status){
+    var map = { "Booked":"badge-grey", "In Transit":"badge-amber", "At Port":"badge-blue", "Delivered":"badge-green" };
+    return '<span class="badge '+(map[status]||"badge-grey")+'"><span class="dot"></span>'+esc(status)+'</span>';
+  }
+
+  function findRfq(id){ return DB.rfqs.filter(function(r){return r.id===id;})[0]; }
+  function findQuote(id){ return DB.quotes.filter(function(q){return q.id===id;})[0]; }
+  function findShipment(id){ return DB.shipments.filter(function(s){return s.id===id;})[0]; }
+  function quotesForRfq(id){ return DB.quotes.filter(function(q){return q.rfqId===id;}); }
+  function shipmentForQuote(id){ return DB.shipments.filter(function(s){return s.quoteId===id;})[0]; }
+
+  var toastTimer = null;
+  function showToast(msg){
+    var t = document.getElementById("toast");
+    t.textContent = msg;
+    t.classList.add("show");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function(){ t.classList.remove("show"); }, 2600);
+  }
+
+  /* ---------- Router ---------- */
+  var content = document.getElementById("content");
+  var pageTitleEl = document.getElementById("pageTitle");
+  var crumbEl = document.getElementById("crumb");
+  var topbarActions = document.getElementById("topbarActions");
+
+  function setHeader(title, crumb, actionsHtml){
+    pageTitleEl.textContent = title;
+    crumbEl.textContent = crumb;
+    topbarActions.innerHTML = actionsHtml || "";
+  }
+  function setActiveNav(prefix){
+    document.querySelectorAll(".nav-item[data-route]").forEach(function(el){
+      var r = el.getAttribute("data-route");
+      el.classList.toggle("active", prefix.indexOf(r) === 0);
+    });
+  }
+  function go(route){ location.hash = route; }
+
+  function route(){
+    var hash = location.hash || "#/dashboard";
+    var parts = hash.replace("#/","").split("/");
+    var page = parts[0];
+
+    if(page === "dashboard"){ setActiveNav("#/dashboard"); renderDashboard(); }
+    else if(page === "rfq" && parts[1] === "new"){ setActiveNav("#/rfq"); renderRfqForm(); }
+    else if(page === "rfq" && parts[1]){ setActiveNav("#/rfq"); renderRfqDetail(parts[1]); }
+    else if(page === "rfq"){ setActiveNav("#/rfq"); renderRfqList(); }
+    else if(page === "quote" && parts[1]){ setActiveNav("#/quote"); renderQuoteDetail(parts[1]); }
+    else if(page === "quote"){ setActiveNav("#/quote"); renderQuoteList(); }
+    else if(page === "shipment" && parts[1]){ setActiveNav("#/shipment"); renderShipmentDetail(parts[1]); }
+    else if(page === "shipment"){ setActiveNav("#/shipment"); renderShipmentList(); }
+    else if(page === "profile"){ setActiveNav("#/profile"); renderProfile(); }
+    else { go("#/dashboard"); }
+
+    content.scrollTop = 0;
+    window.scrollTo(0,0);
+  }
+  window.addEventListener("hashchange", route);
+
+  document.addEventListener("click", function(e){
+    var el = e.target.closest("[data-route]");
+    if(el){ e.preventDefault(); go(el.getAttribute("data-route")); }
+  });
+  document.getElementById("logoutLink").addEventListener("click", function(){
+    showToast("You have been logged out (prototype — no live session).");
+  });
+
+  /* ---------- Dashboard ---------- */
+  function renderDashboard(){
+    setHeader("Dashboard", "OnePort365 / Dashboard",
+      '<button class="btn btn-primary" data-route="#/rfq/new">+ New RFQ</button>');
+
+    var activeRfqs = DB.rfqs.filter(function(r){ return r.status==="Draft" || r.status==="Sent to Commercial"; }).length;
+    var awaitingQuotes = DB.quotes.filter(function(q){ return q.status==="Sent to Customer"; }).length;
+    var inTransit = DB.shipments.filter(function(s){ return s.status==="In Transit" || s.status==="At Port"; }).length;
+    var avgReady = Math.round(DB.rfqs.reduce(function(a,r){ var rd=readiness(r); return a+(rd.n/rd.total); },0) / DB.rfqs.length * 100);
+
+    var recent = []
+      .concat(DB.rfqs.map(function(r){ return {t:r.created, html:'<b>'+esc(r.id)+'</b> for '+esc(r.customer)+' — '+esc(r.status), route:"#/rfq/"+r.id}; }))
+      .concat(DB.quotes.map(function(q){ return {t:q.created, html:'Quote <b>'+esc(q.id)+'</b> '+esc(q.status.toLowerCase())+' for '+esc(q.customer), route:"#/quote/"+q.id}; }))
+      .sort(function(a,b){ return new Date(b.t) - new Date(a.t); })
+      .slice(0,6);
+
+    content.innerHTML =
+      '<div class="tiles">'+
+        '<div class="tile tile-accent"><div class="tile-label">Active RFQs</div><div class="tile-value num">'+activeRfqs+'</div><div class="tile-sub">Draft or with Commercial</div></div>'+
+        '<div class="tile"><div class="tile-label">Quotes Awaiting Response</div><div class="tile-value num">'+awaitingQuotes+'</div><div class="tile-sub">Action needed from you</div></div>'+
+        '<div class="tile"><div class="tile-label">Shipments In Transit</div><div class="tile-value num">'+inTransit+'</div><div class="tile-sub">Across all lanes</div></div>'+
+        '<div class="tile"><div class="tile-label">Avg. RFQ Readiness</div><div class="tile-value num">'+avgReady+'%</div><div class="tile-sub">Field completeness</div></div>'+
+      '</div>'+
+
+      '<div class="detail-grid">'+
+        '<div>'+
+          '<div class="section-head"><h2>Recent activity</h2></div>'+
+          '<div class="panel panel-pad">'+
+            '<div class="timeline">'+
+              recent.map(function(item){
+                return '<div class="tl-item"><div class="tl-dot done"></div><div class="tl-body">'+
+                  '<div class="tl-label" style="cursor:pointer" data-route="'+item.route+'">'+item.html+'</div>'+
+                  '<div class="tl-meta">'+fmtDateTime(item.t)+'</div></div></div>';
+              }).join("")+
+            '</div>'+
+          '</div>'+
+        '</div>'+
+        '<div>'+
+          '<div class="section-head"><h2>Quick links</h2></div>'+
+          '<div class="panel panel-pad" style="display:flex; flex-direction:column; gap:8px;">'+
+            '<button class="btn" style="justify-content:flex-start" data-route="#/rfq/new">+ New RFQ</button>'+
+            '<button class="btn" style="justify-content:flex-start" data-route="#/quote">View open quotes</button>'+
+            '<button class="btn" style="justify-content:flex-start" data-route="#/shipment">Track shipments</button>'+
+          '</div>'+
+        '</div>'+
+      '</div>';
+  }
+
+  /* ---------- RFQ List ---------- */
+  var rfqFilterState = { q:"", source:"all", status:"all" };
+
+  function renderRfqList(){
+    setHeader("RFQ", "OnePort365 / RFQ", '<button class="btn btn-primary" data-route="#/rfq/new">+ New RFQ</button>');
+
+    content.innerHTML =
+      '<div class="toolbar">'+
+        '<div class="search"><span class="ic">&#128269;</span><input id="rfqSearch" type="text" placeholder="Search RFQ #, company, or port" value="'+esc(rfqFilterState.q)+'"></div>'+
+        '<select class="filter" id="rfqSourceFilter">'+
+          '<option value="all">All sources</option>'+
+          '<option value="Web Portal">Web Portal</option>'+
+        '</select>'+
+        '<select class="filter" id="rfqStatusFilter">'+
+          '<option value="all">All statuses</option>'+
+          '<option>Draft</option><option>Sent to Commercial</option><option>Quoted</option><option>Converted</option>'+
+        '</select>'+
+      '</div>'+
+      '<div class="table-wrap"><table>'+
+        '<thead><tr>'+
+          '<th>RFQ Number</th><th>Customer</th><th>POL</th><th>POD</th><th>Status</th><th>Readiness</th><th></th>'+
+        '</tr></thead>'+
+        '<tbody id="rfqTbody"></tbody>'+
+      '</table></div>';
+
+    document.getElementById("rfqSearch").value = rfqFilterState.q;
+    document.getElementById("rfqSourceFilter").value = rfqFilterState.source;
+    document.getElementById("rfqStatusFilter").value = rfqFilterState.status;
+
+    document.getElementById("rfqSearch").addEventListener("input", function(e){ rfqFilterState.q = e.target.value; paintRfqRows(); });
+    document.getElementById("rfqSourceFilter").addEventListener("change", function(e){ rfqFilterState.source = e.target.value; paintRfqRows(); });
+    document.getElementById("rfqStatusFilter").addEventListener("change", function(e){ rfqFilterState.status = e.target.value; paintRfqRows(); });
+
+    paintRfqRows();
+  }
+
+  function paintRfqRows(){
+    var tbody = document.getElementById("rfqTbody");
+    var q = rfqFilterState.q.trim().toLowerCase();
+    var rows = DB.rfqs.slice().sort(function(a,b){ return b.id.localeCompare(a.id, undefined, {numeric:true}); }).filter(function(r){
+      if(rfqFilterState.status !== "all" && r.status !== rfqFilterState.status) return false;
+      if(rfqFilterState.source !== "all" && r.source !== rfqFilterState.source) return false;
+      if(!q) return true;
+      return (r.id+" "+r.customer+" "+r.origin+" "+r.destination).toLowerCase().indexOf(q) !== -1;
+    });
+
+    if(rows.length === 0){
+      tbody.innerHTML = '<tr class="empty-row"><td colspan="7">No RFQs match your search.</td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = rows.map(function(r){
+      var rd = readiness(r);
+      var readyCls = rd.n === rd.total ? "readiness-full" : "readiness-partial";
+      return '<tr class="table-row" tabindex="0" data-route="#/rfq/'+esc(r.id)+'">'+
+        '<td class="id-link">'+esc(r.id)+'</td>'+
+        '<td>'+esc(r.customer)+'</td>'+
+        '<td class="num">'+esc(r.origin)+'</td>'+
+        '<td class="num">'+esc(r.destination)+'</td>'+
+        '<td>'+rfqStatusBadge(r.status)+'</td>'+
+        '<td><span class="readiness '+readyCls+'">'+rd.n+'/'+rd.total+'</span></td>'+
+        '<td class="chevron">&#8250;</td>'+
+      '</tr>';
+    }).join("");
+  }
+
+  /* ---------- RFQ Detail ---------- */
+  function renderRfqDetail(id){
+    var r = findRfq(id);
+    if(!r){ renderNotFound("RFQ", "#/rfq"); return; }
+    setHeader(r.id, "OnePort365 / RFQ / "+r.id, actionsForRfq(r));
+
+    var rd = readiness(r);
+    var linkedQuotes = quotesForRfq(r.id);
+
+    content.innerHTML =
+      '<div class="back-link" data-route="#/rfq">&#8592; Back to RFQ list</div>'+
+      '<div class="detail-head"><div class="detail-title"><h1>'+esc(r.customer)+'</h1>'+rfqStatusBadge(r.status)+'</div></div>'+
+      '<div class="detail-grid">'+
+        '<div class="panel panel-pad">'+
+          '<div class="field-grid">'+
+            field("Freight Type", r.freightType)+
+            field("Incoterm", r.incoterm)+
+            field("Origin (POL)", r.origin+" — "+(PORTS[r.origin]||""))+
+            field("Destination (POD)", r.destination+" — "+(PORTS[r.destination]||""))+
+            field("Container Type", r.containerType)+
+            field("Quantity", r.quantity)+
+            field("Cargo Weight", r.cargoWeight)+
+            field("Target Shipment Date", fmtDate(r.targetDate))+
+            fieldSpan2("Cargo Description", r.cargoDescription)+
+            fieldSpan2("Notes", r.notes || "—")+
+          '</div>'+
+          (linkedQuotes.length ? (
+            '<div class="divider"></div>'+
+            '<div class="section-head" style="margin-top:0;"><h2>Linked quotes</h2></div>'+
+            '<div class="table-wrap"><table><thead><tr><th>Quote</th><th>Carrier</th><th>Rate</th><th>Status</th></tr></thead><tbody>'+
+            linkedQuotes.map(function(q){
+              return '<tr class="table-row" data-route="#/quote/'+esc(q.id)+'"><td class="id-link">'+esc(q.id)+'</td><td>'+esc(q.carrier)+'</td><td class="num">'+esc(q.rate)+'</td><td>'+quoteStatusBadge(q.status)+'</td></tr>';
+            }).join("")+
+            '</tbody></table></div>'
+          ) : "")+
+        '</div>'+
+        '<div>'+
+          '<div class="panel panel-pad" style="margin-bottom:14px;">'+
+            '<div class="section-head" style="margin:0 0 12px 0;"><h2>Summary</h2></div>'+
+            '<div class="stat-list">'+
+              statRow("Readiness", rd.n+" / "+rd.total)+
+              statRow("Source", r.source)+
+              statRow("Created", fmtDate(r.created))+
+              statRow("Customer", r.customer)+
+            '</div>'+
+          '</div>'+
+          (r.status === "Draft" ? (
+            '<div class="panel panel-pad">'+
+              '<div style="font-size:13px; font-weight:600; margin-bottom:6px;">Ready to submit?</div>'+
+              '<div style="font-size:12.5px; color:var(--muted); margin-bottom:12px;">Complete the remaining fields, then send this RFQ to our commercial team for pricing.</div>'+
+              '<button class="btn btn-primary" style="width:100%; justify-content:center" data-route="#/rfq/'+esc(r.id)+'/edit" id="continueEditBtn">Continue editing</button>'+
+            '</div>'
+          ) : "")+
+        '</div>'+
+      '</div>';
+
+    if(r.status === "Draft"){
+      document.getElementById("continueEditBtn").addEventListener("click", function(e){
+        e.preventDefault();
+        renderRfqForm(r.id);
+        history.replaceState(null, "", "#/rfq/"+r.id);
+      });
+    }
+  }
+
+  function actionsForRfq(r){
+    var html = "";
+    if(r.status === "Draft"){
+      html += '<button class="btn" id="sendToCommercialBtn">Send to Commercial</button>';
+    }
+    html += '<button class="btn btn-ghost" data-route="#/rfq">Close</button>';
+    setTimeout(function(){
+      var b = document.getElementById("sendToCommercialBtn");
+      if(b) b.addEventListener("click", function(){
+        var rd = readiness(r);
+        if(rd.n < rd.total){
+          showToast("Please complete all required fields before sending ("+rd.n+"/"+rd.total+" done).");
+          return;
+        }
+        r.status = "Sent to Commercial";
+        saveState();
+        showToast(r.id+" sent to Commercial.");
+        renderRfqDetail(r.id);
+      });
+    },0);
+    return html;
+  }
+
+  function field(label, value){
+    return '<div class="field"><div class="field-label">'+esc(label)+'</div><div class="field-value">'+(value && String(value).trim() !== "" ? esc(value) : '<span style="color:var(--muted)">—</span>')+'</div></div>';
+  }
+  function fieldSpan2(label, value){
+    return '<div class="field field-span2"><div class="field-label">'+esc(label)+'</div><div class="field-value">'+(value && String(value).trim() !== "" ? esc(value) : '<span style="color:var(--muted)">—</span>')+'</div></div>';
+  }
+  function statRow(k, v){
+    return '<div class="stat-row"><span class="k">'+esc(k)+'</span><span class="v">'+esc(v)+'</span></div>';
+  }
+
+  function renderNotFound(kind, backRoute){
+    setHeader("Not found", "OnePort365 / "+kind, "");
+    content.innerHTML = '<div class="empty-state panel panel-pad"><div class="ic">&#9888;</div><div>This '+esc(kind)+' record could not be found in this prototype.</div><button class="btn" data-route="'+backRoute+'" style="margin-top:8px;">Back</button></div>';
+  }
+
+  /* ---------- New RFQ Form ---------- */
+  function renderRfqForm(editId){
+    var editing = editId ? findRfq(editId) : null;
+    var draft = editing ? editing : {
+      customer:"Adaeze Foods Ltd", freightType:"", origin:"", destination:"", cargoDescription:"",
+      cargoWeight:"", containerType:"", quantity:"", incoterm:"", targetDate:"", notes:""
+    };
+
+    setHeader(editing ? "Edit "+editing.id : "New RFQ", "OnePort365 / RFQ / "+(editing?editing.id:"New"), "");
+
+    content.innerHTML =
+      '<div class="back-link" data-route="'+(editing?"#/rfq/"+editing.id:"#/rfq")+'">&#8592; '+(editing?"Back to "+editing.id:"Back to RFQ list")+'</div>'+
+      '<div class="panel panel-pad" style="max-width:760px;">'+
+        '<form id="rfqForm">'+
+          '<div class="form-grid">'+
+
+            '<div class="form-field span2">'+
+              '<label for="f_customer">Customer</label>'+
+              '<input type="text" id="f_customer" value="'+esc(draft.customer)+'" placeholder="Company name" />'+
+            '</div>'+
+
+            '<div class="form-field">'+
+              '<label for="f_freightType">Freight Type</label>'+
+              '<select id="f_freightType">'+optionList(FREIGHT_TYPES, draft.freightType, "Select freight type")+'</select>'+
+            '</div>'+
+            '<div class="form-field">'+
+              '<label for="f_incoterm">Incoterm</label>'+
+              '<select id="f_incoterm">'+optionList(INCOTERMS, draft.incoterm, "Select incoterm")+'</select>'+
+            '</div>'+
+
+            '<div class="form-field">'+
+              '<label for="f_origin">Origin (Port of Loading)</label>'+
+              '<select id="f_origin">'+portOptionList(draft.origin)+'</select>'+
+            '</div>'+
+            '<div class="form-field">'+
+              '<label for="f_destination">Destination (Port of Discharge)</label>'+
+              '<select id="f_destination">'+portOptionList(draft.destination)+'</select>'+
+            '</div>'+
+
+            '<div class="form-field span2">'+
+              '<label for="f_cargoDescription">Cargo Description</label>'+
+              '<input type="text" id="f_cargoDescription" value="'+esc(draft.cargoDescription)+'" placeholder="e.g. Frozen poultry parts" />'+
+            '</div>'+
+
+            '<div class="form-field">'+
+              '<label for="f_cargoWeight">Cargo Weight <span class="opt">(with units)</span></label>'+
+              '<input type="text" id="f_cargoWeight" value="'+esc(draft.cargoWeight)+'" placeholder="e.g. 18,000 kg" />'+
+            '</div>'+
+            '<div class="form-field">'+
+              '<label for="f_quantity">Quantity</label>'+
+              '<input type="text" id="f_quantity" value="'+esc(draft.quantity)+'" placeholder="e.g. 2 containers" />'+
+            '</div>'+
+
+            '<div class="form-field">'+
+              '<label for="f_containerType">Container Type</label>'+
+              '<select id="f_containerType">'+optionList(CONTAINER_TYPES, draft.containerType, "Select container type")+'</select>'+
+            '</div>'+
+            '<div class="form-field">'+
+              '<label for="f_targetDate">Target Shipment Date</label>'+
+              '<input type="date" id="f_targetDate" value="'+esc(draft.targetDate)+'" />'+
+            '</div>'+
+
+            '<div class="form-field span2">'+
+              '<label for="f_notes">Notes <span class="opt">(optional)</span></label>'+
+              '<textarea id="f_notes" placeholder="Handling instructions, certifications, special requirements...">'+esc(draft.notes)+'</textarea>'+
+            '</div>'+
+
+          '</div>'+
+
+          '<div class="form-actions">'+
+            '<div class="progress-mini">Readiness: <b id="readinessLabel">0/10</b> required fields complete</div>'+
+            '<div style="display:flex; gap:10px;">'+
+              '<button type="button" class="btn" id="saveDraftBtn">Save as draft</button>'+
+              '<button type="submit" class="btn btn-primary" id="submitRfqBtn">Send to Commercial</button>'+
+            '</div>'+
+          '</div>'+
+        '</form>'+
+      '</div>';
+
+    function collect(){
+      return {
+        customer: document.getElementById("f_customer").value.trim(),
+        freightType: document.getElementById("f_freightType").value,
+        incoterm: document.getElementById("f_incoterm").value,
+        origin: document.getElementById("f_origin").value,
+        destination: document.getElementById("f_destination").value,
+        cargoDescription: document.getElementById("f_cargoDescription").value.trim(),
+        cargoWeight: document.getElementById("f_cargoWeight").value.trim(),
+        quantity: document.getElementById("f_quantity").value.trim(),
+        containerType: document.getElementById("f_containerType").value,
+        targetDate: document.getElementById("f_targetDate").value,
+        notes: document.getElementById("f_notes").value.trim()
+      };
+    }
+    function updateReadiness(){
+      var vals = collect();
+      var rd = readiness(vals);
+      document.getElementById("readinessLabel").textContent = rd.n+"/"+rd.total;
+    }
+    ["f_customer","f_freightType","f_incoterm","f_origin","f_destination","f_cargoDescription","f_cargoWeight","f_quantity","f_containerType","f_targetDate","f_notes"].forEach(function(id){
+      var el = document.getElementById(id);
+      el.addEventListener("input", updateReadiness);
+      el.addEventListener("change", updateReadiness);
+    });
+    updateReadiness();
+
+    document.getElementById("saveDraftBtn").addEventListener("click", function(){
+      persist("Draft");
+    });
+    document.getElementById("rfqForm").addEventListener("submit", function(e){
+      e.preventDefault();
+      var vals = collect();
+      var rd = readiness(vals);
+      if(rd.n < rd.total){
+        showToast("Complete all required fields to send to Commercial ("+rd.n+"/"+rd.total+" done). Saved as draft instead.");
+        persist("Draft");
+        return;
+      }
+      persist("Sent to Commercial");
+    });
+
+    function persist(status){
+      var vals = collect();
+      if(editing){
+        Object.assign(editing, vals);
+        editing.status = status;
+        saveState();
+        showToast(editing.id+" "+(status==="Draft"?"saved as draft.":"sent to Commercial."));
+        go("#/rfq/"+editing.id);
+      } else {
+        var id = "RFQ-"+DB.nextRfq;
+        DB.nextRfq += 1;
+        var record = Object.assign({id:id, status:status, source:"Web Portal", created:new Date().toISOString()}, vals);
+        DB.rfqs.unshift(record);
+        saveState();
+        showToast(id+" "+(status==="Draft"?"saved as draft.":"created and sent to Commercial."));
+        go("#/rfq/"+id);
+      }
+    }
+  }
+
+  function optionList(list, selected, placeholder){
+    var html = '<option value="" '+(selected?"":"selected")+' disabled>'+esc(placeholder)+'</option>';
+    list.forEach(function(v){
+      html += '<option value="'+esc(v)+'" '+(v===selected?"selected":"")+'>'+esc(v)+'</option>';
+    });
+    return html;
+  }
+  function portOptionList(selected){
+    var html = '<option value="" '+(selected?"":"selected")+' disabled>Select a port</option>';
+    PORT_LIST.forEach(function(p){
+      html += '<option value="'+esc(p.code)+'" '+(p.code===selected?"selected":"")+'>'+esc(p.label)+'</option>';
+    });
+    return html;
+  }
+
+  /* ---------- Quote List / Detail ---------- */
+  function renderQuoteList(){
+    setHeader("Quote", "OnePort365 / Quote", "");
+    var rows = DB.quotes.slice().sort(function(a,b){ return b.id.localeCompare(a.id, undefined, {numeric:true}); });
+    content.innerHTML =
+      '<div class="table-wrap"><table>'+
+        '<thead><tr><th>Quote</th><th>Customer</th><th>Lane</th><th>Carrier</th><th>Rate</th><th>Valid Until</th><th>Status</th><th></th></tr></thead>'+
+        '<tbody>'+
+        (rows.length ? rows.map(function(q){
+          return '<tr class="table-row" tabindex="0" data-route="#/quote/'+esc(q.id)+'">'+
+            '<td class="id-link">'+esc(q.id)+'</td>'+
+            '<td>'+esc(q.customer)+'</td>'+
+            '<td class="num">'+esc(q.lane)+'</td>'+
+            '<td>'+esc(q.carrier)+'</td>'+
+            '<td class="num">'+esc(q.rate)+'</td>'+
+            '<td class="num">'+fmtDate(q.validUntil)+'</td>'+
+            '<td>'+quoteStatusBadge(q.status)+'</td>'+
+            '<td class="chevron">&#8250;</td>'+
+          '</tr>';
+        }).join("") : '<tr class="empty-row"><td colspan="8">No quotes yet.</td></tr>')+
+        '</tbody>'+
+      '</table></div>';
+  }
+
+  function renderQuoteDetail(id){
+    var q = findQuote(id);
+    if(!q){ renderNotFound("Quote", "#/quote"); return; }
+    var rfq = findRfq(q.rfqId);
+    var shipment = shipmentForQuote(q.id);
+
+    var actions = "";
+    if(q.status === "Sent to Customer"){
+      actions = '<button class="btn btn-primary" id="acceptQuoteBtn">Accept quote</button><button class="btn" id="declineQuoteBtn">Decline</button>';
+    }
+    setHeader(q.id, "OnePort365 / Quote / "+q.id, actions+'<button class="btn btn-ghost" data-route="#/quote">Close</button>');
+
+    content.innerHTML =
+      '<div class="back-link" data-route="#/quote">&#8592; Back to Quote list</div>'+
+      '<div class="detail-head"><div class="detail-title"><h1>'+esc(q.customer)+'</h1>'+quoteStatusBadge(q.status)+'</div></div>'+
+      '<div class="detail-grid">'+
+        '<div class="panel panel-pad">'+
+          '<div class="field-grid">'+
+            field("Carrier", q.carrier)+
+            field("Lane", q.lane)+
+            field("Rate", q.rate)+
+            field("Transit Time", q.transitDays+" days")+
+            field("Valid Until", fmtDate(q.validUntil))+
+            field("Linked RFQ", rfq ? rfq.id : "—")+
+          '</div>'+
+          (shipment ? (
+            '<div class="divider"></div>'+
+            '<div class="section-head" style="margin-top:0;"><h2>Shipment</h2></div>'+
+            '<div class="table-wrap"><table><thead><tr><th>Shipment</th><th>Carrier Ref</th><th>ETD</th><th>ETA</th><th>Status</th></tr></thead><tbody>'+
+            '<tr class="table-row" data-route="#/shipment/'+esc(shipment.id)+'"><td class="id-link">'+esc(shipment.id)+'</td><td class="num">'+esc(shipment.ref)+'</td><td class="num">'+fmtDate(shipment.etd)+'</td><td class="num">'+fmtDate(shipment.eta)+'</td><td>'+shipmentStatusBadge(shipment.status)+'</td></tr>'+
+            '</tbody></table></div>'
+          ) : "")+
+        '</div>'+
+        '<div>'+
+          '<div class="panel panel-pad">'+
+            '<div class="section-head" style="margin:0 0 12px 0;"><h2>Related RFQ</h2></div>'+
+            (rfq ? (
+              '<div class="stat-list">'+
+                statRow("RFQ", rfq.id)+
+                statRow("Cargo", rfq.cargoDescription)+
+                statRow("Incoterm", rfq.incoterm)+
+              '</div>'+
+              '<button class="btn btn-sm" style="width:100%; justify-content:center; margin-top:14px;" data-route="#/rfq/'+esc(rfq.id)+'">View RFQ</button>'
+            ) : '<div style="color:var(--muted); font-size:13px;">No linked RFQ.</div>')+
+          '</div>'+
+        '</div>'+
+      '</div>';
+
+    if(q.status === "Sent to Customer"){
+      document.getElementById("acceptQuoteBtn").addEventListener("click", function(){
+        q.status = "Accepted";
+        if(rfq) rfq.status = "Converted";
+        var newShip = {
+          id: "SHP-"+(2200+DB.shipments.length+10), quoteId:q.id, rfqId:q.rfqId, customer:q.customer,
+          mode:q.carrier+" — "+(rfq?rfq.freightType:""), lane:q.lane, carrier:q.carrier,
+          ref: q.carrier.replace(/\s+/g,"").toUpperCase()+"-"+Math.floor(100000+Math.random()*899999),
+          etd:"", eta:"", status:"Booked",
+          milestones:[
+            {label:"Booking confirmed", date:new Date().toISOString().slice(0,10), done:true, current:true},
+            {label:"Cargo received at origin", date:"", done:false},
+            {label:"Departed origin", date:"", done:false},
+            {label:"In transit", date:"", done:false},
+            {label:"Arrived destination", date:"", done:false},
+            {label:"Delivered", date:"", done:false}
+          ]
+        };
+        DB.shipments.unshift(newShip);
+        saveState();
+        showToast(q.id+" accepted. Shipment "+newShip.id+" created.");
+        renderQuoteDetail(q.id);
+      });
+      document.getElementById("declineQuoteBtn").addEventListener("click", function(){
+        q.status = "Expired";
+        saveState();
+        showToast(q.id+" declined.");
+        renderQuoteDetail(q.id);
+      });
+    }
+  }
+
+  /* ---------- Shipment List / Detail ---------- */
+  function renderShipmentList(){
+    setHeader("Shipment", "OnePort365 / Shipment", "");
+    var rows = DB.shipments.slice().sort(function(a,b){ return b.id.localeCompare(a.id, undefined, {numeric:true}); });
+    content.innerHTML =
+      '<div class="table-wrap"><table>'+
+        '<thead><tr><th>Shipment</th><th>Customer</th><th>Lane</th><th>Carrier</th><th>ETD</th><th>ETA</th><th>Status</th><th></th></tr></thead>'+
+        '<tbody>'+
+        (rows.length ? rows.map(function(s){
+          return '<tr class="table-row" tabindex="0" data-route="#/shipment/'+esc(s.id)+'">'+
+            '<td class="id-link">'+esc(s.id)+'</td>'+
+            '<td>'+esc(s.customer)+'</td>'+
+            '<td class="num">'+esc(s.lane)+'</td>'+
+            '<td>'+esc(s.carrier)+'</td>'+
+            '<td class="num">'+fmtDate(s.etd)+'</td>'+
+            '<td class="num">'+fmtDate(s.eta)+'</td>'+
+            '<td>'+shipmentStatusBadge(s.status)+'</td>'+
+            '<td class="chevron">&#8250;</td>'+
+          '</tr>';
+        }).join("") : '<tr class="empty-row"><td colspan="8">No shipments yet.</td></tr>')+
+        '</tbody>'+
+      '</table></div>';
+  }
+
+  function renderShipmentDetail(id){
+    var s = findShipment(id);
+    if(!s){ renderNotFound("Shipment", "#/shipment"); return; }
+    var rfq = findRfq(s.rfqId);
+    setHeader(s.id, "OnePort365 / Shipment / "+s.id, '<button class="btn btn-ghost" data-route="#/shipment">Close</button>');
+
+    content.innerHTML =
+      '<div class="back-link" data-route="#/shipment">&#8592; Back to Shipment list</div>'+
+      '<div class="detail-head"><div class="detail-title"><h1>'+esc(s.customer)+'</h1>'+shipmentStatusBadge(s.status)+'</div></div>'+
+      '<div class="detail-grid">'+
+        '<div class="panel panel-pad">'+
+          '<div class="field-grid">'+
+            field("Mode", s.mode)+
+            field("Lane", s.lane)+
+            field("Carrier", s.carrier)+
+            field("Carrier Reference", s.ref)+
+            field("ETD", fmtDate(s.etd))+
+            field("ETA", fmtDate(s.eta))+
+          '</div>'+
+        '</div>'+
+        '<div>'+
+          '<div class="panel panel-pad" style="margin-bottom:14px;">'+
+            '<div class="section-head" style="margin:0 0 12px 0;"><h2>Milestones</h2></div>'+
+            '<div class="timeline">'+
+              s.milestones.map(function(m){
+                return '<div class="tl-item"><div class="tl-dot '+(m.current?"current":(m.done?"done":""))+'"></div>'+
+                  '<div class="tl-body"><div class="tl-label">'+esc(m.label)+'</div><div class="tl-meta">'+(m.date?fmtDate(m.date):"Pending")+'</div></div></div>';
+              }).join("")+
+            '</div>'+
+          '</div>'+
+          (rfq ? (
+            '<div class="panel panel-pad">'+
+              '<div class="section-head" style="margin:0 0 12px 0;"><h2>Origin RFQ</h2></div>'+
+              '<div class="stat-list">'+ statRow("RFQ", rfq.id) + statRow("Cargo", rfq.cargoDescription) +'</div>'+
+              '<button class="btn btn-sm" style="width:100%; justify-content:center; margin-top:14px;" data-route="#/rfq/'+esc(rfq.id)+'">View RFQ</button>'+
+            '</div>'
+          ) : "")+
+        '</div>'+
+      '</div>';
+  }
+
+  /* ---------- Profile ---------- */
+  function renderProfile(){
+    setHeader("Profile setting", "OnePort365 / Profile setting", "");
+    content.innerHTML =
+      '<div class="panel panel-pad" style="max-width:520px;">'+
+        '<div class="field-grid">'+
+          field("Name", "Okpanaci")+
+          field("Company", "Adaeze Foods Ltd")+
+          field("Email", "okpanaci@adaezefoods.example")+
+          field("Role", "Logistics Coordinator")+
+        '</div>'+
+        '<div class="divider"></div>'+
+        '<div style="font-size:12.5px; color:var(--muted);">Profile editing is not wired up in this click-through prototype.</div>'+
+      '</div>';
+  }
+
+  /* ---------- Boot ---------- */
+  route();
+})();
+</script>
+</body>
+</html>
