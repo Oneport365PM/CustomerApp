@@ -250,7 +250,7 @@
   .panel-pad{padding:20px;}
 
   .tiles{
-    display:grid; grid-template-columns:repeat(4,1fr); gap:14px;
+    display:grid; grid-template-columns:repeat(5,1fr); gap:14px;
     margin-bottom:22px;
   }
   .tile{
@@ -332,7 +332,9 @@
   .back-link:hover{color:var(--ink);}
 
   .detail-grid{display:grid; grid-template-columns:2fr 1fr; gap:18px; align-items:start;}
+  @media (max-width:1180px){ .tiles{grid-template-columns:repeat(3,1fr);} }
   @media (max-width:900px){ .detail-grid{grid-template-columns:1fr;} .tiles{grid-template-columns:repeat(2,1fr);} }
+  @media (max-width:520px){ .tiles{grid-template-columns:1fr;} }
 
   .field-grid{display:grid; grid-template-columns:1fr 1fr; gap:16px 24px;}
   .field{display:flex; flex-direction:column; gap:4px;}
@@ -505,9 +507,13 @@
         incoterm:"EXW", targetDate:"2026-09-14", notes:"Priority parts for stalled production line.",
         status:"Converted", source:"Web Portal", created:"2026-08-20T10:05:00" },
       { id:"RFQ-1031", customer:"Adaeze Foods Ltd", freightType:"FCL", origin:"CNNSA", destination:"NGAPP",
-        cargoDescription:"Canned tomato paste", cargoWeight:"21,000 kg", containerType:"40GP", quantity:"1",
+        cargoDescription:"Canned tomato paste", cargoWeight:"21,000 kg", containerType:"40GP", quantity:"2",
         incoterm:"CIF", targetDate:"2026-08-18", notes:"",
-        status:"Converted", source:"Web Portal", created:"2026-08-02T09:30:00" }
+        status:"Converted", source:"Web Portal", created:"2026-08-02T09:30:00" },
+      { id:"RFQ-1033", customer:"Adaeze Foods Ltd", freightType:"FCL", origin:"CNDAL", destination:"GHTEM",
+        cargoDescription:"Bagged rice", cargoWeight:"27,000 kg", containerType:"40HC", quantity:"3",
+        incoterm:"CIF", targetDate:"2026-09-25", notes:"",
+        status:"Converted", source:"Web Portal", created:"2026-08-12T13:10:00" }
     ],
     quotes: [
       { id:"QUO-3301", rfqId:"RFQ-1039", customer:"Kaduna Metals Inc.", carrier:"Maersk Line", lane:"CNSHA → NGAPP",
@@ -518,7 +524,10 @@
         created:"2026-08-21T09:15:00" },
       { id:"QUO-3277", rfqId:"RFQ-1031", customer:"Adaeze Foods Ltd", carrier:"MSC", lane:"CNNSA → NGAPP",
         rate:"US$ 2,100 / 40GP", transitDays:29, validUntil:"2026-08-15", status:"Accepted",
-        created:"2026-08-03T10:40:00" }
+        created:"2026-08-03T10:40:00" },
+      { id:"QUO-3285", rfqId:"RFQ-1033", customer:"Adaeze Foods Ltd", carrier:"CMA CGM", lane:"CNDAL → GHTEM",
+        rate:"US$ 1,980 / 40HC", transitDays:24, validUntil:"2026-08-30", status:"Accepted",
+        created:"2026-08-13T11:20:00" }
     ],
     shipments: [
       { id:"SHP-2210", quoteId:"QUO-3298", rfqId:"RFQ-1036", customer:"Chukwuma Auto Parts",
@@ -530,6 +539,17 @@
           {label:"Departed CNSHA", date:"2026-09-05", done:true},
           {label:"In transit", date:"2026-09-07", done:true, current:true},
           {label:"Arrived NGLOS", date:"", done:false},
+          {label:"Delivered", date:"", done:false}
+        ]},
+      { id:"SHP-2201", quoteId:"QUO-3285", rfqId:"RFQ-1033", customer:"Adaeze Foods Ltd",
+        mode:"FCL — Sea Freight", lane:"CNDAL → GHTEM", carrier:"CMA CGM", ref:"CMDU-6620148",
+        etd:"2026-08-16", eta:"2026-09-13", status:"In Transit",
+        milestones:[
+          {label:"Booking confirmed", date:"2026-08-13", done:true},
+          {label:"Cargo received at origin", date:"2026-08-15", done:true},
+          {label:"Departed CNDAL", date:"2026-08-16", done:true},
+          {label:"In transit", date:"2026-09-06", done:true, current:true},
+          {label:"Arrived GHTEM", date:"", done:false},
           {label:"Delivered", date:"", done:false}
         ]},
       { id:"SHP-2189", quoteId:"QUO-3277", rfqId:"RFQ-1031", customer:"Adaeze Foods Ltd",
@@ -567,6 +587,14 @@
     var n = 0;
     RFQ_REQUIRED.forEach(function(k){ if(rfq[k] && String(rfq[k]).trim() !== "") n++; });
     return {n:n, total:RFQ_REQUIRED.length};
+  }
+
+  // Counts physical containers (20GP/40GP/40HC/20RF/40RF) tied to an RFQ's quantity field —
+  // LCL, air, and breakbulk shipments don't move in discrete boxes, so they're excluded.
+  function containerCount(rfq){
+    if(!rfq || !/GP|HC|RF/.test(rfq.containerType || "")) return 0;
+    var match = String(rfq.quantity || "").match(/\d+/);
+    return match ? parseInt(match[0], 10) : 0;
   }
 
   function rfqStatusBadge(status){
@@ -653,10 +681,11 @@
     setHeader("Dashboard", "OnePort365 / Dashboard",
       '<button class="btn btn-primary" data-route="#/rfq/new">+ New RFQ</button>');
 
-    var activeRfqs = DB.rfqs.filter(function(r){ return r.status==="Draft" || r.status==="Sent to Commercial"; }).length;
-    var awaitingQuotes = DB.quotes.filter(function(q){ return q.status==="Sent to Customer"; }).length;
-    var inTransit = DB.shipments.filter(function(s){ return s.status==="In Transit" || s.status==="At Port"; }).length;
-    var avgReady = Math.round(DB.rfqs.reduce(function(a,r){ var rd=readiness(r); return a+(rd.n/rd.total); },0) / DB.rfqs.length * 100);
+    var rfqRequests = DB.rfqs.length;
+    var acceptedQuotes = DB.quotes.filter(function(q){ return q.status==="Accepted"; }).length;
+    var containers = DB.shipments.reduce(function(a,s){ return a + containerCount(findRfq(s.rfqId)); }, 0);
+    var inTransit = DB.shipments.filter(function(s){ return s.status!=="Delivered"; }).length;
+    var completed = DB.shipments.filter(function(s){ return s.status==="Delivered"; }).length;
 
     var recent = []
       .concat(DB.rfqs.map(function(r){ return {t:r.created, html:'<b>'+esc(r.id)+'</b> for '+esc(r.customer)+' — '+esc(r.status), route:"#/rfq/"+r.id}; }))
@@ -666,10 +695,11 @@
 
     content.innerHTML =
       '<div class="tiles">'+
-        '<div class="tile tile-accent"><div class="tile-label">Active RFQs</div><div class="tile-value num">'+activeRfqs+'</div><div class="tile-sub">Draft or with Commercial</div></div>'+
-        '<div class="tile"><div class="tile-label">Quotes Awaiting Response</div><div class="tile-value num">'+awaitingQuotes+'</div><div class="tile-sub">Action needed from you</div></div>'+
-        '<div class="tile"><div class="tile-label">Shipments In Transit</div><div class="tile-value num">'+inTransit+'</div><div class="tile-sub">Across all lanes</div></div>'+
-        '<div class="tile"><div class="tile-label">Avg. RFQ Readiness</div><div class="tile-value num">'+avgReady+'%</div><div class="tile-sub">Field completeness</div></div>'+
+        '<div class="tile tile-accent"><div class="tile-label">RFQ Requests</div><div class="tile-value num">'+rfqRequests+'</div><div class="tile-sub">Submitted to date</div></div>'+
+        '<div class="tile"><div class="tile-label">Accepted Quotes</div><div class="tile-value num">'+acceptedQuotes+'</div><div class="tile-sub">Ready to ship</div></div>'+
+        '<div class="tile"><div class="tile-label">Containers</div><div class="tile-value num">'+containers+'</div><div class="tile-sub">Across your bookings</div></div>'+
+        '<div class="tile"><div class="tile-label">Shipments In Transit</div><div class="tile-value num">'+inTransit+'</div><div class="tile-sub">Booked, moving, or at port</div></div>'+
+        '<div class="tile"><div class="tile-label">Completed Shipments</div><div class="tile-value num">'+completed+'</div><div class="tile-sub">Delivered to date</div></div>'+
       '</div>'+
 
       '<div class="detail-grid">'+
