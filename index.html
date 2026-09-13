@@ -204,14 +204,16 @@
   .sidebar-spacer{flex:1;}
 
   .user-block{
+    position:relative;
     border-top:1px solid rgba(253,251,241,.12);
     padding-top:12px;
-    display:flex; flex-direction:column; gap:2px;
   }
   .user-row{
-    display:flex; align-items:center; gap:9px;
-    padding:6px 8px 10px 8px;
+    display:flex; align-items:center; gap:9px; width:100%;
+    padding:6px 8px; border-radius:var(--radius-md);
+    border:none; background:transparent; cursor:pointer; text-align:left; font:inherit;
   }
+  .user-row:hover, .user-row[aria-expanded="true"]{background:var(--sidebar-hover);}
   .user-avatar{
     width:30px; height:30px; border-radius:9px;
     background:var(--accent); color:var(--accent-ink);
@@ -220,11 +222,42 @@
   }
   .user-name{font-family:var(--font-display); font-size:13px; font-weight:600; color:#fff;}
   .user-role{font-size:11px; color:var(--sidebar-muted);}
-  .user-link{
-    font-size:12.5px; color:var(--sidebar-muted);
-    padding:6px 8px; border-radius:var(--radius-md); cursor:pointer;
+
+  /* Account popover — opens above the sidebar trigger, notch pointing back at it */
+  .profile-popover{
+    position:absolute; left:8px; bottom:calc(100% + 10px); width:266px;
+    z-index:60; opacity:0; transform:translateY(6px) scale(.98); pointer-events:none;
+    transition:opacity .14s ease, transform .14s ease;
   }
-  .user-link:hover{background:var(--sidebar-hover); color:var(--sidebar-ink);}
+  .profile-popover.open{opacity:1; transform:translateY(0) scale(1); pointer-events:auto;}
+  .popover-panel{
+    background:var(--surface); border-radius:var(--radius-lg); box-shadow:var(--shadow-e3);
+    overflow:hidden;
+  }
+  .popover-notch{
+    position:absolute; bottom:-6px; left:23px; width:12px; height:12px;
+    background:var(--surface); transform:rotate(45deg); border-radius:2px;
+    box-shadow:2px 2px 3px rgba(2,56,25,.06);
+  }
+  .popover-header{display:flex; align-items:center; gap:12px; padding:18px 18px 16px;}
+  .popover-avatar{
+    width:44px; height:44px; border-radius:50%; flex:none;
+    background:var(--accent); color:var(--accent-ink);
+    display:flex; align-items:center; justify-content:center;
+    font-family:var(--font-display); font-weight:600; font-size:15px;
+  }
+  .popover-name{font-family:var(--font-display); font-weight:600; font-size:15px; color:var(--ink);}
+  .popover-role{font-size:12.5px; color:var(--muted); margin-top:1px;}
+  .popover-divider{height:1px; background:var(--border);}
+  .popover-item{
+    display:flex; align-items:center; gap:12px; padding:14px 18px;
+    font-size:14px; font-weight:500; color:var(--ink); text-decoration:none; cursor:pointer;
+  }
+  .popover-item:hover{background:var(--surface-2);}
+  .popover-item .popover-ic{display:inline-flex; color:var(--muted); flex:none;}
+  .popover-item.danger{color:var(--red-ink);}
+  .popover-item.danger .popover-ic{color:var(--red-dot);}
+  .popover-item.danger:hover{background:var(--red-bg);}
 
   /* Main */
   .main{flex:1; min-width:0; display:flex; flex-direction:column;}
@@ -511,15 +544,35 @@
     <div class="sidebar-spacer"></div>
 
     <div class="user-block">
-      <div class="user-row">
+      <button class="user-row" id="profileTrigger" aria-haspopup="true" aria-expanded="false">
         <div class="user-avatar">OK</div>
         <div>
           <div class="user-name">Okpanaci</div>
           <div class="user-role" id="sidebarCompany">Adaeze Foods Ltd</div>
         </div>
+      </button>
+
+      <div class="profile-popover" id="profilePopover">
+        <div class="popover-panel">
+          <div class="popover-header">
+            <div class="popover-avatar">OK</div>
+            <div>
+              <div class="popover-name">Okpanaci</div>
+              <div class="popover-role">Logistics Coordinator</div>
+            </div>
+          </div>
+          <div class="popover-divider"></div>
+          <a class="popover-item" data-route="#/profile" id="popoverProfileLink">
+            <span class="popover-ic"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M12 2v4M12 18v4M2 12h4M18 12h4" stroke-linecap="round"></path></svg></span>
+            Profile Settings
+          </a>
+          <a class="popover-item danger" id="popoverLogoutLink">
+            <span class="popover-ic"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4" stroke-linecap="round" stroke-linejoin="round"></path><path d="M16 17l5-5-5-5M21 12H9" stroke-linecap="round" stroke-linejoin="round"></path></svg></span>
+            Logout
+          </a>
+        </div>
+        <div class="popover-notch"></div>
       </div>
-      <a class="user-link" data-route="#/profile">Profile setting</a>
-      <a class="user-link" id="logoutLink">Logout</a>
     </div>
   </nav>
 
@@ -765,11 +818,33 @@
     var el = e.target.closest("[data-route]");
     if(el){ e.preventDefault(); go(el.getAttribute("data-route")); }
   });
-  document.getElementById("logoutLink").addEventListener("click", function(){
+
+  /* ---------- Account popover ---------- */
+  var profileTrigger = document.getElementById("profileTrigger");
+  var profilePopover = document.getElementById("profilePopover");
+  function closeProfilePopover(){
+    profilePopover.classList.remove("open");
+    profileTrigger.setAttribute("aria-expanded", "false");
+  }
+  profileTrigger.addEventListener("click", function(e){
+    e.stopPropagation();
+    var open = profilePopover.classList.toggle("open");
+    profileTrigger.setAttribute("aria-expanded", open ? "true" : "false");
+  });
+  document.getElementById("popoverProfileLink").addEventListener("click", closeProfilePopover);
+  document.getElementById("popoverLogoutLink").addEventListener("click", function(){
+    closeProfilePopover();
     showToast("You have been logged out (prototype — no live session).");
   });
+  document.addEventListener("click", function(e){
+    if(profilePopover.classList.contains("open") && !profilePopover.contains(e.target) && e.target !== profileTrigger && !profileTrigger.contains(e.target)){
+      closeProfilePopover();
+    }
+  });
   document.addEventListener("keydown", function(e){
-    if(e.key === "Escape" && document.getElementById("rfqDrawer").classList.contains("open")){ go("#/rfq"); }
+    if(e.key !== "Escape") return;
+    if(document.getElementById("rfqDrawer").classList.contains("open")){ go("#/rfq"); }
+    if(profilePopover.classList.contains("open")){ closeProfilePopover(); }
   });
 
   /* ---------- Dashboard ---------- */
@@ -1272,15 +1347,25 @@
   function renderProfile(){
     setHeader("Profile setting", "OnePort365 / Profile setting", "");
     content.innerHTML =
-      '<div class="panel panel-pad" style="max-width:520px;">'+
-        '<div class="field-grid">'+
-          field("Name", "Okpanaci")+
-          field("Company", CUSTOMER)+
-          field("Email", "okpanaci@adaezefoods.example")+
-          field("Role", "Logistics Coordinator")+
+      '<div class="panel" style="max-width:520px; overflow:hidden;">'+
+        '<div class="popover-header" style="padding:22px 24px;">'+
+          '<div class="popover-avatar" style="width:52px; height:52px; font-size:17px;">OK</div>'+
+          '<div>'+
+            '<div class="popover-name" style="font-size:17px;">Okpanaci</div>'+
+            '<div class="popover-role">Logistics Coordinator</div>'+
+          '</div>'+
         '</div>'+
-        '<div class="divider"></div>'+
-        '<div style="font-size:12.5px; color:var(--muted);">Profile editing is not wired up in this click-through prototype.</div>'+
+        '<div class="popover-divider"></div>'+
+        '<div class="panel-pad">'+
+          '<div class="field-grid">'+
+            field("Name", "Okpanaci")+
+            field("Company", CUSTOMER)+
+            field("Email", "okpanaci@adaezefoods.example")+
+            field("Role", "Logistics Coordinator")+
+          '</div>'+
+          '<div class="divider"></div>'+
+          '<div style="font-size:12.5px; color:var(--muted);">Profile editing is not wired up in this click-through prototype.</div>'+
+        '</div>'+
       '</div>';
   }
 
