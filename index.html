@@ -738,7 +738,7 @@
     quotes: [
       { id:"QUO-3301", rfqId:"RFQ-1039", carrier:"Maersk Line", equip:"40GP", unit:"1",
         transitDays:26, freeDays:7, freightSell:1850,
-        issuedDate:"2026-08-29", validDays:7, status:"Sent to Customer",
+        issuedDate:"2026-08-29", validDays:7, status:"Pending",
         declineReason:null, declineNote:null, created:"2026-08-29T14:00:00" },
       { id:"QUO-3298", rfqId:"RFQ-1036", carrier:"Ethiopian Cargo", equip:"Air Freight", unit:"850 kg",
         transitDays:4, freeDays:null, freightSell:3570,
@@ -890,7 +890,7 @@
     return '<span class="badge '+(map[status]||"badge-grey")+'"><span class="dot"></span>'+esc(status)+'</span>';
   }
   function quoteStatusBadge(status){
-    var map = { "Sent to Customer":"badge-amber", "Accepted":"badge-green", "Declined":"badge-red" };
+    var map = { "Pending":"badge-amber", "Accepted":"badge-green", "Declined":"badge-red" };
     return '<span class="badge '+(map[status]||"badge-grey")+'"><span class="dot"></span>'+esc(status)+'</span>';
   }
   function shipmentStatusBadge(status){
@@ -1398,7 +1398,7 @@
     var freightTitle = (rfq && rfq.freightType === "Air Freight") ? "Air Freight" : "Ocean Freight";
 
     var headerActions = "";
-    if(q.status === "Sent to Customer"){
+    if(q.status === "Pending"){
       headerActions = '<button class="btn btn-primary btn-sm" id="acceptQuoteBtn">Accept Quote</button>'+
                        '<button class="btn btn-sm" id="declineQuoteBtn">Decline</button>';
     }
