@@ -349,6 +349,22 @@
   .chevron{color:var(--muted); text-align:right;}
   .empty-row td{padding:36px 16px; text-align:center; color:var(--muted);}
 
+  .pagination{
+    display:flex; align-items:center; justify-content:space-between; gap:12px;
+    flex-wrap:wrap; padding:14px 2px 0;
+  }
+  .pagination-info{font-size:12.5px; color:var(--muted);}
+  .pagination-pages{display:flex; align-items:center; gap:6px;}
+  .page-btn{
+    min-width:32px; height:32px; padding:0 8px; border-radius:var(--radius-md);
+    border:1.5px solid var(--input-border); background:var(--surface); color:var(--ink);
+    font-family:var(--font-display); font-size:13px; font-weight:600; cursor:pointer;
+    display:inline-flex; align-items:center; justify-content:center;
+  }
+  .page-btn:hover{background:var(--surface-2);}
+  .page-btn.active{background:var(--accent); border-color:var(--accent-strong); color:var(--accent-ink);}
+  .page-btn:disabled{opacity:.4; cursor:not-allowed;}
+
   .badge{
     display:inline-flex; align-items:center; gap:6px;
     padding:5px 11px; border-radius:var(--radius-sm); font-size:12px; font-weight:700;
@@ -1032,7 +1048,8 @@
   }
 
   /* ---------- RFQ List ---------- */
-  var rfqFilterState = { q:"", status:"all" };
+  var RFQ_PAGE_SIZE = 5;
+  var rfqFilterState = { q:"", status:"all", page:1 };
 
   function renderRfqList(){
     setHeader("RFQ", "OnePort365 / RFQ", '<button class="btn btn-primary" data-route="#/rfq/new">+ New RFQ</button>');
@@ -1050,13 +1067,18 @@
           '<th>RFQ Number</th><th>POL</th><th>POD</th><th>Status</th><th>Readiness</th><th></th>'+
         '</tr></thead>'+
         '<tbody id="rfqTbody"></tbody>'+
-      '</table></div>';
+      '</table></div>'+
+      '<div class="pagination" id="rfqPagination"></div>';
 
     document.getElementById("rfqSearch").value = rfqFilterState.q;
     document.getElementById("rfqStatusFilter").value = rfqFilterState.status;
 
-    document.getElementById("rfqSearch").addEventListener("input", function(e){ rfqFilterState.q = e.target.value; paintRfqRows(); });
-    document.getElementById("rfqStatusFilter").addEventListener("change", function(e){ rfqFilterState.status = e.target.value; paintRfqRows(); });
+    document.getElementById("rfqSearch").addEventListener("input", function(e){
+      rfqFilterState.q = e.target.value; rfqFilterState.page = 1; paintRfqRows();
+    });
+    document.getElementById("rfqStatusFilter").addEventListener("change", function(e){
+      rfqFilterState.status = e.target.value; rfqFilterState.page = 1; paintRfqRows();
+    });
 
     paintRfqRows();
   }
@@ -1064,18 +1086,25 @@
   function paintRfqRows(){
     var tbody = document.getElementById("rfqTbody");
     var q = rfqFilterState.q.trim().toLowerCase();
-    var rows = DB.rfqs.slice().sort(function(a,b){ return b.id.localeCompare(a.id, undefined, {numeric:true}); }).filter(function(r){
+    var filtered = DB.rfqs.slice().sort(function(a,b){ return b.id.localeCompare(a.id, undefined, {numeric:true}); }).filter(function(r){
       if(rfqFilterState.status !== "all" && r.status !== rfqFilterState.status) return false;
       if(!q) return true;
       return r.id.toLowerCase().indexOf(q) !== -1;
     });
 
-    if(rows.length === 0){
+    var totalPages = Math.max(1, Math.ceil(filtered.length / RFQ_PAGE_SIZE));
+    if(rfqFilterState.page > totalPages) rfqFilterState.page = totalPages;
+    if(rfqFilterState.page < 1) rfqFilterState.page = 1;
+    var startIdx = (rfqFilterState.page - 1) * RFQ_PAGE_SIZE;
+    var pageRows = filtered.slice(startIdx, startIdx + RFQ_PAGE_SIZE);
+
+    if(filtered.length === 0){
       tbody.innerHTML = '<tr class="empty-row"><td colspan="6">No RFQs match this RFQ number.</td></tr>';
+      paintRfqPagination(0, 1, 0, 0);
       return;
     }
 
-    tbody.innerHTML = rows.map(function(r){
+    tbody.innerHTML = pageRows.map(function(r){
       var rd = readiness(r);
       var readyCls = "readiness-"+readinessTier(rd);
       return '<tr class="table-row" tabindex="0" data-route="#/rfq/'+esc(r.id)+'">'+
@@ -1087,6 +1116,41 @@
         '<td class="chevron">&#8250;</td>'+
       '</tr>';
     }).join("");
+
+    paintRfqPagination(filtered.length, totalPages, startIdx, pageRows.length);
+  }
+
+  function paintRfqPagination(totalItems, totalPages, startIdx, pageCount){
+    var el = document.getElementById("rfqPagination");
+    if(!el) return;
+    if(totalItems === 0){ el.innerHTML = ""; return; }
+
+    var page = rfqFilterState.page;
+    var pageButtons = "";
+    for(var i = 1; i <= totalPages; i++){
+      pageButtons += '<button type="button" class="page-btn'+(i===page?" active":"")+'" data-page="'+i+'">'+i+'</button>';
+    }
+
+    el.innerHTML =
+      '<div class="pagination-info">Showing '+(startIdx+1)+'–'+(startIdx+pageCount)+' of '+totalItems+'</div>'+
+      '<div class="pagination-pages">'+
+        '<button type="button" class="page-btn" id="rfqPagePrev" '+(page<=1?"disabled":"")+' aria-label="Previous page">&#8249;</button>'+
+        pageButtons+
+        '<button type="button" class="page-btn" id="rfqPageNext" '+(page>=totalPages?"disabled":"")+' aria-label="Next page">&#8250;</button>'+
+      '</div>';
+
+    document.getElementById("rfqPagePrev").addEventListener("click", function(){
+      if(rfqFilterState.page > 1){ rfqFilterState.page -= 1; paintRfqRows(); }
+    });
+    document.getElementById("rfqPageNext").addEventListener("click", function(){
+      if(rfqFilterState.page < totalPages){ rfqFilterState.page += 1; paintRfqRows(); }
+    });
+    el.querySelectorAll(".page-btn[data-page]").forEach(function(btn){
+      btn.addEventListener("click", function(){
+        rfqFilterState.page = parseInt(btn.getAttribute("data-page"), 10);
+        paintRfqRows();
+      });
+    });
   }
 
   /* ---------- RFQ View (side drawer) ---------- */
