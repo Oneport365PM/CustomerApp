@@ -159,19 +159,6 @@
     padding:20px 16px;
     position:sticky; top:0; height:100vh;
   }
-  .brand{
-    display:flex; align-items:center; gap:10px;
-    padding:6px 8px 22px 8px;
-  }
-  .brand-mark{
-    width:30px; height:30px; border-radius:7px;
-    background:var(--accent); color:var(--accent-ink);
-    display:flex; align-items:center; justify-content:center;
-    font-weight:700; font-size:15px; flex:none;
-  }
-  .brand-name{font-family:var(--font-display); font-weight:600; font-size:15px; letter-spacing:0.01em; color:#fff;}
-  .brand-sub{font-size:10.5px; color:var(--sidebar-muted); letter-spacing:0.06em; text-transform:uppercase; margin-top:1px;}
-
   .nav-group{
     border:1px solid rgba(253,251,241,.12);
     border-radius:var(--radius-lg);
@@ -599,14 +586,6 @@
 <body>
 <div class="app">
   <nav class="sidebar" aria-label="Primary">
-    <div class="brand">
-      <div class="brand-mark">1P</div>
-      <div>
-        <div class="brand-name">OnePort365</div>
-        <div class="brand-sub">Customer Portal</div>
-      </div>
-    </div>
-
     <a class="nav-item nav-solo" data-route="#/dashboard"><span class="ic">&#9635;</span>Dashboard</a>
 
     <div class="nav-group">
@@ -1327,6 +1306,7 @@
 
     var all = DB.quotes.slice().sort(function(a,b){ return new Date(b.created) - new Date(a.created); });
     var filtered = all.filter(function(q){
+      if(quoteFilterState.tab === "pending") return q.status === "Pending";
       if(quoteFilterState.tab === "accepted") return q.status === "Accepted";
       if(quoteFilterState.tab === "declined") return q.status === "Declined";
       return true;
@@ -1336,7 +1316,7 @@
     var activeId = selectedId || null;
     selectedQuoteId = activeId;
 
-    var tabs = [["all","All"],["accepted","Accepted"],["declined","Declined"]];
+    var tabs = [["all","All"],["pending","Pending"],["accepted","Accepted"],["declined","Declined"]];
 
     content.innerHTML =
       '<div class="quote-shell">'+
