@@ -5,128 +5,148 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>OnePort365 Portal</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Open+Sans:wght@400;500;600;700&display=swap">
 <style>
+  /*
+    Tokens sourced from the OnePort365 design system: deep green (#023819) for
+    trust/structure, electric lime (#BFFB4F) reserved for the one primary action
+    per view, gold for value/warning, red strictly for error. Poppins carries
+    display/headings/key figures; Open Sans carries body, UI and dense data.
+  */
   :root{
-    --bg:#F5F7F4;
+    --bg:#FDFBF1;
     --surface:#FFFFFF;
-    --surface-2:#F0F3EE;
-    --border:#DFE5DC;
-    --border-strong:#C7D0C2;
-    --ink:#152016;
-    --ink-soft:#4B5A4C;
-    --muted:#7C8A7C;
-    --sidebar:#0F1B14;
-    --sidebar-ink:#D9E4D6;
-    --sidebar-muted:#8AA089;
-    --sidebar-active:#1B2E20;
-    --accent:#8FD13A;
-    --accent-ink:#12210D;
-    --accent-strong:#6FAE21;
-    --amber-bg:#FBF0D9;
-    --amber-ink:#8A5A0B;
-    --amber-dot:#D98C1B;
-    --green-bg:#DCEFDD;
-    --green-ink:#175C31;
-    --green-dot:#1F8C46;
-    --grey-bg:#EBEEE9;
-    --grey-ink:#5B685C;
-    --grey-dot:#8B978A;
-    --blue-bg:#DDE8F5;
-    --blue-ink:#1E4A80;
-    --blue-dot:#3B7BC4;
-    --red-bg:#F8E1DE;
-    --red-ink:#9A3324;
-    --red-dot:#C9503C;
-    --shadow: 0 1px 2px rgba(15,27,20,0.06), 0 1px 1px rgba(15,27,20,0.04);
-    --radius:8px;
-    --font-ui: 'Public Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    --font-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+    --surface-2:#F4F6EF;
+    --border:rgba(2,56,25,.12);
+    --border-strong:#023819;
+    --ink:#023819;
+    --ink-soft:#383838;
+    --muted:#808080;
+    --link:#2f6b1e;
+    --brand-fill:#023819;
+    --input-border:rgba(2,56,25,.35);
+
+    --sidebar:#023819;
+    --sidebar-ink:#FDFBF1;
+    --sidebar-muted:rgba(253,251,241,.62);
+    --sidebar-hover:rgba(253,251,241,.08);
+    --sidebar-active:#BFFB4F;
+    --sidebar-active-ink:#023819;
+
+    --accent:#BFFB4F;
+    --accent-ink:#023819;
+    --accent-strong:#a9e83a;
+    --tint:#D1DBBD;
+    --tint-ink:#023819;
+
+    --amber-bg:#FFF3CC; --amber-ink:#8a6a00; --amber-dot:#FFCC1A;
+    --green-bg:#E1F1E8; --green-ink:#0f7a45; --green-dot:#1F8A5B;
+    --grey-bg:#EDEFE8; --grey-ink:#4a5a3f; --grey-dot:#808080;
+    --red-bg:#FDE0E0; --red-ink:#cc1414; --red-dot:#FF1A1A;
+    --lime-bg:#BFFB4F; --lime-ink:#023819; --lime-dot:#023819;
+
+    --shadow-e1: 0 1px 2px rgba(2,56,25,.05), 0 1px 3px rgba(2,56,25,.04);
+    --shadow-e2: 0 2px 4px rgba(2,56,25,.05), 0 8px 20px -8px rgba(2,56,25,.14);
+    --shadow-e3: 0 4px 8px rgba(2,56,25,.06), 0 18px 40px -16px rgba(2,56,25,.22);
+    --shadow:var(--shadow-e1);
+    --radius:16px;
+    --radius-sm:6px; --radius-md:8px; --radius-lg:12px; --radius-xl:16px;
+    --font-ui: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --font-display: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-mono: var(--font-display);
   }
   @media (prefers-color-scheme: dark){
     :root:not([data-theme="light"]){
-      --bg:#0E1512;
-      --surface:#151F19;
-      --surface-2:#1B271F;
-      --border:#2B3A31;
-      --border-strong:#3A4C40;
-      --ink:#E7EEE5;
-      --ink-soft:#B7C4B4;
-      --muted:#7E8F7C;
-      --sidebar:#0A120D;
-      --sidebar-ink:#D9E4D6;
-      --sidebar-muted:#75886F;
-      --sidebar-active:#182620;
-      --accent:#8FD13A;
-      --accent-ink:#12210D;
-      --accent-strong:#A3E552;
-      --amber-bg:#3A2C10;
-      --amber-ink:#E8B85B;
-      --amber-dot:#D98C1B;
-      --green-bg:#123420;
-      --green-ink:#6FCB8E;
-      --green-dot:#3AAE63;
-      --grey-bg:#20291F;
-      --grey-ink:#A7B3A2;
-      --grey-dot:#7C8A7A;
-      --blue-bg:#132A3F;
-      --blue-ink:#7FB2E8;
-      --blue-dot:#4C8FD1;
-      --red-bg:#3B1D17;
-      --red-ink:#E39482;
-      --red-dot:#C9503C;
-      --shadow: 0 1px 2px rgba(0,0,0,0.4), 0 1px 1px rgba(0,0,0,0.3);
+      --bg:#081109;
+      --surface:#0F1F14;
+      --surface-2:#142A1B;
+      --border:rgba(191,251,79,.14);
+      --border-strong:#BFFB4F;
+      --ink:#F2F7EC;
+      --ink-soft:#C9D6C2;
+      --muted:#8FA08A;
+      --link:#a9e83a;
+      --brand-fill:#1f5c33;
+      --input-border:rgba(191,251,79,.35);
+
+      --sidebar:#04140A;
+      --sidebar-ink:#FDFBF1;
+      --sidebar-muted:rgba(253,251,241,.55);
+      --sidebar-hover:rgba(253,251,241,.08);
+      --sidebar-active:#BFFB4F;
+      --sidebar-active-ink:#023819;
+
+      --accent:#BFFB4F;
+      --accent-ink:#06210D;
+      --accent-strong:#d4ff85;
+      --tint:#223a28;
+      --tint-ink:#EAF2E2;
+
+      --amber-bg:#3A2C0A; --amber-ink:#FFD666; --amber-dot:#FFCC1A;
+      --green-bg:#0F2E1C; --green-ink:#6FE3A6; --green-dot:#1F8A5B;
+      --grey-bg:#1C2A1E; --grey-ink:#AAB8A2; --grey-dot:#8FA08A;
+      --red-bg:#3A1210; --red-ink:#FF8A7A; --red-dot:#FF1A1A;
+      --lime-bg:#2b3a12; --lime-ink:#D9FFA0; --lime-dot:#BFFB4F;
+
+      --shadow-e1: 0 1px 2px rgba(0,0,0,.4), 0 1px 3px rgba(0,0,0,.3);
+      --shadow-e2: 0 2px 4px rgba(0,0,0,.4), 0 8px 20px -8px rgba(0,0,0,.5);
+      --shadow-e3: 0 4px 8px rgba(0,0,0,.45), 0 18px 40px -16px rgba(0,0,0,.6);
+      --shadow:var(--shadow-e1);
     }
   }
   :root[data-theme="dark"]{
-    --bg:#0E1512;
-    --surface:#151F19;
-    --surface-2:#1B271F;
-    --border:#2B3A31;
-    --border-strong:#3A4C40;
-    --ink:#E7EEE5;
-    --ink-soft:#B7C4B4;
-    --muted:#7E8F7C;
-    --sidebar:#0A120D;
-    --sidebar-ink:#D9E4D6;
-    --sidebar-muted:#75886F;
-    --sidebar-active:#182620;
-    --accent:#8FD13A;
-    --accent-ink:#12210D;
-    --accent-strong:#A3E552;
-    --amber-bg:#3A2C10;
-    --amber-ink:#E8B85B;
-    --amber-dot:#D98C1B;
-    --green-bg:#123420;
-    --green-ink:#6FCB8E;
-    --green-dot:#3AAE63;
-    --grey-bg:#20291F;
-    --grey-ink:#A7B3A2;
-    --grey-dot:#7C8A7A;
-    --blue-bg:#132A3F;
-    --blue-ink:#7FB2E8;
-    --blue-dot:#4C8FD1;
-    --red-bg:#3B1D17;
-    --red-ink:#E39482;
-    --red-dot:#C9503C;
-    --shadow: 0 1px 2px rgba(0,0,0,0.4), 0 1px 1px rgba(0,0,0,0.3);
+    --bg:#081109;
+    --surface:#0F1F14;
+    --surface-2:#142A1B;
+    --border:rgba(191,251,79,.14);
+    --border-strong:#BFFB4F;
+    --ink:#F2F7EC;
+    --ink-soft:#C9D6C2;
+    --muted:#8FA08A;
+    --link:#a9e83a;
+    --brand-fill:#1f5c33;
+    --input-border:rgba(191,251,79,.35);
+
+    --sidebar:#04140A;
+    --sidebar-ink:#FDFBF1;
+    --sidebar-muted:rgba(253,251,241,.55);
+    --sidebar-hover:rgba(253,251,241,.08);
+    --sidebar-active:#BFFB4F;
+    --sidebar-active-ink:#023819;
+
+    --accent:#BFFB4F;
+    --accent-ink:#06210D;
+    --accent-strong:#d4ff85;
+    --tint:#223a28;
+    --tint-ink:#EAF2E2;
+
+    --amber-bg:#3A2C0A; --amber-ink:#FFD666; --amber-dot:#FFCC1A;
+    --green-bg:#0F2E1C; --green-ink:#6FE3A6; --green-dot:#1F8A5B;
+    --grey-bg:#1C2A1E; --grey-ink:#AAB8A2; --grey-dot:#8FA08A;
+    --red-bg:#3A1210; --red-ink:#FF8A7A; --red-dot:#FF1A1A;
+    --lime-bg:#2b3a12; --lime-ink:#D9FFA0; --lime-dot:#BFFB4F;
+
+    --shadow-e1: 0 1px 2px rgba(0,0,0,.4), 0 1px 3px rgba(0,0,0,.3);
+    --shadow-e2: 0 2px 4px rgba(0,0,0,.4), 0 8px 20px -8px rgba(0,0,0,.5);
+    --shadow-e3: 0 4px 8px rgba(0,0,0,.45), 0 18px 40px -16px rgba(0,0,0,.6);
+    --shadow:var(--shadow-e1);
   }
 
   *{box-sizing:border-box;}
   html,body{margin:0;padding:0;}
   body{
     background:var(--bg);
-    color:var(--ink);
+    color:var(--ink-soft);
     font-family:var(--font-ui);
     font-size:14px;
     line-height:1.5;
     -webkit-font-smoothing:antialiased;
   }
-  h1,h2,h3{text-wrap:balance; margin:0;}
+  h1,h2,h3{font-family:var(--font-display); font-weight:600; text-wrap:balance; margin:0; color:var(--ink);}
   a{color:inherit;}
   button{font-family:inherit;}
   ::selection{background:var(--accent); color:var(--accent-ink);}
-  .num{font-family:var(--font-mono); font-variant-numeric:tabular-nums;}
+  .num{font-family:var(--font-display); font-weight:600; font-variant-numeric:tabular-nums;}
 
   /* App shell */
   .app{display:flex; min-height:100vh;}
@@ -149,12 +169,12 @@
     display:flex; align-items:center; justify-content:center;
     font-weight:700; font-size:15px; flex:none;
   }
-  .brand-name{font-weight:700; font-size:15px; letter-spacing:0.01em; color:#fff;}
+  .brand-name{font-family:var(--font-display); font-weight:600; font-size:15px; letter-spacing:0.01em; color:#fff;}
   .brand-sub{font-size:10.5px; color:var(--sidebar-muted); letter-spacing:0.06em; text-transform:uppercase; margin-top:1px;}
 
   .nav-group{
-    border:1px solid #223226;
-    border-radius:10px;
+    border:1px solid rgba(253,251,241,.12);
+    border-radius:var(--radius-lg);
     padding:6px;
     display:flex; flex-direction:column; gap:2px;
     margin-bottom:14px;
@@ -163,27 +183,28 @@
   .nav-item{
     display:flex; align-items:center; gap:10px;
     padding:9px 10px;
-    border-radius:7px;
+    border-radius:var(--radius-md);
     text-decoration:none;
     color:var(--sidebar-ink);
+    font-family:var(--font-display);
     font-size:13.5px; font-weight:500;
     cursor:pointer;
     border:1px solid transparent;
     background:transparent;
   }
   .nav-item .ic{width:16px; text-align:center; opacity:0.85; flex:none;}
-  .nav-item:hover{background:#152018;}
+  .nav-item:hover{background:var(--sidebar-hover);}
   .nav-item.active{
     background:var(--sidebar-active);
-    border-color:#2C4032;
-    color:#fff;
+    color:var(--sidebar-active-ink);
+    font-weight:600;
   }
   .nav-item.active .ic{opacity:1;}
 
   .sidebar-spacer{flex:1;}
 
   .user-block{
-    border-top:1px solid #1F2C22;
+    border-top:1px solid rgba(253,251,241,.12);
     padding-top:12px;
     display:flex; flex-direction:column; gap:2px;
   }
@@ -192,18 +213,18 @@
     padding:6px 8px 10px 8px;
   }
   .user-avatar{
-    width:28px; height:28px; border-radius:50%;
-    background:#26382B; color:#C9DBC5;
+    width:30px; height:30px; border-radius:9px;
+    background:var(--accent); color:var(--accent-ink);
     display:flex; align-items:center; justify-content:center;
-    font-size:11.5px; font-weight:700; flex:none;
+    font-family:var(--font-display); font-size:11.5px; font-weight:600; flex:none;
   }
-  .user-name{font-size:13px; font-weight:600; color:#fff;}
+  .user-name{font-family:var(--font-display); font-size:13px; font-weight:600; color:#fff;}
   .user-role{font-size:11px; color:var(--sidebar-muted);}
   .user-link{
     font-size:12.5px; color:var(--sidebar-muted);
-    padding:6px 8px; border-radius:6px; cursor:pointer;
+    padding:6px 8px; border-radius:var(--radius-md); cursor:pointer;
   }
-  .user-link:hover{background:#152018; color:var(--sidebar-ink);}
+  .user-link:hover{background:var(--sidebar-hover); color:var(--sidebar-ink);}
 
   /* Main */
   .main{flex:1; min-width:0; display:flex; flex-direction:column;}
@@ -219,23 +240,23 @@
 
   .content{padding:28px 32px 56px 32px; max-width:1180px; width:100%;}
 
-  /* Buttons */
+  /* Buttons — Accent (lime, primary), Outline (default, inverts on hover), Ghost (text-only) */
   .btn{
     display:inline-flex; align-items:center; gap:6px;
-    padding:9px 14px; border-radius:7px;
-    font-size:13.5px; font-weight:600;
-    border:1px solid var(--border-strong);
+    padding:10px 16px; border-radius:var(--radius-md);
+    font-family:var(--font-display); font-size:13.5px; font-weight:600;
+    border:1.5px solid var(--border-strong);
     background:var(--surface); color:var(--ink);
-    cursor:pointer; white-space:nowrap;
+    cursor:pointer; white-space:nowrap; transition:.16s;
   }
-  .btn:hover{background:var(--surface-2);}
+  .btn:hover{background:var(--brand-fill); color:var(--accent); border-color:var(--brand-fill);}
   .btn-primary{
-    background:var(--accent); border-color:var(--accent-strong); color:var(--accent-ink);
+    background:var(--accent); border:none; color:var(--accent-ink);
   }
-  .btn-primary:hover{background:var(--accent-strong);}
+  .btn-primary:hover{background:var(--accent-strong); color:var(--accent-ink);}
   .btn-ghost{border-color:transparent; background:transparent;}
-  .btn-ghost:hover{background:var(--surface-2);}
-  .btn-sm{padding:6px 10px; font-size:12.5px;}
+  .btn-ghost:hover{background:var(--surface-2); color:var(--ink); border-color:transparent;}
+  .btn-sm{padding:7px 11px; font-size:12.5px;}
   .btn:focus-visible, .nav-item:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible, .table-row:focus-visible{
     outline:2px solid var(--accent-strong); outline-offset:1px;
   }
@@ -244,8 +265,8 @@
   .panel{
     background:var(--surface);
     border:1px solid var(--border);
-    border-radius:var(--radius);
-    box-shadow:var(--shadow);
+    border-radius:var(--radius-xl);
+    box-shadow:var(--shadow-e1);
   }
   .panel-pad{padding:20px;}
 
@@ -254,19 +275,20 @@
     margin-bottom:22px;
   }
   .tile{
-    background:var(--surface); border:1px solid var(--border); border-radius:var(--radius);
-    padding:16px 18px; box-shadow:var(--shadow);
+    background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-xl);
+    padding:16px 18px; box-shadow:var(--shadow-e2);
   }
   .tile-label{font-size:11.5px; color:var(--muted); text-transform:uppercase; letter-spacing:0.05em; font-weight:600;}
-  .tile-value{font-family:var(--font-mono); font-size:26px; font-weight:600; margin-top:8px; letter-spacing:-0.01em;}
+  .tile-value{font-family:var(--font-display); font-size:26px; font-weight:600; margin-top:8px; letter-spacing:-0.01em; color:var(--ink);}
   .tile-sub{font-size:12px; color:var(--muted); margin-top:4px;}
   .tile-accent{border-top:3px solid var(--accent);}
+  .tile-green{border-top:3px solid var(--green-dot);}
 
   .section-head{
     display:flex; align-items:baseline; justify-content:space-between;
     margin:26px 0 12px 0;
   }
-  .section-head h2{font-size:14.5px; font-weight:700;}
+  .section-head h2{font-size:14.5px; font-weight:600;}
   .section-head .link{font-size:12.5px; color:var(--ink-soft); cursor:pointer; text-decoration:underline; text-decoration-color:var(--border-strong); text-underline-offset:3px;}
 
   /* Toolbar */
@@ -276,48 +298,56 @@
   .search{
     flex:1; min-width:220px;
     display:flex; align-items:center; gap:8px;
-    border:1px solid var(--border-strong); border-radius:7px;
-    padding:8px 12px; background:var(--surface);
+    border-radius:var(--radius-md);
+    padding:9px 12px; background:var(--tint);
   }
-  .search input{border:none; outline:none; background:transparent; font-size:13.5px; color:var(--ink); width:100%; font-family:inherit;}
-  .search .ic{color:var(--muted); font-size:13px;}
+  .search input{border:none; outline:none; background:transparent; font-size:13.5px; color:var(--tint-ink); width:100%; font-family:inherit;}
+  .search input::placeholder{color:var(--ink-soft); opacity:.75;}
+  .search .ic{color:var(--ink-soft); font-size:13px;}
   select.filter{
-    border:1px solid var(--border-strong); border-radius:7px;
+    border:1.5px solid var(--input-border); border-radius:var(--radius-md);
     padding:8px 10px; background:var(--surface); color:var(--ink);
     font-size:13px; font-family:inherit; cursor:pointer;
   }
 
   /* Table */
-  .table-wrap{overflow-x:auto; border:1px solid var(--border); border-radius:var(--radius); background:var(--surface); box-shadow:var(--shadow);}
+  .table-wrap{overflow-x:auto; border:1px solid var(--border); border-radius:var(--radius-lg); background:var(--surface); box-shadow:var(--shadow-e1);}
   table{width:100%; border-collapse:collapse; min-width:720px;}
   thead th{
     text-align:left; font-size:11px; text-transform:uppercase; letter-spacing:0.04em;
-    color:var(--muted); font-weight:600; padding:11px 16px; border-bottom:1px solid var(--border);
+    color:var(--muted); font-weight:700; padding:11px 16px; border-bottom:1px solid var(--border);
     background:var(--surface-2);
   }
   tbody td{padding:13px 16px; border-bottom:1px solid var(--border); font-size:13.5px; vertical-align:middle;}
   tbody tr:last-child td{border-bottom:none;}
   .table-row{cursor:pointer;}
   .table-row:hover{background:var(--surface-2);}
-  .id-link{font-family:var(--font-mono); font-weight:600; color:var(--green-ink); font-size:13px;}
+  .id-link{font-family:var(--font-display); font-weight:600; color:var(--ink); font-size:13px;}
   .chevron{color:var(--muted); text-align:right;}
   .empty-row td{padding:36px 16px; text-align:center; color:var(--muted);}
 
   .badge{
     display:inline-flex; align-items:center; gap:6px;
-    padding:4px 9px; border-radius:99px; font-size:12px; font-weight:600;
+    padding:5px 11px; border-radius:var(--radius-sm); font-size:12px; font-weight:700;
     white-space:nowrap;
   }
   .badge .dot{width:6px; height:6px; border-radius:50%; flex:none;}
   .badge-amber{background:var(--amber-bg); color:var(--amber-ink);} .badge-amber .dot{background:var(--amber-dot);}
   .badge-green{background:var(--green-bg); color:var(--green-ink);} .badge-green .dot{background:var(--green-dot);}
   .badge-grey{background:var(--grey-bg); color:var(--grey-ink);} .badge-grey .dot{background:var(--grey-dot);}
-  .badge-blue{background:var(--blue-bg); color:var(--blue-ink);} .badge-blue .dot{background:var(--blue-dot);}
+  .badge-lime{background:var(--lime-bg); color:var(--lime-ink);} .badge-lime .dot{background:var(--lime-dot);}
   .badge-red{background:var(--red-bg); color:var(--red-ink);} .badge-red .dot{background:var(--red-dot);}
 
-  .readiness{font-family:var(--font-mono); font-size:12.5px; font-weight:600; padding:3px 8px; border-radius:6px;}
-  .readiness-full{background:var(--green-bg); color:var(--green-ink);}
-  .readiness-partial{background:var(--amber-bg); color:var(--amber-ink);}
+  /* Readiness — 0-3 low (red), 4-6 building (gold), 7+ ready (green); never bare text */
+  .readiness{font-family:var(--font-ui); font-size:12px; font-weight:700; padding:4px 10px; border-radius:999px;}
+  .readiness-low{background:var(--red-bg); color:var(--red-ink);}
+  .readiness-building{background:var(--amber-bg); color:var(--amber-ink);}
+  .readiness-ready{background:var(--green-bg); color:var(--green-ink);}
+
+  .readiness-bar{flex:1; height:8px; border-radius:4px; background:var(--grey-bg); overflow:hidden;}
+  .readiness-bar > span{display:block; height:100%;}
+  .readiness-ring{width:66px; height:66px; border-radius:50%; display:grid; place-items:center; flex:none;}
+  .readiness-ring-inner{width:50px; height:50px; border-radius:50%; background:var(--surface); display:grid; place-items:center; font-family:var(--font-display); font-weight:600; font-size:14px;}
 
   /* Detail view */
   .detail-head{
@@ -363,18 +393,35 @@
   .stat-row .k{color:var(--muted);}
   .stat-row .v{font-weight:600; font-family:var(--font-mono);}
 
-  /* Form */
-  .form-grid{display:grid; grid-template-columns:1fr 1fr; gap:16px 20px;}
+  /* Form — the notched floating label is the input foundation across text, select, textarea */
+  .form-grid{display:grid; grid-template-columns:1fr 1fr; gap:18px 20px;}
   .form-field{display:flex; flex-direction:column; gap:6px;}
   .form-field.span2{grid-column:1 / -1;}
-  label{font-size:12.5px; font-weight:600; color:var(--ink-soft);}
-  label .opt{font-weight:400; color:var(--muted); text-transform:none; letter-spacing:0;}
-  input[type=text], input[type=number], input[type=date], select, textarea{
-    border:1px solid var(--border-strong); border-radius:7px; padding:9px 11px;
-    font-size:13.5px; font-family:inherit; color:var(--ink); background:var(--surface);
-    width:100%;
+  .field-notch{
+    position:relative; display:block;
+    border:1.5px solid var(--input-border); border-radius:var(--radius-md);
+    padding:15px 14px; background:var(--surface); transition:.14s;
   }
-  textarea{resize:vertical; min-height:76px;}
+  .field-notch:hover{border-color:var(--border-strong);}
+  .field-notch:focus-within{
+    border:2px solid var(--border-strong); padding:14.5px 13.5px;
+    box-shadow:0 0 0 3px rgba(191,251,79,.4);
+  }
+  .field-notch-label{
+    position:absolute; top:-8px; left:11px; background:var(--surface); padding:0 5px;
+    font-size:11px; color:var(--muted); font-weight:600; white-space:nowrap;
+  }
+  .field-notch:focus-within .field-notch-label{color:var(--border-strong);}
+  .field-notch input, .field-notch select, .field-notch textarea{
+    border:none; outline:none; width:100%; background:transparent; padding:0;
+    font-size:14px; font-family:var(--font-ui); color:var(--ink);
+  }
+  .field-notch textarea{resize:vertical; min-height:60px;}
+  .field-notch select{
+    appearance:none; -webkit-appearance:none; cursor:pointer; padding-right:20px;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23808080' stroke-width='2'><path d='M6 9l6 6 6-6' stroke-linecap='round' stroke-linejoin='round'/></svg>");
+    background-repeat:no-repeat; background-position:right center;
+  }
   .hint{font-size:11.5px; color:var(--muted);}
   .radio-row{display:flex; gap:8px; flex-wrap:wrap;}
   .radio-chip{
@@ -590,6 +637,19 @@
     RFQ_REQUIRED.forEach(function(k){ if(rfq[k] && String(rfq[k]).trim() !== "") n++; });
     return {n:n, total:RFQ_REQUIRED.length};
   }
+  // Scale: low (red) -> building (gold) -> ready (green) — the readiness score
+  // is the heart of the RFQ screens, so it's always drawn, never bare text.
+  var READINESS_TONES = {
+    low:{bg:"var(--red-bg)", ink:"var(--red-ink)", dot:"var(--red-dot)"},
+    building:{bg:"var(--amber-bg)", ink:"var(--amber-ink)", dot:"var(--amber-dot)"},
+    ready:{bg:"var(--green-bg)", ink:"var(--green-ink)", dot:"var(--green-dot)"}
+  };
+  function readinessTier(rd){
+    var pct = rd.n / rd.total;
+    if(pct <= 1/3) return "low";
+    if(pct <= 2/3) return "building";
+    return "ready";
+  }
 
   // Counts physical containers (20GP/40GP/40HC/20RF/40RF) tied to an RFQ's quantity field —
   // LCL, air, and breakbulk shipments don't move in discrete boxes, so they're excluded.
@@ -601,7 +661,7 @@
 
   function rfqStatusBadge(status){
     var map = {
-      "Awaiting Quote":"badge-grey", "Sent":"badge-amber", "Quoted":"badge-green"
+      "Awaiting Quote":"badge-grey", "Sent":"badge-amber", "Quoted":"badge-lime"
     };
     return '<span class="badge '+(map[status]||"badge-grey")+'"><span class="dot"></span>'+esc(status)+'</span>';
   }
@@ -610,7 +670,7 @@
     return '<span class="badge '+(map[status]||"badge-grey")+'"><span class="dot"></span>'+esc(status)+'</span>';
   }
   function shipmentStatusBadge(status){
-    var map = { "Booked":"badge-grey", "In Transit":"badge-amber", "At Port":"badge-blue", "Delivered":"badge-green" };
+    var map = { "Booked":"badge-grey", "In Transit":"badge-lime", "At Port":"badge-amber", "Delivered":"badge-green" };
     return '<span class="badge '+(map[status]||"badge-grey")+'"><span class="dot"></span>'+esc(status)+'</span>';
   }
 
@@ -696,11 +756,11 @@
 
     content.innerHTML =
       '<div class="tiles">'+
-        '<div class="tile tile-accent"><div class="tile-label">RFQ Requests</div><div class="tile-value num">'+rfqRequests+'</div><div class="tile-sub">Submitted to date</div></div>'+
-        '<div class="tile"><div class="tile-label">Accepted Quotes</div><div class="tile-value num">'+acceptedQuotes+'</div><div class="tile-sub">Ready to ship</div></div>'+
+        '<div class="tile"><div class="tile-label">RFQ Requests</div><div class="tile-value num">'+rfqRequests+'</div><div class="tile-sub">Submitted to date</div></div>'+
+        '<div class="tile tile-green"><div class="tile-label">Accepted Quotes</div><div class="tile-value num">'+acceptedQuotes+'</div><div class="tile-sub">Ready to ship</div></div>'+
         '<div class="tile"><div class="tile-label">Containers</div><div class="tile-value num">'+containers+'</div><div class="tile-sub">Across your bookings</div></div>'+
-        '<div class="tile"><div class="tile-label">Shipments In Transit</div><div class="tile-value num">'+inTransit+'</div><div class="tile-sub">Booked, moving, or at port</div></div>'+
-        '<div class="tile"><div class="tile-label">Completed Shipments</div><div class="tile-value num">'+completed+'</div><div class="tile-sub">Delivered to date</div></div>'+
+        '<div class="tile tile-accent"><div class="tile-label">Shipments In Transit</div><div class="tile-value num">'+inTransit+'</div><div class="tile-sub">Booked, moving, or at port</div></div>'+
+        '<div class="tile tile-green"><div class="tile-label">Completed Shipments</div><div class="tile-value num">'+completed+'</div><div class="tile-sub">Delivered to date</div></div>'+
       '</div>'+
 
       '<div class="detail-grid">'+
@@ -773,7 +833,7 @@
 
     tbody.innerHTML = rows.map(function(r){
       var rd = readiness(r);
-      var readyCls = rd.n === rd.total ? "readiness-full" : "readiness-partial";
+      var readyCls = "readiness-"+readinessTier(rd);
       return '<tr class="table-row" tabindex="0" data-route="#/rfq/'+esc(r.id)+'">'+
         '<td class="id-link">'+esc(r.id)+'</td>'+
         '<td class="num">'+esc(r.origin)+'</td>'+
@@ -824,8 +884,8 @@
         '<div>'+
           '<div class="panel panel-pad" style="margin-bottom:14px;">'+
             '<div class="section-head" style="margin:0 0 12px 0;"><h2>Summary</h2></div>'+
+            readinessRing(rd)+
             '<div class="stat-list">'+
-              statRow("Readiness", rd.n+" / "+rd.total)+
               statRow("Lane", (r.origin||"—")+" → "+(r.destination||"—"))+
               statRow("Created", fmtDate(r.created))+
             '</div>'+
@@ -881,10 +941,44 @@
   function statRow(k, v){
     return '<div class="stat-row"><span class="k">'+esc(k)+'</span><span class="v">'+esc(v)+'</span></div>';
   }
+  function readinessRing(rd){
+    var tone = READINESS_TONES[readinessTier(rd)];
+    var deg = Math.round((rd.n/rd.total)*360);
+    var pct = Math.round((rd.n/rd.total)*100);
+    return '<div style="display:flex;align-items:center;gap:16px;margin-bottom:18px;">'+
+      '<div class="readiness-ring" style="background:conic-gradient('+tone.dot+' 0deg '+deg+'deg, var(--grey-bg) '+deg+'deg 360deg)">'+
+        '<div class="readiness-ring-inner" style="color:'+tone.ink+'">'+rd.n+'/'+rd.total+'</div>'+
+      '</div>'+
+      '<div style="flex:1;">'+
+        '<div class="field-label" style="margin-bottom:7px;">Readiness</div>'+
+        '<div class="readiness-bar"><span style="width:'+pct+'%;background:'+tone.dot+'"></span></div>'+
+      '</div>'+
+    '</div>';
+  }
 
   function renderNotFound(kind, backRoute){
     setHeader("Not found", "OnePort365 / "+kind, "");
     content.innerHTML = '<div class="empty-state panel panel-pad"><div class="ic">&#9888;</div><div>This '+esc(kind)+' record could not be found in this prototype.</div><button class="btn" data-route="'+backRoute+'" style="margin-top:8px;">Back</button></div>';
+  }
+
+  /* Notched floating-label field — the input foundation across text, select and textarea */
+  function notchInput(id, label, value, placeholder, type, span2){
+    return '<div class="form-field'+(span2?" span2":"")+'"><label class="field-notch" for="'+id+'">'+
+      '<span class="field-notch-label">'+label+'</span>'+
+      '<input type="'+(type||"text")+'" id="'+id+'" value="'+esc(value)+'" placeholder="'+esc(placeholder||"")+'" />'+
+    '</label></div>';
+  }
+  function notchSelect(id, label, optionsHtml, span2){
+    return '<div class="form-field'+(span2?" span2":"")+'"><label class="field-notch" for="'+id+'">'+
+      '<span class="field-notch-label">'+label+'</span>'+
+      '<select id="'+id+'">'+optionsHtml+'</select>'+
+    '</label></div>';
+  }
+  function notchTextarea(id, label, value, placeholder, span2){
+    return '<div class="form-field'+(span2?" span2":"")+'"><label class="field-notch" for="'+id+'">'+
+      '<span class="field-notch-label">'+label+'</span>'+
+      '<textarea id="'+id+'" placeholder="'+esc(placeholder||"")+'">'+esc(value)+'</textarea>'+
+    '</label></div>';
   }
 
   /* ---------- New RFQ Form ---------- */
@@ -903,51 +997,21 @@
         '<form id="rfqForm">'+
           '<div class="form-grid">'+
 
-            '<div class="form-field">'+
-              '<label for="f_freightType">Freight Type</label>'+
-              '<select id="f_freightType">'+optionList(FREIGHT_TYPES, draft.freightType, "Select freight type")+'</select>'+
-            '</div>'+
-            '<div class="form-field">'+
-              '<label for="f_incoterm">Incoterm</label>'+
-              '<select id="f_incoterm">'+optionList(INCOTERMS, draft.incoterm, "Select incoterm")+'</select>'+
-            '</div>'+
+            notchSelect("f_freightType", "Freight Type", optionList(FREIGHT_TYPES, draft.freightType, "Select freight type"))+
+            notchSelect("f_incoterm", "Incoterm", optionList(INCOTERMS, draft.incoterm, "Select incoterm"))+
 
-            '<div class="form-field">'+
-              '<label for="f_origin">Origin (Port of Loading)</label>'+
-              '<select id="f_origin">'+portOptionList(draft.origin)+'</select>'+
-            '</div>'+
-            '<div class="form-field">'+
-              '<label for="f_destination">Destination (Port of Discharge)</label>'+
-              '<select id="f_destination">'+portOptionList(draft.destination)+'</select>'+
-            '</div>'+
+            notchSelect("f_origin", "Origin (Port of Loading)", portOptionList(draft.origin))+
+            notchSelect("f_destination", "Destination (Port of Discharge)", portOptionList(draft.destination))+
 
-            '<div class="form-field span2">'+
-              '<label for="f_cargoDescription">Cargo Description</label>'+
-              '<input type="text" id="f_cargoDescription" value="'+esc(draft.cargoDescription)+'" placeholder="e.g. Frozen poultry parts" />'+
-            '</div>'+
+            notchInput("f_cargoDescription", "Cargo Description", draft.cargoDescription, "e.g. Frozen poultry parts", "text", true)+
 
-            '<div class="form-field">'+
-              '<label for="f_cargoWeight">Cargo Weight <span class="opt">(with units)</span></label>'+
-              '<input type="text" id="f_cargoWeight" value="'+esc(draft.cargoWeight)+'" placeholder="e.g. 18,000 kg" />'+
-            '</div>'+
-            '<div class="form-field">'+
-              '<label for="f_quantity">Quantity</label>'+
-              '<input type="text" id="f_quantity" value="'+esc(draft.quantity)+'" placeholder="e.g. 2 containers" />'+
-            '</div>'+
+            notchInput("f_cargoWeight", "Cargo Weight (with units)", draft.cargoWeight, "e.g. 18,000 kg")+
+            notchInput("f_quantity", "Quantity", draft.quantity, "e.g. 2 containers")+
 
-            '<div class="form-field">'+
-              '<label for="f_containerType">Container Type</label>'+
-              '<select id="f_containerType">'+optionList(CONTAINER_TYPES, draft.containerType, "Select container type")+'</select>'+
-            '</div>'+
-            '<div class="form-field">'+
-              '<label for="f_targetDate">Target Shipment Date</label>'+
-              '<input type="date" id="f_targetDate" value="'+esc(draft.targetDate)+'" />'+
-            '</div>'+
+            notchSelect("f_containerType", "Container Type", optionList(CONTAINER_TYPES, draft.containerType, "Select container type"))+
+            notchInput("f_targetDate", "Target Shipment Date", draft.targetDate, "", "date")+
 
-            '<div class="form-field span2">'+
-              '<label for="f_notes">Notes <span class="opt">(optional)</span></label>'+
-              '<textarea id="f_notes" placeholder="Handling instructions, certifications, special requirements...">'+esc(draft.notes)+'</textarea>'+
-            '</div>'+
+            notchTextarea("f_notes", "Notes (optional)", draft.notes, "Handling instructions, certifications, special requirements...", true)+
 
           '</div>'+
 
