@@ -490,6 +490,23 @@
   .drawer-header h2{font-size:20px;}
   .drawer-actions{display:flex; align-items:center; gap:8px; flex:none;}
   .drawer-body{padding:4px 24px 8px; overflow-y:auto; flex:1; min-height:0;}
+
+  /* Always-visible scrollbar on every internally-scrolling pane — relying on the
+     OS/browser default (often an invisible overlay bar) leaves no clue there's
+     more content below. */
+  html, .drawer-body, .quote-detail-pane, .quote-cards{
+    scrollbar-width:thin; scrollbar-color:var(--border-strong) transparent;
+  }
+  html::-webkit-scrollbar, .drawer-body::-webkit-scrollbar, .quote-detail-pane::-webkit-scrollbar,
+  .quote-cards::-webkit-scrollbar{ width:10px; }
+  html::-webkit-scrollbar-track, .drawer-body::-webkit-scrollbar-track, .quote-detail-pane::-webkit-scrollbar-track,
+  .quote-cards::-webkit-scrollbar-track{ background:transparent; }
+  html::-webkit-scrollbar-thumb, .drawer-body::-webkit-scrollbar-thumb, .quote-detail-pane::-webkit-scrollbar-thumb,
+  .quote-cards::-webkit-scrollbar-thumb{
+    background-color:var(--border-strong); border-radius:999px; border:2px solid var(--surface);
+  }
+  .quote-cards::-webkit-scrollbar-thumb{ border-color:var(--surface-2); }
+
   .drawer-footer{
     display:flex; align-items:center; justify-content:space-between; gap:10px;
     padding:16px 24px; border-top:1px solid var(--border); flex:none;
