@@ -450,10 +450,6 @@
   }
   .radio-chip input{position:absolute; opacity:0; pointer-events:none;}
   .radio-chip.checked{background:var(--surface-2); border-color:var(--ink-soft); font-weight:600;}
-  .form-actions{
-    display:flex; align-items:center; justify-content:space-between; gap:10px;
-    margin-top:22px; padding-top:18px; border-top:1px solid var(--border);
-  }
   .progress-mini{font-size:12.5px; color:var(--muted);}
   .progress-mini b{color:var(--ink); font-family:var(--font-mono);}
 
@@ -493,7 +489,11 @@
   }
   .drawer-header h2{font-size:20px;}
   .drawer-actions{display:flex; align-items:center; gap:8px; flex:none;}
-  .drawer-body{padding:4px 24px 8px; overflow-y:auto; flex:1;}
+  .drawer-body{padding:4px 24px 8px; overflow-y:auto; flex:1; min-height:0;}
+  .drawer-footer{
+    display:flex; align-items:center; justify-content:space-between; gap:10px;
+    padding:16px 24px; border-top:1px solid var(--border); flex:none;
+  }
   .btn-icon{
     width:32px; height:32px; border-radius:var(--radius-md); border:none;
     background:transparent; color:var(--ink); font-size:20px; line-height:1;
@@ -661,8 +661,8 @@
     NGLOS:"Tin Can Island (Lagos), Nigeria", NGCAL:"Calabar, Nigeria"
   };
   var PORT_LIST = Object.keys(PORTS).map(function(c){ return {code:c, label:c+" — "+PORTS[c]}; });
-  var FREIGHT_TYPES = ["FCL","LCL","Air Freight","Breakbulk","RoRo"];
-  var CONTAINER_TYPES = ["20GP","40GP","40HC","20RF","40RF","N/A (Air)","N/A (Breakbulk)"];
+  var FREIGHT_TYPES = ["Haulage","Ocean Freight","Air Freight"];
+  var CONTAINER_TYPES = ["20GP","40GP","40HC","20RF","40RF","N/A (Air)"];
   var INCOTERMS = ["EXW","FCA","FOB","CFR","CIF","DAP","DDP"];
 
   function loadState(){
@@ -681,19 +681,19 @@
   var SEED = {
     nextRfq: 1043,
     rfqs: [
-      { id:"RFQ-1042", freightType:"FCL", origin:"CNDAL", destination:"GHTEM",
+      { id:"RFQ-1042", freightType:"Ocean Freight", origin:"CNDAL", destination:"GHTEM",
         cargoDescription:"Frozen poultry parts", cargoWeight:"18,000 kg", containerType:"40RF", quantity:"2",
         incoterm:"CIF", targetDate:"2026-10-15", notes:"Temperature controlled at -18°C. Halal certification required.",
         status:"Sent", created:"2026-09-02T09:14:00" },
-      { id:"RFQ-1041", freightType:"LCL", origin:"CNNSA", destination:"NGAPP",
+      { id:"RFQ-1041", freightType:"Ocean Freight", origin:"CNNSA", destination:"NGAPP",
         cargoDescription:"Cotton fabric rolls", cargoWeight:"4,200 kg", containerType:"N/A (Air)", quantity:"28 CBM",
         incoterm:"FOB", targetDate:"2026-10-01", notes:"Keep dry, avoid stacking above 3 pallets.",
         status:"Sent", created:"2026-09-01T15:40:00" },
-      { id:"RFQ-1039", freightType:"FCL", origin:"CNSHA", destination:"NGAPP",
+      { id:"RFQ-1039", freightType:"Ocean Freight", origin:"CNSHA", destination:"NGAPP",
         cargoDescription:"Galvanized steel coils", cargoWeight:"24,500 kg", containerType:"40GP", quantity:"1",
         incoterm:"CFR", targetDate:"2026-09-20", notes:"",
         status:"Quoted", created:"2026-08-27T11:02:00" },
-      { id:"RFQ-1038", freightType:"FCL", origin:"NGAPP", destination:"GHTEM",
+      { id:"RFQ-1038", freightType:"Haulage", origin:"NGAPP", destination:"GHTEM",
         cargoDescription:"Bagged cashew nuts", cargoWeight:"", containerType:"20GP", quantity:"3",
         incoterm:"", targetDate:"", notes:"",
         status:"Awaiting Quote", created:"2026-09-05T08:20:00" },
@@ -701,15 +701,15 @@
         cargoDescription:"Automotive spare parts", cargoWeight:"850 kg", containerType:"N/A (Air)", quantity:"6 pallets",
         incoterm:"EXW", targetDate:"2026-09-14", notes:"Priority parts for stalled production line.",
         status:"Quoted", created:"2026-08-20T10:05:00" },
-      { id:"RFQ-1031", freightType:"FCL", origin:"CNNSA", destination:"NGAPP",
+      { id:"RFQ-1031", freightType:"Ocean Freight", origin:"CNNSA", destination:"NGAPP",
         cargoDescription:"Canned tomato paste", cargoWeight:"21,000 kg", containerType:"40GP", quantity:"2",
         incoterm:"CIF", targetDate:"2026-08-18", notes:"",
         status:"Quoted", created:"2026-08-02T09:30:00" },
-      { id:"RFQ-1033", freightType:"FCL", origin:"CNDAL", destination:"GHTEM",
+      { id:"RFQ-1033", freightType:"Ocean Freight", origin:"CNDAL", destination:"GHTEM",
         cargoDescription:"Bagged rice", cargoWeight:"27,000 kg", containerType:"40HC", quantity:"3",
         incoterm:"CIF", targetDate:"2026-09-25", notes:"",
         status:"Quoted", created:"2026-08-12T13:10:00" },
-      { id:"RFQ-1044", freightType:"FCL", origin:"CNSHA", destination:"NGAPP",
+      { id:"RFQ-1044", freightType:"Ocean Freight", origin:"CNSHA", destination:"NGAPP",
         cargoDescription:"Ceramic floor tiles", cargoWeight:"19,000 kg", containerType:"20GP", quantity:"2",
         incoterm:"FOB", targetDate:"2026-09-08", notes:"",
         status:"Quoted", created:"2026-08-24T10:00:00" }
@@ -823,8 +823,7 @@
   }
   function serviceTypeLabel(rfq){
     if(!rfq) return "—";
-    if(rfq.freightType === "Air Freight") return "Import Air Freight";
-    if(rfq.freightType === "FCL" || rfq.freightType === "LCL") return "Import Ocean Freight | " + rfq.freightType;
+    if(rfq.freightType === "Haulage") return "Haulage";
     return "Import " + rfq.freightType;
   }
   var CONTAINER_SIZE_MAP = {"20GP":"20FT","20RF":"20FT","40GP":"40FT","40HC":"40FT HC","40RF":"40FT"};
@@ -916,8 +915,8 @@
     var page = parts[0];
 
     if(page === "dashboard"){ setActiveNav("#/dashboard"); closeRfqDrawer(); renderDashboard(); }
-    else if(page === "rfq" && parts[1] === "new"){ setActiveNav("#/rfq"); closeRfqDrawer(); renderRfqForm(); }
-    else if(page === "rfq" && parts[1] && parts[2] === "edit"){ setActiveNav("#/rfq"); closeRfqDrawer(); renderRfqForm(parts[1]); }
+    else if(page === "rfq" && parts[1] === "new"){ setActiveNav("#/rfq"); renderRfqList(); openRfqFormDrawer(); }
+    else if(page === "rfq" && parts[1] && parts[2] === "edit"){ setActiveNav("#/rfq"); renderRfqList(); openRfqFormDrawer(parts[1]); }
     else if(page === "rfq" && parts[1]){ setActiveNav("#/rfq"); renderRfqList(); openRfqDrawer(parts[1]); }
     else if(page === "rfq"){ setActiveNav("#/rfq"); closeRfqDrawer(); renderRfqList(); }
     else if(page === "quote" && parts[1]){ setActiveNav("#/quote"); closeRfqDrawer(); renderQuoteList(parts[1]); }
@@ -1099,7 +1098,7 @@
     var actions = "";
     if(r.status === "Awaiting Quote"){
       actions += '<button class="btn btn-sm" data-route="#/rfq/'+esc(r.id)+'/edit">Edit</button>';
-      actions += '<button class="btn btn-sm btn-primary" id="drawerSendBtn">Send to Commercial</button>';
+      actions += '<button class="btn btn-sm btn-primary" id="drawerSendBtn">Send RFQ</button>';
     }
 
     drawer.innerHTML =
@@ -1129,7 +1128,7 @@
       }
       r.status = "Sent";
       saveState();
-      showToast(r.id+" sent to Commercial.");
+      showToast(r.id+" sent.");
       openRfqDrawer(r.id);
     });
 
@@ -1177,20 +1176,24 @@
     '</label></div>';
   }
 
-  /* ---------- New RFQ Form ---------- */
-  function renderRfqForm(editId){
+  /* ---------- New RFQ Form (modal) ---------- */
+  function openRfqFormDrawer(editId){
     var editing = editId ? findRfq(editId) : null;
     var draft = editing ? editing : {
       freightType:"", origin:"", destination:"", cargoDescription:"",
       cargoWeight:"", containerType:"", quantity:"", incoterm:"", targetDate:"", notes:""
     };
 
-    setHeader(editing ? "Edit "+editing.id : "New RFQ", "OnePort365 / RFQ / "+(editing?editing.id:"New"), "");
+    var backdrop = document.getElementById("rfqDrawerBackdrop");
+    var drawer = document.getElementById("rfqDrawer");
 
-    content.innerHTML =
-      '<div class="back-link" data-route="'+(editing?"#/rfq/"+editing.id:"#/rfq")+'">&#8592; '+(editing?"Back to "+editing.id:"Back to RFQ list")+'</div>'+
-      '<div class="panel panel-pad" style="max-width:760px;">'+
-        '<form id="rfqForm">'+
+    drawer.innerHTML =
+      '<div class="drawer-header">'+
+        '<h2>'+(editing ? "Edit "+esc(editing.id) : "New RFQ")+'</h2>'+
+        '<button class="btn-icon" data-route="'+(editing?"#/rfq/"+editing.id:"#/rfq")+'" aria-label="Close">&times;</button>'+
+      '</div>'+
+      '<form id="rfqForm" style="display:flex; flex-direction:column; flex:1; min-height:0;">'+
+        '<div class="drawer-body">'+
           '<div class="form-grid">'+
 
             notchSelect("f_freightType", "Freight Type", optionList(FREIGHT_TYPES, draft.freightType, "Select freight type"))+
@@ -1210,16 +1213,18 @@
             notchTextarea("f_notes", "Notes (optional)", draft.notes, "Handling instructions, certifications, special requirements...", true)+
 
           '</div>'+
-
-          '<div class="form-actions">'+
-            '<div class="progress-mini">Readiness: <b id="readinessLabel">0/9</b> required fields complete</div>'+
-            '<div style="display:flex; gap:10px;">'+
-              '<button type="button" class="btn" id="saveDraftBtn">Save &amp; finish later</button>'+
-              '<button type="submit" class="btn btn-primary" id="submitRfqBtn">Send to Commercial</button>'+
-            '</div>'+
+        '</div>'+
+        '<div class="drawer-footer">'+
+          '<div class="progress-mini">Readiness: <b id="readinessLabel">0/9</b> required fields complete</div>'+
+          '<div style="display:flex; gap:10px;">'+
+            '<button type="button" class="btn btn-sm" id="saveDraftBtn">Save &amp; finish later</button>'+
+            '<button type="submit" class="btn btn-primary btn-sm" id="submitRfqBtn">Send RFQ</button>'+
           '</div>'+
-        '</form>'+
-      '</div>';
+        '</div>'+
+      '</form>';
+
+    backdrop.classList.add("open");
+    drawer.classList.add("open");
 
     function collect(){
       return {
@@ -1255,7 +1260,7 @@
       var vals = collect();
       var rd = readiness(vals);
       if(rd.n < rd.total){
-        showToast("Complete all required fields to send to Commercial ("+rd.n+"/"+rd.total+" done). Saved for later instead.");
+        showToast("Complete all required fields to send ("+rd.n+"/"+rd.total+" done). Saved for later instead.");
         persist("Awaiting Quote");
         return;
       }
@@ -1268,7 +1273,7 @@
         Object.assign(editing, vals);
         editing.status = status;
         saveState();
-        showToast(editing.id+" "+(status==="Awaiting Quote"?"saved. Finish it later from the RFQ list.":"sent to Commercial."));
+        showToast(editing.id+" "+(status==="Awaiting Quote"?"saved. Finish it later from the RFQ list.":"sent."));
         go("#/rfq/"+editing.id);
       } else {
         var id = "RFQ-"+DB.nextRfq;
@@ -1276,7 +1281,7 @@
         var record = Object.assign({id:id, status:status, created:new Date().toISOString()}, vals);
         DB.rfqs.unshift(record);
         saveState();
-        showToast(id+" "+(status==="Awaiting Quote"?"saved. Finish it later from the RFQ list.":"created and sent to Commercial."));
+        showToast(id+" "+(status==="Awaiting Quote"?"saved. Finish it later from the RFQ list.":"created and sent."));
         go("#/rfq/"+id);
       }
     }
@@ -1376,7 +1381,7 @@
     var qty = parseQty(rfq ? rfq.quantity : "1");
     var originCharges = defaultOriginCharges(qty);
     var originSubtotal = originCharges.reduce(function(a,c){ return a + c.sell; }, 0);
-    var freightTitle = (rfq && rfq.freightType === "Air Freight") ? "Air Freight" : "Ocean Freight";
+    var freightTitle = rfq ? rfq.freightType : "Freight";
 
     var headerActions = "";
     if(q.status === "Pending"){
