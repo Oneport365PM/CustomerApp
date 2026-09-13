@@ -764,8 +764,7 @@
 
   /* ---------- Dashboard ---------- */
   function renderDashboard(){
-    setHeader("Dashboard", "OnePort365 / Dashboard",
-      '<button class="btn btn-primary" data-route="#/rfq/new">+ New RFQ</button>');
+    setHeader("Dashboard", "OnePort365 / Dashboard", "");
 
     var rfqRequests = DB.rfqs.length;
     var acceptedQuotes = DB.quotes.filter(function(q){ return q.status==="Accepted"; }).length;
@@ -804,7 +803,6 @@
         '<div>'+
           '<div class="section-head"><h2>Quick links</h2></div>'+
           '<div class="panel panel-pad" style="display:flex; flex-direction:column; gap:8px;">'+
-            '<button class="btn" style="justify-content:flex-start" data-route="#/rfq/new">+ New RFQ</button>'+
             '<button class="btn" style="justify-content:flex-start" data-route="#/quote">View open quotes</button>'+
             '<button class="btn" style="justify-content:flex-start" data-route="#/shipment">Track shipments</button>'+
           '</div>'+
