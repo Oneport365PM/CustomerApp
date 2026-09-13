@@ -289,6 +289,9 @@
   .btn-primary:hover{background:var(--accent-strong); color:var(--accent-ink);}
   .btn-ghost{border-color:transparent; background:transparent;}
   .btn-ghost:hover{background:var(--surface-2); color:var(--ink); border-color:transparent;}
+  .btn-danger{background:var(--red-dot); border:none; color:#fff;}
+  .btn-danger:hover{background:var(--red-ink); color:#fff;}
+  .btn:disabled{opacity:.5; cursor:not-allowed; pointer-events:none;}
   .btn-sm{padding:7px 11px; font-size:12.5px;}
   .btn:focus-visible, .nav-item:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible, .table-row:focus-visible{
     outline:2px solid var(--accent-strong); outline-offset:1px;
@@ -395,6 +398,8 @@
   @media (max-width:520px){ .tiles{grid-template-columns:1fr;} }
 
   .field-grid{display:grid; grid-template-columns:1fr 1fr; gap:16px 24px;}
+  .field-grid-4{grid-template-columns:repeat(4,1fr);}
+  @media (max-width:1100px){ .field-grid-4{grid-template-columns:repeat(2,1fr);} }
   .field{display:flex; flex-direction:column; gap:4px;}
   .field-label{font-size:11px; text-transform:uppercase; letter-spacing:0.04em; color:var(--muted); font-weight:600;}
   .field-value{font-size:14px; color:var(--ink);}
@@ -517,6 +522,76 @@
   .modal-row .mk{font-size:13.5px; color:var(--ink-soft); flex:none;}
   .modal-row .mv{font-size:13.5px; color:var(--ink); font-weight:600; text-align:right;}
   .badge-tint{background:var(--tint); color:var(--tint-ink); padding:5px 12px; border-radius:999px; font-size:12.5px; font-weight:700;}
+  .drawer-sm{width:420px;}
+
+  /* Quote — master list + document detail, side by side */
+  .quote-shell{
+    display:flex; height:calc(100vh - 172px); min-height:520px;
+    border:1px solid var(--border); border-radius:var(--radius-xl); overflow:hidden;
+    box-shadow:var(--shadow-e1); background:var(--surface);
+  }
+  .quote-list-pane{
+    width:320px; flex:none; display:flex; flex-direction:column;
+    border-right:1px solid var(--border); background:var(--surface-2);
+  }
+  .quote-list-head{padding:18px 18px 0; flex:none;}
+  .quote-list-title{font-size:12px; text-transform:uppercase; letter-spacing:.05em; color:var(--muted); font-weight:700;}
+  .quote-tabs{display:flex; gap:18px; padding:14px 18px 0; border-bottom:1px solid var(--border); flex:none;}
+  .quote-tab{padding-bottom:10px; font-size:13px; font-weight:600; color:var(--muted); cursor:pointer; border-bottom:2px solid transparent;}
+  .quote-tab.active{color:var(--ink); border-bottom-color:var(--ink);}
+  .quote-cards{flex:1; overflow-y:auto;}
+  .quote-card{padding:14px 18px; border-bottom:1px solid var(--border); cursor:pointer; border-left:3px solid transparent;}
+  .quote-card:hover{background:var(--surface);}
+  .quote-card.active{background:var(--green-bg); border-left-color:var(--green-dot);}
+  .quote-card-top{display:flex; align-items:center; justify-content:space-between; gap:8px;}
+  .quote-card-id{font-family:var(--font-display); font-weight:600; font-size:13.5px; color:var(--ink);}
+  .quote-card-name{font-size:13px; color:var(--ink-soft); margin-top:6px;}
+  .quote-card-route{font-size:12px; color:var(--muted); margin-top:2px;}
+  .quote-card-date{font-size:11.5px; color:var(--muted); margin-top:6px;}
+
+  .quote-detail-pane{flex:1; min-width:0; overflow-y:auto; display:flex; flex-direction:column;}
+  .quote-doc-top{
+    display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap;
+    padding:18px 28px; border-bottom:1px solid var(--border); background:var(--surface);
+    position:sticky; top:0; z-index:2; flex:none;
+  }
+  .quote-doc-title{font-family:var(--font-display); font-weight:700; font-size:18px; color:var(--ink);}
+  .quote-doc-sub{font-size:12.5px; color:var(--muted); margin-top:2px;}
+  .quote-doc{padding:28px;}
+
+  .quote-letterhead{display:flex; align-items:flex-start; justify-content:space-between; gap:20px; padding-bottom:22px; border-bottom:1px solid var(--border); margin-bottom:26px;}
+  .quote-brand{font-family:var(--font-display); font-weight:700; font-size:21px;}
+  .quote-address{font-size:12.5px; color:var(--ink-soft); line-height:1.6; margin-top:10px;}
+  .quote-meta-right{text-align:right;}
+  .quote-doc-id{font-family:var(--font-display); font-weight:700; font-size:17px; color:var(--ink);}
+  .quote-doc-issued{font-size:12px; color:var(--muted); margin-top:5px;}
+  .quote-doc-valid{font-size:12.5px; color:var(--amber-ink); font-weight:700; margin-top:3px;}
+
+  .collapsible-head{display:flex; align-items:center; justify-content:space-between; cursor:pointer; padding-bottom:14px; border-bottom:1px solid var(--border); margin-bottom:18px;}
+  .collapsible-head h3{font-size:13px; text-transform:uppercase; letter-spacing:.05em; font-weight:700; color:var(--ink);}
+  .collapsible-chevron{color:var(--muted); transition:transform .15s ease; flex:none;}
+  .collapsible.collapsed .collapsible-chevron{transform:rotate(-90deg);}
+  .collapsible.collapsed .collapsible-body{display:none;}
+  .collapsible{margin-bottom:28px;}
+
+  .section-title{font-size:13px; text-transform:uppercase; letter-spacing:.05em; font-weight:700; color:var(--ink); margin:0 0 14px;}
+  .doc-table-wrap thead th{background:var(--tint); color:var(--tint-ink);}
+  .doc-subtotal{display:flex; justify-content:flex-end; gap:8px; padding:12px 4px 0; font-size:13.5px; color:var(--ink-soft); margin-bottom:26px;}
+  .doc-subtotal b{font-family:var(--font-display); color:var(--ink); font-size:15px;}
+
+  .doc-note{
+    display:flex; gap:12px; align-items:flex-start; background:var(--red-dot); color:#fff;
+    padding:16px 18px; border-radius:var(--radius-md); font-size:13px; line-height:1.6; margin-bottom:28px;
+  }
+  .doc-note .ic{font-size:16px; flex:none;}
+
+  .doc-terms{border:1px solid var(--border); border-radius:var(--radius-md); padding:20px 22px;}
+  .doc-terms ol{margin:0; padding-left:20px; display:flex; flex-direction:column; gap:9px; font-size:13px; color:var(--ink-soft); line-height:1.55;}
+
+  @media (max-width:900px){
+    .quote-shell{flex-direction:column; height:auto;}
+    .quote-list-pane{width:auto; border-right:none; border-bottom:1px solid var(--border); max-height:320px;}
+  }
 
   @media (prefers-reduced-motion: reduce){ *{transition:none !important; animation:none !important;} }
 </style>
@@ -591,6 +666,9 @@
 <div class="drawer-backdrop" id="rfqDrawerBackdrop" data-route="#/rfq"></div>
 <div class="drawer" id="rfqDrawer" role="dialog" aria-modal="true" aria-label="RFQ details"></div>
 
+<div class="drawer-backdrop" id="declineBackdrop"></div>
+<div class="drawer drawer-sm" id="declineModal" role="dialog" aria-modal="true" aria-label="Decline quote"></div>
+
 <div class="toast" id="toast"></div>
 
 <script>
@@ -610,13 +688,13 @@
 
   function loadState(){
     try{
-      var raw = localStorage.getItem("op365_customer_prototype_v3");
+      var raw = localStorage.getItem("op365_customer_prototype_v4");
       if(raw) return JSON.parse(raw);
     }catch(e){}
     return null;
   }
   function saveState(){
-    try{ localStorage.setItem("op365_customer_prototype_v3", JSON.stringify(DB)); }catch(e){}
+    try{ localStorage.setItem("op365_customer_prototype_v4", JSON.stringify(DB)); }catch(e){}
   }
 
   var CUSTOMER = "Adaeze Foods Ltd";
@@ -651,21 +729,34 @@
       { id:"RFQ-1033", freightType:"FCL", origin:"CNDAL", destination:"GHTEM",
         cargoDescription:"Bagged rice", cargoWeight:"27,000 kg", containerType:"40HC", quantity:"3",
         incoterm:"CIF", targetDate:"2026-09-25", notes:"",
-        status:"Quoted", created:"2026-08-12T13:10:00" }
+        status:"Quoted", created:"2026-08-12T13:10:00" },
+      { id:"RFQ-1044", freightType:"FCL", origin:"CNSHA", destination:"NGAPP",
+        cargoDescription:"Ceramic floor tiles", cargoWeight:"19,000 kg", containerType:"20GP", quantity:"2",
+        incoterm:"FOB", targetDate:"2026-09-08", notes:"",
+        status:"Quoted", created:"2026-08-24T10:00:00" }
     ],
     quotes: [
-      { id:"QUO-3301", rfqId:"RFQ-1039", carrier:"Maersk Line", lane:"CNSHA → NGAPP",
-        rate:"US$ 1,850 / 40GP", transitDays:26, validUntil:"2026-09-30", status:"Sent to Customer",
-        created:"2026-08-29T14:00:00" },
-      { id:"QUO-3298", rfqId:"RFQ-1036", carrier:"Ethiopian Cargo", lane:"CNSHA → NGLOS",
-        rate:"US$ 4.20 / kg", transitDays:4, validUntil:"2026-09-10", status:"Accepted",
-        created:"2026-08-21T09:15:00" },
-      { id:"QUO-3277", rfqId:"RFQ-1031", carrier:"MSC", lane:"CNNSA → NGAPP",
-        rate:"US$ 2,100 / 40GP", transitDays:29, validUntil:"2026-08-15", status:"Accepted",
-        created:"2026-08-03T10:40:00" },
-      { id:"QUO-3285", rfqId:"RFQ-1033", carrier:"CMA CGM", lane:"CNDAL → GHTEM",
-        rate:"US$ 1,980 / 40HC", transitDays:24, validUntil:"2026-08-30", status:"Accepted",
-        created:"2026-08-13T11:20:00" }
+      { id:"QUO-3301", rfqId:"RFQ-1039", carrier:"Maersk Line", equip:"40GP", unit:"1",
+        transitDays:26, freeDays:7, freightSell:1850,
+        issuedDate:"2026-08-29", validDays:7, status:"Sent to Customer",
+        declineReason:null, declineNote:null, created:"2026-08-29T14:00:00" },
+      { id:"QUO-3298", rfqId:"RFQ-1036", carrier:"Ethiopian Cargo", equip:"Air Freight", unit:"850 kg",
+        transitDays:4, freeDays:null, freightSell:3570,
+        issuedDate:"2026-08-21", validDays:5, status:"Accepted",
+        declineReason:null, declineNote:null, created:"2026-08-21T09:15:00" },
+      { id:"QUO-3277", rfqId:"RFQ-1031", carrier:"MSC", equip:"40GP", unit:"2",
+        transitDays:29, freeDays:7, freightSell:4200,
+        issuedDate:"2026-08-03", validDays:10, status:"Accepted",
+        declineReason:null, declineNote:null, created:"2026-08-03T10:40:00" },
+      { id:"QUO-3285", rfqId:"RFQ-1033", carrier:"CMA CGM", equip:"40HC", unit:"3",
+        transitDays:24, freeDays:7, freightSell:5940,
+        issuedDate:"2026-08-13", validDays:7, status:"Accepted",
+        declineReason:null, declineNote:null, created:"2026-08-13T11:20:00" },
+      { id:"QUO-3312", rfqId:"RFQ-1044", carrier:"OOCL", equip:"20GP", unit:"2",
+        transitDays:27, freeDays:5, freightSell:2400,
+        issuedDate:"2026-08-25", validDays:7, status:"Declined",
+        declineReason:"Price too high", declineNote:"Found a lower rate from another forwarder for this lane.",
+        created:"2026-08-25T09:40:00" }
     ],
     shipments: [
       { id:"SHP-2210", quoteId:"QUO-3298", rfqId:"RFQ-1036",
@@ -743,6 +834,55 @@
     return match ? parseInt(match[0], 10) : 0;
   }
 
+  /* ---------- Quote document helpers ---------- */
+  function parseQty(str){
+    var m = String(str || "").match(/\d+/);
+    return m ? parseInt(m[0], 10) : 1;
+  }
+  function portLabel(code){
+    return code ? code + " — " + (PORTS[code] || "") : "—";
+  }
+  function serviceTypeLabel(rfq){
+    if(!rfq) return "—";
+    if(rfq.freightType === "Air Freight") return "Import Air Freight";
+    if(rfq.freightType === "FCL" || rfq.freightType === "LCL") return "Import Ocean Freight | " + rfq.freightType;
+    return "Import " + rfq.freightType;
+  }
+  var CONTAINER_SIZE_MAP = {"20GP":"20FT","20RF":"20FT","40GP":"40FT","40HC":"40FT HC","40RF":"40FT"};
+  function containerSizeLabel(rfq){
+    if(!rfq) return "—";
+    var size = CONTAINER_SIZE_MAP[rfq.containerType];
+    if(!size) return rfq.quantity || "—";
+    return size + " X " + parseQty(rfq.quantity);
+  }
+  function fmtUSD(n){ return "US$" + Number(n).toLocaleString("en-US"); }
+  function fmtNaira(n){ return "₦" + Number(n).toLocaleString("en-NG"); }
+  function defaultOriginCharges(qty){
+    qty = qty || 1;
+    return [
+      {basis:"Documentation Processing Fee", qty:1, sell:17250, description:"Per BL"},
+      {basis:"Carbon Levy", qty:qty, sell:5750 * qty, description:"Per Container"},
+      {basis:"Terminal Handling Charge (THC)", qty:1, sell:97750, description:"Per Shipment"}
+    ];
+  }
+  var TERMS_AND_CONDITIONS = [
+    "All documents related to clearing shipments is to be provided by the CLIENT where we do not handle documentation.",
+    "CLIENT to ensure that all the details are correct and in order.",
+    "CLIENT ensures that all permits required for the Importation of their commodity are provided and valid at the time of Import.",
+    "The Goods imported are the same as the Goods declared on all Documents provided.",
+    "CLIENT to ensure timely payment of Duty.",
+    "CLIENT to offload SERVICE PROVIDER's Trucks within 24Hrs of arrival at Facility, Truck demurrage per day applies for delays@₦30,000.",
+    "CLIENT to provide Delivery address accurately on the DATASHEET.",
+    "Any force majeure, incident or accident will be notified to Client and necessary solutions will be provided.",
+    "Counter for number of days shall halt where we have to resolve queries or incomplete documentation.",
+    "For NAFDAC regulated items;",
+    "Client to provide samples within 24 hrs of discharge of cargo at warehouse for submission to NAFDAC for 2nd stamping to effect full release.",
+    "Client to ensure quantities supplied as samples fit item of import & batch number as per the NAFDAC requirements.",
+    "Client to ensure all documentation regarding NAFDAC certificates, Current year import permits, applicable HS codes are valid as per the standard import guidelines requirements.",
+    "For chemicals requiring EUC certificates Client to ensure provision of certificates ahead of customs clearing.",
+    "All shipments from China and India must be accompanied by laboratory stamped CRIA."
+  ];
+
   function rfqStatusBadge(status){
     var map = {
       "Awaiting Quote":"badge-grey", "Sent":"badge-amber", "Quoted":"badge-lime"
@@ -750,7 +890,7 @@
     return '<span class="badge '+(map[status]||"badge-grey")+'"><span class="dot"></span>'+esc(status)+'</span>';
   }
   function quoteStatusBadge(status){
-    var map = { "Draft":"badge-grey", "Sent to Customer":"badge-amber", "Accepted":"badge-green", "Expired":"badge-red" };
+    var map = { "Sent to Customer":"badge-amber", "Accepted":"badge-green", "Declined":"badge-red" };
     return '<span class="badge '+(map[status]||"badge-grey")+'"><span class="dot"></span>'+esc(status)+'</span>';
   }
   function shipmentStatusBadge(status){
@@ -761,7 +901,6 @@
   function findRfq(id){ return DB.rfqs.filter(function(r){return r.id===id;})[0]; }
   function findQuote(id){ return DB.quotes.filter(function(q){return q.id===id;})[0]; }
   function findShipment(id){ return DB.shipments.filter(function(s){return s.id===id;})[0]; }
-  function quotesForRfq(id){ return DB.quotes.filter(function(q){return q.rfqId===id;}); }
   function shipmentForQuote(id){ return DB.shipments.filter(function(s){return s.quoteId===id;})[0]; }
 
   var toastTimer = null;
@@ -802,7 +941,7 @@
     else if(page === "rfq" && parts[1] && parts[2] === "edit"){ setActiveNav("#/rfq"); closeRfqDrawer(); renderRfqForm(parts[1]); }
     else if(page === "rfq" && parts[1]){ setActiveNav("#/rfq"); renderRfqList(); openRfqDrawer(parts[1]); }
     else if(page === "rfq"){ setActiveNav("#/rfq"); closeRfqDrawer(); renderRfqList(); }
-    else if(page === "quote" && parts[1]){ setActiveNav("#/quote"); closeRfqDrawer(); renderQuoteDetail(parts[1]); }
+    else if(page === "quote" && parts[1]){ setActiveNav("#/quote"); closeRfqDrawer(); renderQuoteList(parts[1]); }
     else if(page === "quote"){ setActiveNav("#/quote"); closeRfqDrawer(); renderQuoteList(); }
     else if(page === "shipment" && parts[1]){ setActiveNav("#/shipment"); closeRfqDrawer(); renderShipmentDetail(parts[1]); }
     else if(page === "shipment"){ setActiveNav("#/shipment"); closeRfqDrawer(); renderShipmentList(); }
@@ -845,7 +984,9 @@
     if(e.key !== "Escape") return;
     if(document.getElementById("rfqDrawer").classList.contains("open")){ go("#/rfq"); }
     if(profilePopover.classList.contains("open")){ closeProfilePopover(); }
+    if(document.getElementById("declineModal").classList.contains("open")){ closeDeclineModal(); }
   });
+  document.getElementById("declineBackdrop").addEventListener("click", function(){ closeDeclineModal(); });
 
   /* ---------- Dashboard ---------- */
   function renderDashboard(){
@@ -1178,105 +1319,257 @@
   }
 
   /* ---------- Quote List / Detail ---------- */
-  function renderQuoteList(){
+  var quoteFilterState = { tab:"all" };
+  var selectedQuoteId = null;
+
+  function renderQuoteList(selectedId){
     setHeader("Quote", "OnePort365 / Quote", "");
-    var rows = DB.quotes.slice().sort(function(a,b){ return b.id.localeCompare(a.id, undefined, {numeric:true}); });
-    content.innerHTML =
-      '<div class="table-wrap"><table>'+
-        '<thead><tr><th>Quote</th><th>Lane</th><th>Carrier</th><th>Rate</th><th>Valid Until</th><th>Status</th><th></th></tr></thead>'+
-        '<tbody>'+
-        (rows.length ? rows.map(function(q){
-          return '<tr class="table-row" tabindex="0" data-route="#/quote/'+esc(q.id)+'">'+
-            '<td class="id-link">'+esc(q.id)+'</td>'+
-            '<td class="num">'+esc(q.lane)+'</td>'+
-            '<td>'+esc(q.carrier)+'</td>'+
-            '<td class="num">'+esc(q.rate)+'</td>'+
-            '<td class="num">'+fmtDate(q.validUntil)+'</td>'+
-            '<td>'+quoteStatusBadge(q.status)+'</td>'+
-            '<td class="chevron">&#8250;</td>'+
-          '</tr>';
-        }).join("") : '<tr class="empty-row"><td colspan="7">No quotes yet.</td></tr>')+
-        '</tbody>'+
-      '</table></div>';
-  }
 
-  function renderQuoteDetail(id){
-    var q = findQuote(id);
-    if(!q){ renderNotFound("Quote", "#/quote"); return; }
-    var rfq = findRfq(q.rfqId);
-    var shipment = shipmentForQuote(q.id);
+    var all = DB.quotes.slice().sort(function(a,b){ return new Date(b.created) - new Date(a.created); });
+    var filtered = all.filter(function(q){
+      if(quoteFilterState.tab === "accepted") return q.status === "Accepted";
+      if(quoteFilterState.tab === "declined") return q.status === "Declined";
+      return true;
+    });
+    var stillVisible = filtered.some(function(q){ return q.id === (selectedId || selectedQuoteId); });
+    var activeId = selectedId || (stillVisible ? selectedQuoteId : (filtered[0] ? filtered[0].id : null));
+    selectedQuoteId = activeId;
 
-    var actions = "";
-    if(q.status === "Sent to Customer"){
-      actions = '<button class="btn btn-primary" id="acceptQuoteBtn">Accept quote</button><button class="btn" id="declineQuoteBtn">Decline</button>';
-    }
-    setHeader(q.id, "OnePort365 / Quote / "+q.id, actions+'<button class="btn btn-ghost" data-route="#/quote">Close</button>');
+    var tabs = [["all","All"],["accepted","Accepted"],["declined","Declined"]];
 
     content.innerHTML =
-      '<div class="back-link" data-route="#/quote">&#8592; Back to Quote list</div>'+
-      '<div class="detail-head"><div class="detail-title"><h1>'+esc(q.lane)+'</h1>'+quoteStatusBadge(q.status)+'</div></div>'+
-      '<div class="detail-grid">'+
-        '<div class="panel panel-pad">'+
-          '<div class="field-grid">'+
-            field("Carrier", q.carrier)+
-            field("Lane", q.lane)+
-            field("Rate", q.rate)+
-            field("Transit Time", q.transitDays+" days")+
-            field("Valid Until", fmtDate(q.validUntil))+
-            field("Linked RFQ", rfq ? rfq.id : "—")+
+      '<div class="quote-shell">'+
+        '<div class="quote-list-pane">'+
+          '<div class="quote-list-head"><div class="quote-list-title">All Quotes</div></div>'+
+          '<div class="quote-tabs">'+
+            tabs.map(function(t){
+              return '<span class="quote-tab'+(quoteFilterState.tab===t[0]?" active":"")+'" data-tab="'+t[0]+'">'+t[1]+'</span>';
+            }).join("")+
           '</div>'+
-          (shipment ? (
-            '<div class="divider"></div>'+
-            '<div class="section-head" style="margin-top:0;"><h2>Shipment</h2></div>'+
-            '<div class="table-wrap"><table><thead><tr><th>Shipment</th><th>Carrier Ref</th><th>ETD</th><th>ETA</th><th>Status</th></tr></thead><tbody>'+
-            '<tr class="table-row" data-route="#/shipment/'+esc(shipment.id)+'"><td class="id-link">'+esc(shipment.id)+'</td><td class="num">'+esc(shipment.ref)+'</td><td class="num">'+fmtDate(shipment.etd)+'</td><td class="num">'+fmtDate(shipment.eta)+'</td><td>'+shipmentStatusBadge(shipment.status)+'</td></tr>'+
-            '</tbody></table></div>'
-          ) : "")+
-        '</div>'+
-        '<div>'+
-          '<div class="panel panel-pad">'+
-            '<div class="section-head" style="margin:0 0 12px 0;"><h2>Related RFQ</h2></div>'+
-            (rfq ? (
-              '<div class="stat-list">'+
-                statRow("RFQ", rfq.id)+
-                statRow("Cargo", rfq.cargoDescription)+
-                statRow("Incoterm", rfq.incoterm)+
-              '</div>'+
-              '<button class="btn btn-sm" style="width:100%; justify-content:center; margin-top:14px;" data-route="#/rfq/'+esc(rfq.id)+'">View RFQ</button>'
-            ) : '<div style="color:var(--muted); font-size:13px;">No linked RFQ.</div>')+
+          '<div class="quote-cards">'+
+            (filtered.length ? filtered.map(function(q){
+              var rfq = findRfq(q.rfqId);
+              return '<div class="quote-card'+(q.id===activeId?" active":"")+'" data-qid="'+esc(q.id)+'">'+
+                '<div class="quote-card-top"><span class="quote-card-id">'+esc(q.id)+'</span>'+quoteStatusBadge(q.status)+'</div>'+
+                '<div class="quote-card-name">'+esc(CUSTOMER)+'</div>'+
+                '<div class="quote-card-route">'+(rfq ? esc(portShort(rfq.origin)+" → "+portShort(rfq.destination)) : "—")+'</div>'+
+                '<div class="quote-card-date">'+fmtDate(q.issuedDate)+'</div>'+
+              '</div>';
+            }).join("") : '<div class="empty-state" style="padding:36px 18px;"><div class="ic">&#128179;</div><div>No quotes in this view.</div></div>')+
           '</div>'+
         '</div>'+
+        '<div class="quote-detail-pane" id="quoteDetailPane"></div>'+
       '</div>';
 
-    if(q.status === "Sent to Customer"){
-      document.getElementById("acceptQuoteBtn").addEventListener("click", function(){
-        q.status = "Accepted";
-        var newShip = {
-          id: "SHP-"+(2200+DB.shipments.length+10), quoteId:q.id, rfqId:q.rfqId,
-          mode:q.carrier+" — "+(rfq?rfq.freightType:""), lane:q.lane, carrier:q.carrier,
-          ref: q.carrier.replace(/\s+/g,"").toUpperCase()+"-"+Math.floor(100000+Math.random()*899999),
-          etd:"", eta:"", status:"Booked",
-          milestones:[
-            {label:"Booking confirmed", date:new Date().toISOString().slice(0,10), done:true, current:true},
-            {label:"Cargo received at origin", date:"", done:false},
-            {label:"Departed origin", date:"", done:false},
-            {label:"In transit", date:"", done:false},
-            {label:"Arrived destination", date:"", done:false},
-            {label:"Delivered", date:"", done:false}
-          ]
-        };
-        DB.shipments.unshift(newShip);
-        saveState();
-        showToast(q.id+" accepted. Shipment "+newShip.id+" created.");
-        renderQuoteDetail(q.id);
+    document.querySelectorAll(".quote-tab").forEach(function(el){
+      el.addEventListener("click", function(){
+        quoteFilterState.tab = el.getAttribute("data-tab");
+        renderQuoteList();
       });
-      document.getElementById("declineQuoteBtn").addEventListener("click", function(){
-        q.status = "Expired";
-        saveState();
-        showToast(q.id+" declined.");
-        renderQuoteDetail(q.id);
+    });
+    document.querySelectorAll(".quote-card").forEach(function(el){
+      el.addEventListener("click", function(){
+        var qid = el.getAttribute("data-qid");
+        selectedQuoteId = qid;
+        history.replaceState(null, "", "#/quote/"+qid);
+        document.querySelectorAll(".quote-card").forEach(function(c){
+          c.classList.toggle("active", c.getAttribute("data-qid") === qid);
+        });
+        renderQuoteDetailPane(qid);
       });
+    });
+
+    renderQuoteDetailPane(activeId);
+  }
+
+  function portShort(code){ return code || "—"; }
+
+  function renderQuoteDetailPane(id){
+    var pane = document.getElementById("quoteDetailPane");
+    var q = findQuote(id);
+    if(!q){
+      pane.innerHTML = '<div class="empty-state" style="height:100%;"><div class="ic">&#128179;</div><div>Select a quote to view details.</div></div>';
+      return;
     }
+    var rfq = findRfq(q.rfqId);
+    var qty = parseQty(rfq ? rfq.quantity : "1");
+    var originCharges = defaultOriginCharges(qty);
+    var originSubtotal = originCharges.reduce(function(a,c){ return a + c.sell; }, 0);
+    var freightTitle = (rfq && rfq.freightType === "Air Freight") ? "Air Freight" : "Ocean Freight";
+
+    var headerActions = "";
+    if(q.status === "Sent to Customer"){
+      headerActions = '<button class="btn btn-primary btn-sm" id="acceptQuoteBtn">Accept Quote</button>'+
+                       '<button class="btn btn-sm" id="declineQuoteBtn">Decline</button>';
+    }
+
+    pane.innerHTML =
+      '<div class="quote-doc-top">'+
+        '<div>'+
+          '<div class="quote-doc-title">'+esc(q.id)+'</div>'+
+          '<div class="quote-doc-sub">'+esc(CUSTOMER)+(rfq ? " · "+esc(PORTS[rfq.origin]||rfq.origin)+" → "+esc(PORTS[rfq.destination]||rfq.destination) : "")+'</div>'+
+        '</div>'+
+        '<div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">'+
+          quoteStatusBadge(q.status)+headerActions+
+          '<button class="btn btn-sm" id="quotePdfBtn"><span style="margin-right:5px;">&#128196;</span>PDF</button>'+
+        '</div>'+
+      '</div>'+
+      '<div class="quote-doc">'+
+
+        (q.status === "Declined" ? (
+          '<div class="doc-note"><span class="ic">&#9888;</span><div><b>Declined'+(q.declineReason?": "+esc(q.declineReason):"")+'.</b>'+(q.declineNote?" "+esc(q.declineNote):"")+'</div></div>'
+        ) : "")+
+
+        '<div class="quote-letterhead">'+
+          '<div>'+
+            '<div class="quote-brand"><span style="color:var(--ink)">OnePort</span><span style="color:var(--accent-strong)">365</span></div>'+
+            '<div class="quote-address">25 Marina Street, Lagos Island<br>Lagos, Nigeria</div>'+
+          '</div>'+
+          '<div class="quote-meta-right">'+
+            '<div class="quote-doc-id">'+esc(q.id)+'</div>'+
+            '<div class="quote-doc-issued">Issued: '+fmtDate(q.issuedDate)+'</div>'+
+            '<div class="quote-doc-valid">Valid for '+q.validDays+' day'+(q.validDays===1?"":"s")+'</div>'+
+          '</div>'+
+        '</div>'+
+
+        '<div class="collapsible" id="bookingDetailsBlock">'+
+          '<div class="collapsible-head" id="bookingDetailsToggle"><h3>Booking Details</h3><span class="collapsible-chevron">&#9662;</span></div>'+
+          '<div class="collapsible-body">'+
+            '<div class="field-grid field-grid-4">'+
+              field("Company Name", CUSTOMER)+
+              field("Customer Name", "Okpanaci")+
+              field("Email Address", "okpanaci@adaezefoods.example")+
+              field("Commodity", rfq ? rfq.cargoDescription : "")+
+              field("Service Type", rfq ? serviceTypeLabel(rfq) : "")+
+              field("Port of Loading", rfq ? portLabel(rfq.origin) : "")+
+              field("Destination Port", rfq ? portLabel(rfq.destination) : "")+
+              field("Container Size", rfq ? containerSizeLabel(rfq) : "")+
+            '</div>'+
+          '</div>'+
+        '</div>'+
+
+        '<div class="section-title">'+esc(freightTitle)+'</div>'+
+        '<div class="table-wrap doc-table-wrap"><table><thead><tr>'+
+          '<th>Carrier</th><th>Route</th><th>Equip</th><th>Unit</th><th>Transit</th><th>Free Days</th><th>Sell</th>'+
+        '</tr></thead><tbody><tr>'+
+          '<td>'+esc(q.carrier)+'</td>'+
+          '<td class="num">'+(rfq ? esc(rfq.origin+" → "+rfq.destination) : "—")+'</td>'+
+          '<td>'+esc(q.equip)+'</td>'+
+          '<td class="num">'+esc(q.unit)+'</td>'+
+          '<td class="num">'+q.transitDays+' days</td>'+
+          '<td class="num">'+(q.freeDays != null ? q.freeDays+' days' : "—")+'</td>'+
+          '<td class="num" style="font-weight:700; color:var(--ink);">'+fmtUSD(q.freightSell)+'</td>'+
+        '</tr></tbody></table></div>'+
+        '<div class="doc-subtotal">Sub Total: <b>'+fmtUSD(q.freightSell)+'</b></div>'+
+
+        '<div class="section-title">Origin Charges</div>'+
+        '<div class="table-wrap doc-table-wrap"><table><thead><tr>'+
+          '<th>Basis</th><th>Qty</th><th>Description</th><th>Sell</th>'+
+        '</tr></thead><tbody>'+
+          originCharges.map(function(c){
+            return '<tr><td>'+esc(c.basis)+'</td><td class="num">'+c.qty+'</td><td>'+esc(c.description)+'</td>'+
+              '<td class="num" style="font-weight:700; color:var(--ink);">'+fmtNaira(c.sell)+'</td></tr>';
+          }).join("")+
+        '</tbody></table></div>'+
+        '<div class="doc-subtotal">Sub Total: <b>'+fmtNaira(originSubtotal)+'</b></div>'+
+
+        '<div class="doc-note"><span class="ic">&#9888;</span><div><b>Note:</b> Duty and tax advised are subject to verification and assessment by NCS upon arrival of cargo. 7.5% VAT will be applicable at the time of invoicing. Please note this offer is firm for acceptance within 48 hours, otherwise the above offer will be considered invalid. Storage / detention / demurrage charges (if any) are as per receipt.</div></div>'+
+
+        '<div class="section-title">OnePort365 Terms and Conditions</div>'+
+        '<div class="doc-terms"><ol>'+
+          TERMS_AND_CONDITIONS.map(function(t){ return '<li>'+esc(t)+'</li>'; }).join("")+
+        '</ol></div>'+
+
+      '</div>';
+
+    document.getElementById("bookingDetailsToggle").addEventListener("click", function(){
+      document.getElementById("bookingDetailsBlock").classList.toggle("collapsed");
+    });
+    document.getElementById("quotePdfBtn").addEventListener("click", function(){
+      showToast("PDF export isn't wired up in this prototype.");
+    });
+
+    var acceptBtn = document.getElementById("acceptQuoteBtn");
+    if(acceptBtn) acceptBtn.addEventListener("click", function(){
+      q.status = "Accepted";
+      var newShip = {
+        id: "SHP-"+(2200+DB.shipments.length+10), quoteId:q.id, rfqId:q.rfqId,
+        mode:q.carrier+" — "+(rfq?rfq.freightType:""),
+        lane: rfq ? (rfq.origin+" → "+rfq.destination) : "—",
+        carrier:q.carrier,
+        ref: q.carrier.replace(/\s+/g,"").toUpperCase()+"-"+Math.floor(100000+Math.random()*899999),
+        etd:"", eta:"", status:"Booked",
+        milestones:[
+          {label:"Booking confirmed", date:new Date().toISOString().slice(0,10), done:true, current:true},
+          {label:"Cargo received at origin", date:"", done:false},
+          {label:"Departed origin", date:"", done:false},
+          {label:"In transit", date:"", done:false},
+          {label:"Arrived destination", date:"", done:false},
+          {label:"Delivered", date:"", done:false}
+        ]
+      };
+      DB.shipments.unshift(newShip);
+      saveState();
+      showToast(q.id+" accepted. Shipment "+newShip.id+" created.");
+      renderQuoteList(q.id);
+    });
+    var declineBtn = document.getElementById("declineQuoteBtn");
+    if(declineBtn) declineBtn.addEventListener("click", function(){ openDeclineModal(q.id); });
+  }
+
+  /* ---------- Decline quote modal ---------- */
+  function openDeclineModal(qid){
+    var backdrop = document.getElementById("declineBackdrop");
+    var modal = document.getElementById("declineModal");
+    modal.innerHTML =
+      '<div class="drawer-header"><h2>Decline Quote</h2><button class="btn-icon" id="declineCloseX" aria-label="Close">&times;</button></div>'+
+      '<div class="drawer-body">'+
+        '<p style="font-size:13px; color:var(--ink-soft); margin:0 0 18px;">Let us know why you\'re declining <b>'+esc(qid)+'</b> so our commercial team can follow up.</p>'+
+        '<div class="form-field">'+
+          '<label class="field-notch"><span class="field-notch-label">Reason</span>'+
+            '<select id="declineReasonSelect">'+
+              '<option value="" selected disabled>Select a reason</option>'+
+              '<option>Price too high</option>'+
+              '<option>Transit time too long</option>'+
+              '<option>No longer needed</option>'+
+              '<option>Other</option>'+
+            '</select>'+
+          '</label>'+
+        '</div>'+
+        '<div class="form-field" style="margin-top:16px;">'+
+          '<label class="field-notch"><span class="field-notch-label">Additional note (optional)</span>'+
+            '<textarea id="declineNoteInput" placeholder="Anything else we should know?"></textarea>'+
+          '</label>'+
+        '</div>'+
+      '</div>'+
+      '<div style="display:flex; justify-content:flex-end; gap:10px; padding:16px 22px; border-top:1px solid var(--border); flex:none;">'+
+        '<button class="btn btn-sm" id="declineCancelBtn">Cancel</button>'+
+        '<button class="btn btn-sm btn-danger" id="declineConfirmBtn" disabled>Confirm Decline</button>'+
+      '</div>';
+
+    document.getElementById("declineReasonSelect").addEventListener("change", function(e){
+      document.getElementById("declineConfirmBtn").disabled = !e.target.value;
+    });
+    document.getElementById("declineCloseX").addEventListener("click", closeDeclineModal);
+    document.getElementById("declineCancelBtn").addEventListener("click", closeDeclineModal);
+    document.getElementById("declineConfirmBtn").addEventListener("click", function(){
+      var q = findQuote(qid);
+      if(!q) return;
+      q.status = "Declined";
+      q.declineReason = document.getElementById("declineReasonSelect").value;
+      q.declineNote = document.getElementById("declineNoteInput").value.trim();
+      saveState();
+      closeDeclineModal();
+      showToast(qid+" declined.");
+      renderQuoteList(qid);
+    });
+
+    backdrop.classList.add("open");
+    modal.classList.add("open");
+  }
+  function closeDeclineModal(){
+    document.getElementById("declineBackdrop").classList.remove("open");
+    document.getElementById("declineModal").classList.remove("open");
   }
 
   /* ---------- Shipment List / Detail ---------- */
