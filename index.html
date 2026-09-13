@@ -1331,8 +1331,9 @@
       if(quoteFilterState.tab === "declined") return q.status === "Declined";
       return true;
     });
-    var stillVisible = filtered.some(function(q){ return q.id === (selectedId || selectedQuoteId); });
-    var activeId = selectedId || (stillVisible ? selectedQuoteId : (filtered[0] ? filtered[0].id : null));
+    // Nothing is shown until a quote is explicitly clicked or linked to directly —
+    // no auto-selecting the first row on load or when switching tabs.
+    var activeId = selectedId || null;
     selectedQuoteId = activeId;
 
     var tabs = [["all","All"],["accepted","Accepted"],["declined","Declined"]];
