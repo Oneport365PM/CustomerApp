@@ -694,6 +694,9 @@
 <div class="drawer-backdrop" id="declineBackdrop"></div>
 <div class="drawer drawer-sm" id="declineModal" role="dialog" aria-modal="true" aria-label="Decline quote"></div>
 
+<div class="drawer-backdrop" id="docBackdrop"></div>
+<div class="drawer drawer-sm" id="docModal" role="dialog" aria-modal="true" aria-label="Add document"></div>
+
 <div class="toast" id="toast"></div>
 
 <script>
@@ -1058,8 +1061,10 @@
     if(document.getElementById("rfqDrawer").classList.contains("open")){ go("#/rfq"); }
     if(profilePopover.classList.contains("open")){ closeProfilePopover(); }
     if(document.getElementById("declineModal").classList.contains("open")){ closeDeclineModal(); }
+    if(document.getElementById("docModal").classList.contains("open")){ closeDocModal(); }
   });
   document.getElementById("declineBackdrop").addEventListener("click", function(){ closeDeclineModal(); });
+  document.getElementById("docBackdrop").addEventListener("click", function(){ closeDocModal(); });
 
   /* ---------- Dashboard ---------- */
   function renderDashboard(){
@@ -1701,6 +1706,79 @@
     document.getElementById("declineModal").classList.remove("open");
   }
 
+  /* ---------- Add document modal ---------- */
+  function formatFileSize(bytes){
+    if(!bytes) return "0 KB";
+    var kb = bytes / 1024;
+    if(kb < 1024) return Math.max(1, Math.round(kb)) + " KB";
+    return (kb / 1024).toFixed(1) + " MB";
+  }
+  function openDocModal(shipmentId){
+    var backdrop = document.getElementById("docBackdrop");
+    var modal = document.getElementById("docModal");
+    modal.innerHTML =
+      '<div class="drawer-header"><h2>Add Document</h2><button class="btn-icon" id="docCloseX" aria-label="Close">&times;</button></div>'+
+      '<div class="drawer-body">'+
+        '<div class="form-field">'+
+          '<label class="field-notch"><span class="field-notch-label">Document Type</span>'+
+            '<select id="docTypeSelect">'+
+              '<option value="" selected disabled>Select a document type</option>'+
+              '<option>Commercial Invoice</option>'+
+              '<option>Packing List</option>'+
+              '<option>Bill of Lading</option>'+
+              '<option>Certificate of Origin</option>'+
+              '<option>Customs Declaration</option>'+
+              '<option>Other</option>'+
+            '</select>'+
+          '</label>'+
+        '</div>'+
+        '<div class="form-field" style="margin-top:16px;">'+
+          '<label class="field-notch"><span class="field-notch-label">File</span>'+
+            '<input type="file" id="docFileInput">'+
+          '</label>'+
+        '</div>'+
+      '</div>'+
+      '<div style="display:flex; justify-content:flex-end; gap:10px; padding:16px 22px; border-top:1px solid var(--border); flex:none;">'+
+        '<button class="btn btn-sm" id="docCancelBtn">Cancel</button>'+
+        '<button class="btn btn-sm btn-primary" id="docConfirmBtn" disabled>Add Document</button>'+
+      '</div>';
+
+    function refreshConfirm(){
+      var type = document.getElementById("docTypeSelect").value;
+      var file = document.getElementById("docFileInput").files[0];
+      document.getElementById("docConfirmBtn").disabled = !(type && file);
+    }
+    document.getElementById("docTypeSelect").addEventListener("change", refreshConfirm);
+    document.getElementById("docFileInput").addEventListener("change", refreshConfirm);
+    document.getElementById("docCloseX").addEventListener("click", closeDocModal);
+    document.getElementById("docCancelBtn").addEventListener("click", closeDocModal);
+    document.getElementById("docConfirmBtn").addEventListener("click", function(){
+      var s = findShipment(shipmentId);
+      var file = document.getElementById("docFileInput").files[0];
+      if(!s || !file) return;
+      var type = document.getElementById("docTypeSelect").value;
+      var ext = (file.name.indexOf(".") !== -1 ? file.name.split(".").pop() : "FILE").toUpperCase();
+      if(!s.documents) s.documents = [];
+      s.documents.unshift({
+        name: type + " — " + file.name,
+        type: ext,
+        date: new Date().toISOString().slice(0, 10),
+        size: formatFileSize(file.size)
+      });
+      saveState();
+      closeDocModal();
+      showToast("Document added.");
+      renderShipmentDetail(s.id, "documents");
+    });
+
+    backdrop.classList.add("open");
+    modal.classList.add("open");
+  }
+  function closeDocModal(){
+    document.getElementById("docBackdrop").classList.remove("open");
+    document.getElementById("docModal").classList.remove("open");
+  }
+
   /* ---------- Shipment List / Detail ---------- */
   function renderShipmentList(){
     setHeader("Shipment", "OnePort365 / Shipment", "");
@@ -1760,6 +1838,8 @@
       document.querySelectorAll(".doc-view-btn").forEach(function(btn){
         btn.addEventListener("click", function(){ showToast("Document preview isn't wired up in this prototype."); });
       });
+      var addDocBtn = document.getElementById("addDocBtn");
+      if(addDocBtn) addDocBtn.addEventListener("click", function(){ openDocModal(s.id); });
     }
   }
 
@@ -1858,7 +1938,10 @@
     var docs = s.documents || [];
     return (
       '<div class="panel panel-pad">'+
-        '<div class="section-head" style="margin:0 0 4px 0;"><h2>Documents</h2></div>'+
+        '<div style="display:flex; align-items:flex-start; justify-content:space-between; gap:12px;">'+
+          '<div class="section-head" style="margin:0 0 4px 0;"><h2>Documents</h2></div>'+
+          '<button class="btn btn-primary btn-sm" id="addDocBtn" type="button">+ Add Document</button>'+
+        '</div>'+
         '<div style="font-size:12.5px; color:var(--muted); margin-bottom:16px;">Documents shared for this shipment.</div>'+
         (docs.length ?
           '<div class="table-wrap"><table>'+
