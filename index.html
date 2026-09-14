@@ -1732,6 +1732,11 @@
             '</select>'+
           '</label>'+
         '</div>'+
+        '<div class="form-field" id="docOtherNameField" style="margin-top:16px; display:none;">'+
+          '<label class="field-notch"><span class="field-notch-label">Document Name</span>'+
+            '<input type="text" id="docOtherNameInput" placeholder="Enter a document name">'+
+          '</label>'+
+        '</div>'+
         '<div class="form-field" style="margin-top:16px;">'+
           '<label class="field-notch"><span class="field-notch-label">File</span>'+
             '<input type="file" id="docFileInput">'+
@@ -1746,9 +1751,13 @@
     function refreshConfirm(){
       var type = document.getElementById("docTypeSelect").value;
       var file = document.getElementById("docFileInput").files[0];
-      document.getElementById("docConfirmBtn").disabled = !(type && file);
+      var isOther = type === "Other";
+      document.getElementById("docOtherNameField").style.display = isOther ? "" : "none";
+      var otherName = document.getElementById("docOtherNameInput").value.trim();
+      document.getElementById("docConfirmBtn").disabled = !(type && file && (!isOther || otherName));
     }
     document.getElementById("docTypeSelect").addEventListener("change", refreshConfirm);
+    document.getElementById("docOtherNameInput").addEventListener("input", refreshConfirm);
     document.getElementById("docFileInput").addEventListener("change", refreshConfirm);
     document.getElementById("docCloseX").addEventListener("click", closeDocModal);
     document.getElementById("docCancelBtn").addEventListener("click", closeDocModal);
@@ -1757,10 +1766,11 @@
       var file = document.getElementById("docFileInput").files[0];
       if(!s || !file) return;
       var type = document.getElementById("docTypeSelect").value;
+      var label = type === "Other" ? document.getElementById("docOtherNameInput").value.trim() : type;
       var ext = (file.name.indexOf(".") !== -1 ? file.name.split(".").pop() : "FILE").toUpperCase();
       if(!s.documents) s.documents = [];
       s.documents.unshift({
-        name: type + " — " + file.name,
+        name: label + " — " + file.name,
         type: ext,
         date: new Date().toISOString().slice(0, 10),
         size: formatFileSize(file.size)
