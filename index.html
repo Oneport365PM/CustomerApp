@@ -792,7 +792,10 @@
         branch:"LOS", modeOfBooking:"Online", booked:"2026-08-22",
         goodsType:"General Cargo", commodity:"Automotive spare parts", goodsValue:42000,
         additionalServices:["Express Clearance", "Cargo Insurance"],
-        containers:[],
+        containers:[
+          {number:"EY-PMC-001234", type:"PMC", seal:"SL90112233", weight:"420 kg", status:"In Transit"},
+          {number:"EY-AKE-005678", type:"AKE", seal:"SL90112234", weight:"430 kg", status:"In Transit"}
+        ],
         documents:[
           {name:"Air Waybill — AWB-176-88213940.pdf", type:"PDF", date:"2026-08-22", size:"186 KB"},
           {name:"Commercial Invoice.pdf", type:"PDF", date:"2026-08-22", size:"142 KB"},
@@ -921,9 +924,9 @@
     if(!size) return rfq.quantity || "—";
     return size + " X " + parseQty(rfq.quantity);
   }
-  var CONTAINER_KIND_MAP = {"20GP":"Dry", "40GP":"Dry", "40HC":"High Cube", "20RF":"Reefer", "40RF":"Reefer"};
+  var CONTAINER_KIND_MAP = {"20GP":"Dry", "40GP":"Dry", "40HC":"High Cube", "20RF":"Reefer", "40RF":"Reefer", "PMC":"ULD Pallet", "AKE":"ULD Container"};
   function containerKindLabel(type){ return CONTAINER_KIND_MAP[type] || type || "—"; }
-  var CONTAINER_SIZE_SHORT_MAP = {"20GP":"20FT", "20RF":"20FT", "40GP":"40FT", "40HC":"40FT", "40RF":"40FT"};
+  var CONTAINER_SIZE_SHORT_MAP = {"20GP":"20FT", "20RF":"20FT", "40GP":"40FT", "40HC":"40FT", "40RF":"40FT", "PMC":"PMC", "AKE":"AKE"};
   function containerSizeShort(type){ return CONTAINER_SIZE_SHORT_MAP[type] || type || "—"; }
   function fmtUSD(n){ return "US$" + Number(n).toLocaleString("en-US"); }
   function fmtNaira(n){ return "₦" + Number(n).toLocaleString("en-NG"); }
