@@ -809,7 +809,7 @@
           {label:"Arrived NGLOS", date:"", done:false},
           {label:"Delivered", date:"", done:false}
         ]},
-      { id:"SHP-2201", quoteId:"QUO-3285", rfqId:"RFQ-1033",
+      { id:"ZILOS2606051", quoteId:"QUO-3285", rfqId:"RFQ-1033",
         mode:"FCL — Sea Freight", lane:"CNDAL → GHTEM", carrier:"CMA CGM", ref:"CMDU-6620148",
         etd:"2026-08-16", eta:"2026-09-13", status:"In Transit",
         blNumber:"CMDUBL6620148", shipmentType:"Import", slaStatus:"At Risk",
@@ -836,7 +836,7 @@
           {label:"Arrived GHTEM", date:"", done:false},
           {label:"Delivered", date:"", done:false}
         ]},
-      { id:"SHP-2189", quoteId:"QUO-3277", rfqId:"RFQ-1031",
+      { id:"ZILOS2606052", quoteId:"QUO-3277", rfqId:"RFQ-1031",
         mode:"FCL — Sea Freight", lane:"CNNSA → NGAPP", carrier:"MSC", ref:"MSCU-7741205",
         etd:"2026-08-05", eta:"2026-09-03", status:"Delivered",
         blNumber:"MSCUBL7741205", shipmentType:"Import", slaStatus:"Healthy",
@@ -1622,7 +1622,7 @@
     if(acceptBtn) acceptBtn.addEventListener("click", function(){
       q.status = "Accepted";
       var newShip = {
-        id: "SHP-"+(2200+DB.shipments.length+10), quoteId:q.id, rfqId:q.rfqId,
+        id: "ZILOS"+(2606053+DB.shipments.length), quoteId:q.id, rfqId:q.rfqId,
         mode:q.carrier+" — "+(rfq?rfq.freightType:""),
         lane: rfq ? (rfq.origin+" → "+rfq.destination) : "—",
         carrier:q.carrier,
