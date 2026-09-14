@@ -921,6 +921,10 @@
     if(!size) return rfq.quantity || "—";
     return size + " X " + parseQty(rfq.quantity);
   }
+  var CONTAINER_KIND_MAP = {"20GP":"Dry", "40GP":"Dry", "40HC":"High Cube", "20RF":"Reefer", "40RF":"Reefer"};
+  function containerKindLabel(type){ return CONTAINER_KIND_MAP[type] || type || "—"; }
+  var CONTAINER_SIZE_SHORT_MAP = {"20GP":"20FT", "20RF":"20FT", "40GP":"40FT", "40HC":"40FT", "40RF":"40FT"};
+  function containerSizeShort(type){ return CONTAINER_SIZE_SHORT_MAP[type] || type || "—"; }
   function fmtUSD(n){ return "US$" + Number(n).toLocaleString("en-US"); }
   function fmtNaira(n){ return "₦" + Number(n).toLocaleString("en-NG"); }
   function defaultOriginCharges(qty){
@@ -1794,15 +1798,15 @@
         '<div style="font-size:12.5px; color:var(--muted); margin-bottom:16px;">Containers assigned to this shipment.</div>'+
         (containers.length ?
           '<div class="table-wrap"><table>'+
-            '<thead><tr><th>Container No.</th><th>Type</th><th>Seal No.</th><th>Gross Weight</th><th>Status</th></tr></thead>'+
+            '<thead><tr><th>Container Number</th><th>Size</th><th>Type</th><th>Seal Number</th><th>Weight</th></tr></thead>'+
             '<tbody>'+
               containers.map(function(c){
                 return '<tr>'+
                   '<td class="id-link">'+esc(c.number)+'</td>'+
-                  '<td>'+esc(c.type)+'</td>'+
+                  '<td>'+esc(containerSizeShort(c.type))+'</td>'+
+                  '<td>'+esc(containerKindLabel(c.type))+'</td>'+
                   '<td class="num">'+esc(c.seal)+'</td>'+
                   '<td class="num">'+esc(c.weight)+'</td>'+
-                  '<td>'+shipmentStatusBadge(c.status)+'</td>'+
                 '</tr>';
               }).join("")+
             '</tbody>'+
