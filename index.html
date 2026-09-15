@@ -1344,10 +1344,7 @@
           '</div>'+
         '</div>'+
         '<div class="drawer-footer" style="justify-content:flex-end;">'+
-          '<div style="display:flex; gap:10px;">'+
-            '<button type="button" class="btn btn-sm" id="saveDraftBtn">Save &amp; finish later</button>'+
-            '<button type="submit" class="btn btn-primary btn-sm" id="submitRfqBtn">Send RFQ</button>'+
-          '</div>'+
+          '<button type="submit" class="btn btn-primary btn-sm" id="submitRfqBtn">Send RFQ</button>'+
         '</div>'+
       '</form>';
 
@@ -1368,9 +1365,6 @@
         notes: document.getElementById("f_notes").value.trim()
       };
     }
-    document.getElementById("saveDraftBtn").addEventListener("click", function(){
-      persist("Awaiting Quote");
-    });
     document.getElementById("rfqForm").addEventListener("submit", function(e){
       e.preventDefault();
       var vals = collect();
