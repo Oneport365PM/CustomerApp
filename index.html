@@ -377,12 +377,6 @@
   .badge-lime{background:var(--lime-bg); color:var(--lime-ink);} .badge-lime .dot{background:var(--lime-dot);}
   .badge-red{background:var(--red-bg); color:var(--red-ink);} .badge-red .dot{background:var(--red-dot);}
 
-  /* Readiness — 0-3 low (red), 4-6 building (gold), 7+ ready (green); never bare text */
-  .readiness{font-family:var(--font-ui); font-size:12px; font-weight:700; padding:4px 10px; border-radius:999px;}
-  .readiness-low{background:var(--red-bg); color:var(--red-ink);}
-  .readiness-building{background:var(--amber-bg); color:var(--amber-ink);}
-  .readiness-ready{background:var(--green-bg); color:var(--green-ink);}
-
   /* Detail view */
   .detail-head{
     display:flex; align-items:center; justify-content:space-between; margin-bottom:18px; flex-wrap:wrap; gap:10px;
@@ -479,8 +473,6 @@
   }
   .radio-chip input{position:absolute; opacity:0; pointer-events:none;}
   .radio-chip.checked{background:var(--surface-2); border-color:var(--ink-soft); font-weight:600;}
-  .progress-mini{font-size:12.5px; color:var(--muted);}
-  .progress-mini b{color:var(--ink); font-family:var(--font-mono);}
 
   .toast{
     position:fixed; bottom:22px; left:50%; transform:translateX(-50%) translateY(8px);
@@ -890,14 +882,6 @@
     RFQ_REQUIRED.forEach(function(k){ if(rfq[k] && String(rfq[k]).trim() !== "") n++; });
     return {n:n, total:RFQ_REQUIRED.length};
   }
-  // Scale: low (red) -> building (gold) -> ready (green) — the readiness score
-  // is the heart of the RFQ screens, so it's always drawn, never bare text.
-  function readinessTier(rd){
-    var pct = rd.n / rd.total;
-    if(pct <= 1/3) return "low";
-    if(pct <= 2/3) return "building";
-    return "ready";
-  }
 
   // Counts physical containers (20GP/40GP/40HC/20RF/40RF) tied to an RFQ's quantity field —
   // LCL, air, and breakbulk shipments don't move in discrete boxes, so they're excluded.
@@ -1131,7 +1115,7 @@
       '</div>'+
       '<div class="table-wrap"><table>'+
         '<thead><tr>'+
-          '<th>RFQ Number</th><th>POL</th><th>POD</th><th>Status</th><th>Readiness</th><th></th>'+
+          '<th>RFQ Number</th><th>POL</th><th>POD</th><th>Status</th><th></th>'+
         '</tr></thead>'+
         '<tbody id="rfqTbody"></tbody>'+
       '</table></div>'+
@@ -1166,20 +1150,17 @@
     var pageRows = filtered.slice(startIdx, startIdx + RFQ_PAGE_SIZE);
 
     if(filtered.length === 0){
-      tbody.innerHTML = '<tr class="empty-row"><td colspan="6">No RFQs match this RFQ number.</td></tr>';
+      tbody.innerHTML = '<tr class="empty-row"><td colspan="5">No RFQs match this RFQ number.</td></tr>';
       paintRfqPagination(0, 1, 0, 0);
       return;
     }
 
     tbody.innerHTML = pageRows.map(function(r){
-      var rd = readiness(r);
-      var readyCls = "readiness-"+readinessTier(rd);
       return '<tr class="table-row" tabindex="0" data-route="#/rfq/'+esc(r.id)+'">'+
         '<td class="id-link">'+esc(r.id)+'</td>'+
         '<td class="num">'+esc(r.origin)+'</td>'+
         '<td class="num">'+esc(r.destination)+'</td>'+
         '<td>'+rfqStatusBadge(r.status)+'</td>'+
-        '<td><span class="readiness '+readyCls+'">'+rd.n+'/'+rd.total+'</span></td>'+
         '<td class="chevron">&#8250;</td>'+
       '</tr>';
     }).join("");
@@ -1271,7 +1252,7 @@
     if(sendBtn) sendBtn.addEventListener("click", function(){
       var rd = readiness(r);
       if(rd.n < rd.total){
-        showToast("Please complete all required fields before sending ("+rd.n+"/"+rd.total+" done).");
+        showToast("Please complete all required fields before sending.");
         return;
       }
       r.status = "Sent";
@@ -1362,8 +1343,7 @@
 
           '</div>'+
         '</div>'+
-        '<div class="drawer-footer">'+
-          '<div class="progress-mini">Readiness: <b id="readinessLabel">0/9</b> required fields complete</div>'+
+        '<div class="drawer-footer" style="justify-content:flex-end;">'+
           '<div style="display:flex; gap:10px;">'+
             '<button type="button" class="btn btn-sm" id="saveDraftBtn">Save &amp; finish later</button>'+
             '<button type="submit" class="btn btn-primary btn-sm" id="submitRfqBtn">Send RFQ</button>'+
@@ -1388,18 +1368,6 @@
         notes: document.getElementById("f_notes").value.trim()
       };
     }
-    function updateReadiness(){
-      var vals = collect();
-      var rd = readiness(vals);
-      document.getElementById("readinessLabel").textContent = rd.n+"/"+rd.total;
-    }
-    ["f_freightType","f_incoterm","f_origin","f_destination","f_cargoDescription","f_cargoWeight","f_quantity","f_containerType","f_targetDate","f_notes"].forEach(function(id){
-      var el = document.getElementById(id);
-      el.addEventListener("input", updateReadiness);
-      el.addEventListener("change", updateReadiness);
-    });
-    updateReadiness();
-
     document.getElementById("saveDraftBtn").addEventListener("click", function(){
       persist("Awaiting Quote");
     });
@@ -1408,7 +1376,7 @@
       var vals = collect();
       var rd = readiness(vals);
       if(rd.n < rd.total){
-        showToast("Complete all required fields to send ("+rd.n+"/"+rd.total+" done). Saved for later instead.");
+        showToast("Complete all required fields to send. Saved for later instead.");
         persist("Awaiting Quote");
         return;
       }
